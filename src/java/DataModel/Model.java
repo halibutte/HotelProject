@@ -10,7 +10,9 @@ import DataModel.Managers.*;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -46,26 +48,26 @@ public class Model {
   
     public static void main(String[] args) {
         Model m = new Model();
-        Customer c = new Customer("Pam Satan II", "a@b.c", "Norwich", "V", "02/12", "2136871466");
-        m.CUSTOMERS.createCustomer(c);
+        Customer c = new Customer("Pam Satan III", "bad@inter.net", "Norwich", "V", "02/12", "2136871466");
+        //Room request = new Room();
+        //request.setRoomClass("sup_d");
         try {
-//            System.out.println(m.getCustomer(12008));
-//            System.out.println(m.getCustomer(666));
-//            m.getAllCustomers().stream().forEach(cust -> System.out.println(cust));
-//            System.out.println(m.getRoom(101));
-//            m.getRoomByClass("sup_d").stream().forEach(room -> System.out.println(room));
-//            System.out.println("");
-//            m.getRoomByStatus("A").stream().forEach(room -> System.out.println(room));
-//            System.out.println("==========ALL ROOM=============");
-//            m.getAllRooms().stream().forEach(room -> System.out.println(room));
-//            System.out.println(m.getAllRooms().size());
-//            m.getAllRoomBookings().stream().forEach(room -> System.out.println(room));
-//            System.out.println("==========DATE RANGE=============");
-//            m.getRoomBookings(LocalDate.of(2017, 12, 24), LocalDate.of(2017, 12, 28)).stream().forEach(rb -> System.out.println(rb));
-            m.ROOMS.getRoomsAvailByDate(LocalDate.of(2017, 12, 24), LocalDate.of(2017, 12, 28)).stream().forEach(r -> System.out.println(r));
-            Booking b = m.BOOKINGS.getBooking(13505);
-            System.out.println(b);
-            int foo = 1;
+            c = m.CUSTOMERS.getCustomer(c.getName(), c.getEmail());
+            /*Customer pam = m.CUSTOMERS.createCustomer(c);
+            System.out.println(pam);
+            List<Room> list = new ArrayList<>();
+            list.add(request);
+            //have pam make bookings for this date until she has used up all the available rooms, should exception
+            //out
+            for(int i = 0; i < 100; i++) {
+                m.BOOKINGS.makeBooking(c, list, LocalDate.parse("2017-12-24"), LocalDate.parse("2017-12-28"));
+            }
+            //Booking booktest = m.BOOKINGS.getBooking(15976);
+            int foo = 1;*/
+            c.setName("Jordan Jorgens");
+            m.CUSTOMERS.updateCustomer(c);
+            Customer check = m.CUSTOMERS.getCustomer(12955);
+            System.out.println(check);
         }
         catch (Exception e) {
             e.printStackTrace();

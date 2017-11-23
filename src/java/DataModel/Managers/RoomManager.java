@@ -12,6 +12,8 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -80,6 +82,17 @@ public class RoomManager extends AbstractManager {
         return (List<Room>)(List<?>)getList(sql, args, "getRoomsAvail", RoomManager::mapToRoom);
     }
     
+    public Map<String,Long> getCountRoomsAvailByDate(LocalDate checkin, LocalDate checkout) {
+        //returns a number of available rooms for a specific date range
+        List<Room> avail = getRoomsAvailByDate(checkin, checkout);
+        Map<String,Long> counts = avail.stream()
+                .map(r -> r.getRoomClass())
+                .collect(Collectors.groupingBy(
+                        Function.identity(), 
+                        Collectors.counting()));
+        return counts;
+    }
+
     private static Room mapToRoom(Map<String, Object> map) {
         Room room = new Room();
         room.setNo((Integer)map.get("r_no"));

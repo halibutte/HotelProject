@@ -7,8 +7,10 @@ package DataModel.Managers;
 
 import DataModel.Customer;
 import DataModel.Model;
+import DataModel.ModelException;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  *
@@ -20,24 +22,61 @@ public class CustomerManager extends AbstractManager {
     }
     
     // <editor-fold defaultstate="collapsed" desc="CUSTOMER">
-    public int createCustomer(Customer customer) {
-        //return value is the id of the customer just created
-        //return value is -1 if error
-        //create this prepared statement if it has not already been use
-        String sql = "INSERT INTO hotelbooking.customer("
-                + "c_name, c_email, c_address, c_cardtype, c_cardexp, c_cardno)"
-                + "VALUES (?, ?, ?, ?, ?, ?)";
-        //set up arguments
-        Object[] args = new Object[] {
+    public Customer createCustomer(Customer customer) throws ModelException {
+        //check if this customer exists. if it does, return it
+        Customer check = getCustomer(customer.getName(), customer.getEmail());
+        if(Objects.isNull(check)) {
+            String sql = "INSERT INTO hotelbooking.customer("
+                    + "c_name, c_email, c_address, c_cardtype, c_cardexp, c_cardno)"
+                    + "VALUES (?, ?, ?, ?, ?, ?)";
+            Object[] args = new Object[] {
+                customer.getName(),
+                customer.getEmail(),
+                customer.getAddress(),
+                customer.getCardtype(),
+                customer.getCardexp(),
+                customer.getCardno()
+            };
+
+            Object[] result = createRecord(sql, args, "createCustomer");
+            Integer res1 = (Integer)result[0];
+            if(res1 > 0) {
+                return getCustomer(res1);
+            } else if (res1 == 0) {
+                throw new ModelException("Unable to create customer, may violate unique constraints.");
+            } else {
+                throw new ModelException("SQL Exception when creating customer");
+            }
+        } else {
+            return check;
+        }
+    }
+    
+    public boolean updateCustomer(Customer customer) throws ModelException {
+        //if customer number is not set, see if we can match on name / email
+        if(Objects.isNull(customer.getNo())) {
+            Customer find = getCustomer(customer.getName(), customer.getEmail());
+            if(Objects.isNull(find)) {
+                throw new ModelException("Customer does not exist; use createCustomer to create new record");
+            } else {
+                customer.setNo(find.getNo());
+            }
+        }
+        
+        String sql = "UPDATE hotelbooking.customer " +
+            "SET c_name=?, c_email=?, c_address=?, c_cardtype=?, " + 
+            "c_cardexp=?, c_cardno=? WHERE c_no = ?";
+        Object[] args = {
             customer.getName(),
             customer.getEmail(),
-            customer.getEmail(),
+            customer.getAddress(),
             customer.getCardtype(),
             customer.getCardexp(),
-            customer.getCardno()
+            customer.getCardno(),
+            customer.getNo()
         };
-
-        return createRecord(sql, args, "createCustomer");
+        
+        return updateRecord(sql, args, "updateCustomer");
     }
     
     public Customer getCustomer(int cno) {
@@ -53,9 +92,16 @@ public class CustomerManager extends AbstractManager {
         );
     }
     
-    public Customer getCustomer(String email) {
-        //return a customer based on their email (should also be unique)
-        return new Customer();
+    public Customer getCustomer(String name, String email) {
+        //assume a customer name / email combo is unique
+        String sql = "SELECT * FROM customer WHERE c_name = ? AND c_email = ?";
+        Object[] args = {name, email};
+        return (Customer)getSingle(
+                sql, 
+                args, 
+                "getCustomerNameEmail", 
+                CustomerManager::mapToCustomer 
+        );
     }
     
     public List<Customer> getAllCustomers() {
@@ -77,7 +123,7 @@ public class CustomerManager extends AbstractManager {
         //This should be passed to the createFromRecordset method
         Customer customer = new Customer();
         customer.setAddress((String)map.get("c_address"));
-        customer.setCardexp((String)map.get("c_name"));
+        customer.setCardexp((String)map.get("c_exp"));
         customer.setCardno((String)map.get("c_cardno"));
         customer.setCardtype((String)map.get("c_cardtype"));
         customer.setEmail((String)map.get("c_email"));
@@ -86,4 +132,7 @@ public class CustomerManager extends AbstractManager {
         return customer;
     }
     // </editor-fold>
+    
+    public static void main(String[] args) {
+    }
 }

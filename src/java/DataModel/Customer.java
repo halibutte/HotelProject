@@ -17,7 +17,7 @@ public class Customer {
 // <editor-fold defaultstate="collapsed" desc="Member Variables">
     //customer number - should not be updated once created. does not need to be
     //specified when creathing
-    Integer no = null;    
+    Integer no;    
     String name;
     String email;
     String address; //billing address
@@ -92,11 +92,11 @@ public class Customer {
         this.name = name;
     }
     
-    public int getNo() {
-        return no;
+    public Integer getNo() {
+        return this.no;
     }
     
-    public void setNo(int no) {
+    public void setNo(Integer no) {
         if(Objects.isNull(this.no)) {
             this.no = no;
         }
@@ -105,7 +105,7 @@ public class Customer {
     
     public String toString() {
         //mainly for testing
-        return this.getName() + "::" + this.getEmail();
+        return this.getNo() + "::" + this.getName() + "::" + this.getEmail();
     }
     
 }

@@ -8,6 +8,7 @@ package DataModel.Managers;
 import DataModel.Booking;
 import DataModel.Customer;
 import DataModel.Model;
+import DataModel.ModelException;
 import DataModel.Room;
 import DataModel.RoomBooking;
 import java.math.BigDecimal;
@@ -54,7 +55,7 @@ public class BookingManager extends AbstractManager {
             Customer customer, 
             List<Room> rooms,
             LocalDate checkin,
-            LocalDate checkout) throws IllegalStateException 
+            LocalDate checkout) throws ModelException 
     {
         //pass in a list of the require types of rooms desired, 
         //only need to provide type
@@ -64,9 +65,9 @@ public class BookingManager extends AbstractManager {
         
         //required rooms are available, so go ahead and complete booking
         //currently assumes customer is new TO CHANGE
-        int custId = model.CUSTOMERS.createCustomer(customer);
+        Customer c = model.CUSTOMERS.createCustomer(customer);
         //create a booking object
-        Booking b = createBooking(custId, 0, "Test Booking");
+        Booking b = createBooking(c.getNo(), 0, "Test Booking");
         //create relevant roombookings
         List<Room> availRooms = model.ROOMS.getRoomsAvailByDate(checkin, checkout);
         for(Room r : rooms) {
@@ -82,8 +83,8 @@ public class BookingManager extends AbstractManager {
                     checkin, 
                     checkout
             );
-            int res = model.ROOMBOOKINGS.createRoomBooking(make);
-            b.getRooms().add(make);
+            RoomBooking completed = model.ROOMBOOKINGS.createRoomBooking(make);
+            b.getRooms().add(completed);
         }
         return getBooking(b.getRef());
     }
@@ -103,6 +104,10 @@ public class BookingManager extends AbstractManager {
         
         //count number of impossible requests
         Integer notAvail = countRequest.entrySet().stream().mapToInt((Entry<String,Long> e) -> {
+            //need to handle this not even being in the map as all booked
+            if(!countAvail.containsKey(e.getKey())) {
+                return 1;
+            }
             if(countAvail.get(e.getKey()) < e.getValue()) {
                 return 1;
             } else {
@@ -113,13 +118,20 @@ public class BookingManager extends AbstractManager {
         return notAvail <= 0;
     }
     
-    private Booking createBooking(int custNo, double cost, String notes) {
+    private Booking createBooking(int custNo, double cost, String notes) throws ModelException {
         String sql = "INSERT INTO hotelbooking.booking(" +
             "c_no, b_cost, b_outstanding, b_notes)" +
             "VALUES (?, ?, ?, ?)";
         Object args[] = {custNo, cost, cost, notes};
-        int id = createRecord(sql, args, "createBooking");
-        return getBooking(id);
+        Object[] res = createRecord(sql, args, "createBooking");
+        Integer res1 = (Integer)res[0];
+        if(res1 > 0) {
+            return getBooking(res1);
+        } else if(res1 < 0) {
+            throw new ModelException("SQL Exception while creating booking");
+        } else {
+            throw new ModelException("Failed to create, may violate unique constraints");
+        }
     }
     //</editor-fold>
 }

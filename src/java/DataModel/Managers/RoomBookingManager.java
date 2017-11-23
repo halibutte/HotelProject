@@ -6,6 +6,7 @@
 package DataModel.Managers;
 
 import DataModel.Model;
+import DataModel.ModelException;
 import DataModel.RoomBooking;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -71,7 +72,17 @@ public class RoomBookingManager extends AbstractManager {
         );
     }
     
-    public int createRoomBooking(RoomBooking rb) {
+    public RoomBooking getRoomBooking(int bookingRef, int roomNo) {
+        String sql = "SELECT * FROM roombooking WHERE b_ref = ? AND r_no = ?";
+        Object[] args = {bookingRef, roomNo};
+        return (RoomBooking)getSingle(sql, 
+                args, 
+                "getRoomBookingFromKey", 
+                RoomBookingManager::mapToRoomBooking
+        );
+    }
+    
+    public RoomBooking createRoomBooking(RoomBooking rb) throws ModelException {
         String sql = "INSERT INTO hotelbooking.roombooking(" +
             "r_no, b_ref, checkin, checkout)" + 
             "VALUES (?, ?, ?, ?)";
@@ -81,7 +92,15 @@ public class RoomBookingManager extends AbstractManager {
             rb.getCheckin(),
             rb.getCheckout()
         };
-        return createRecord(sql, args, "createRoomBooking");
+        Object[] res = createRecord(sql, args, "createRoomBooking");
+        Integer res1 = (Integer)res[0];
+        if(res1 > 0) {
+            return getRoomBooking(res1, (Integer)res[1]);
+        } else if (res1 < 0) {
+            throw new ModelException("SQL Exception while creating RoomBooking");
+        } else {
+            throw new ModelException("Unable to create RoomBooking, may violate constraints");
+        }
     }
     //</editor-fold>
 }

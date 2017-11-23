@@ -51,6 +51,15 @@ public class ConnectionManager {
         return conn;
     }
     
+    @Override
+    public void finalize() {
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            
+        }
+    }
+    
     public static void main(String[] args) {
         ConnectionManager c = null;
         try {

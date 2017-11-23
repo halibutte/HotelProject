@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package DataModel;
+package DataModel.Managers;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -16,7 +16,7 @@ import java.util.Objects;
  *
  * @author x3041557
  */
-class ConnectionManager {
+public class ConnectionManager {
     //members to deal with database 
     //holds the jdbc connection to postgre db
     Connection conn;

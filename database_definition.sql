@@ -80,6 +80,17 @@ new_id integer DEFAULT 0;
 $$
 LANGUAGE 'plpgsql';
 
+CREATE OR REPLACE FUNCTION new_bref()
+RETURNS integer AS $$
+DECLARE
+new_id integer DEFAULT 0;
+	BEGIN
+		SELECT COALESCE(MAX(b_ref), 0)+1 INTO new_id FROM booking;
+		RETURN new_id;
+	END;
+$$
+LANGUAGE 'plpgsql';
+
 ALTER TABLE customer ALTER c_no SET DEFAULT new_cno();
 
 insert into room values (101, 'sup_d', 'A', '');

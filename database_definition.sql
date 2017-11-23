@@ -24,7 +24,7 @@ create table room (
 	r_no integer unique not null,
 	r_class char(5) not null,
 	check (r_class in ('std_d', 'std_t', 'sup_d', 'sup_t')),
-	r_status char(1); default 'A',
+	r_status char(1) default 'A',
 	check (r_status in ('O', 'C', 'A', 'X')),
 	r_notes varchar(300),
 	primary key (r_no)
@@ -52,6 +52,35 @@ create table roombooking (
 	primary key (r_no, b_ref)
 );
 
+CREATE VIEW roomrate AS SELECT room.*, rates.price FROM room JOIN rates ON room.r_class = rates.r_class;
+
+CREATE OR REPLACE FUNCTION rooms_avail(d_start DATE, d_end DATE)
+RETURNS TABLE (r_no INTEGER, r_class CHARACTER(5), r_status CHARACTER(1), r_notes VARCHAR, price NUMERIC)
+AS $$
+	BEGIN
+    	RETURN QUERY
+        SELECT roomrate.r_no, roomrate.r_class, roomrate.r_status, roomrate.r_notes, roomrate.price FROM roomrate WHERE roomrate.r_no NOT IN
+        (
+            SELECT roombooking.r_no FROM roombooking 
+            WHERE (roombooking.checkin <= d_start AND roombooking.checkout > d_start) 
+            OR (roombooking.checkin BETWEEN d_start AND d_end)
+        );
+    END;
+$$
+LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION new_cno()
+RETURNS integer AS $$
+DECLARE
+new_id integer DEFAULT 0;
+	BEGIN
+		SELECT COALESCE(MAX(c_no), 0)+1 INTO new_id FROM customer;
+		RETURN new_id;
+	END;
+$$
+LANGUAGE 'plpgsql';
+
+ALTER TABLE customer ALTER c_no SET DEFAULT new_cno();
 
 insert into room values (101, 'sup_d', 'A', '');
 insert into room values (102, 'sup_d', 'A', '');

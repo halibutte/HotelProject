@@ -32,8 +32,7 @@ public class Customer {
     public Customer() {
     }
     
-    public Customer(int no, String name, String email, String address, String cardtype, String cardexp, String cardno) {
-        this.no = no;
+    public Customer(String name, String email, String address, String cardtype, String cardexp, String cardno) {
         this.name = name;
         this.email = email;
         this.address = address;
@@ -44,62 +43,69 @@ public class Customer {
 // </editor-fold> 
     
 
+//<editor-fold defaultstate="collapsed" desc="Accessor Methods">
     public String getAddress() {
         return address;
     }
-
+    
     public void setAddress(String address) {
         this.address = address;
     }
-
+    
     public String getCardexp() {
         return cardexp;
     }
-
+    
     public void setCardexp(String cardexp) {
         this.cardexp = cardexp;
     }
-
+    
     public String getCardno() {
         return cardno;
     }
-
+    
     public void setCardno(String cardno) {
         this.cardno = cardno;
     }
-
+    
     public String getCardtype() {
         return cardtype;
     }
-
+    
     public void setCardtype(String cardtype) {
         this.cardtype = cardtype;
     }
-
+    
     public String getEmail() {
         return email;
     }
-
+    
     public void setEmail(String email) {
         this.email = email;
     }
-
+    
     public String getName() {
         return name;
     }
-
+    
     public void setName(String name) {
         this.name = name;
     }
-
+    
     public int getNo() {
         return no;
     }
-
+    
     public void setNo(int no) {
         if(Objects.isNull(this.no)) {
             this.no = no;
         }
+    }
+//</editor-fold>
+    
+    public String toString() {
+        //mainly for testing
+        return this.getName() + "::" + this.getEmail();
     }
     
 }

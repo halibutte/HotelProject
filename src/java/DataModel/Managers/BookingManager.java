@@ -12,10 +12,13 @@ import DataModel.ModelException;
 import DataModel.Room;
 import DataModel.RoomBooking;
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -60,15 +63,47 @@ public class BookingManager extends AbstractManager {
         //pass in a list of the require types of rooms desired, 
         //only need to provide type
         if(!allAvail(rooms, checkin, checkout)) {
-            throw new IllegalStateException("Not all rooms available");
+            throw new ModelException("Not all rooms available");
         }
         
         //required rooms are available, so go ahead and complete booking
-        //currently assumes customer is new TO CHANGE
+        //create customer will return existing record if there is one
         Customer c = model.CUSTOMERS.createCustomer(customer);
         //create a booking object
-        Booking b = createBooking(c.getNo(), 0, "Test Booking");
+        Booking b = createBooking(c.getNo(), 0, "");
         //create relevant roombookings
+        boolean done = bookList(rooms, checkin, checkout, b);
+        return getBooking(b.getRef());
+    }
+    
+    public Booking addRoom(int bookRef, List<Room> rooms) throws ModelException {
+        //ensure this is a genuine booking
+        Booking booking = getBooking(bookRef);
+        if(Objects.isNull(booking)) {
+            throw new ModelException("Booking does not exist");
+        }
+        
+        //get the dates for this booking
+        RoomBooking r = booking.getRooms().get(0);
+        LocalDate checkin = r.getCheckin();
+        LocalDate checkout = r.getCheckout();
+        //check room is available
+        if(!allAvail(rooms, checkin, checkout)) {
+            throw new ModelException("Not all rooms are available");
+        }
+        
+        //book the rooms
+        boolean done = bookList(rooms, checkin, checkout, booking);
+        return getBooking(booking.getRef());
+    }
+    
+    private boolean bookList(
+            List<Room> rooms, 
+            LocalDate checkin, 
+            LocalDate checkout,
+            Booking booking
+    ) throws ModelException
+    {
         List<Room> availRooms = model.ROOMS.getRoomsAvailByDate(checkin, checkout);
         for(Room r : rooms) {
             //select first available room
@@ -79,14 +114,17 @@ public class BookingManager extends AbstractManager {
             //create a booking for this room
             RoomBooking make = new RoomBooking(
                     selectedRoom.get().getNo(), 
-                    b.getRef(), 
+                    booking.getRef(), 
                     checkin, 
                     checkout
             );
             RoomBooking completed = model.ROOMBOOKINGS.createRoomBooking(make);
-            b.getRooms().add(completed);
+            boolean done = booking.getRooms().add(completed);
+            if(!done) {
+                throw new ModelException("Unable to add room, may be unavailable");
+            }
         }
-        return getBooking(b.getRef());
+        return true;
     }
     
     private boolean allAvail(List<Room> rooms, LocalDate checkin, LocalDate checkout) {
@@ -118,6 +156,47 @@ public class BookingManager extends AbstractManager {
         return notAvail <= 0;
     }
     
+    public Booking takePayment(Booking booking, double amount) throws ModelException {
+        if(Objects.isNull(booking.getRef())) {
+            throw new ModelException("Booking must have reference");
+        }
+        
+        String sql = "UPDATE booking SET b_outstanding = b_outstanding - ? WHERE b_ref = ?";
+        Object[] args = {amount, booking.getRef()};
+        if(updateRecord(sql, args, "bookingPayment")) {
+            return getBooking(booking.getRef());
+        } else {
+            throw new ModelException("Unable to update booking");
+        }
+    }
+    
+    public Booking getCurrentOccupant(int rno) {
+        //gets the booking which is currently checked into a room
+        String sql = "SELECT booking.* " +
+            "FROM roombooking JOIN room ON roombooking.r_no = room.r_no " +
+            "JOIN booking ON roombooking.b_ref = booking.b_ref " +
+            "WHERE room.r_status = 'O' AND roombooking.checkin <= current_date " +
+            "AND roombooking.checkout >= current_date AND roombooking.r_no = ?";
+        Object[] args = {rno};
+        return (Booking)getSingle(sql, args, "getCurrentBookingForRoom", r -> mapToBooking(r));
+    }
+    
+    public Booking getCheckinBooking(int rno, LocalDate checkin) {
+        String sql = "SELECT booking.* "+
+            "FROM roombooking NATURAL JOIN booking " +
+            "WHERE roombooking.checkin = ? AND roombooking.r_no = ?";
+        Object[] args = {Date.valueOf(checkin), rno};
+        return (Booking)getSingle(sql, args, "getCheckinBookingForDate", r -> mapToBooking(r));
+    }
+    
+    public Booking getCheckoutBooking(int rno, LocalDate checkout) {
+        String sql = "SELECT booking.* "+
+            "FROM roombooking NATURAL JOIN booking " +
+            "WHERE roombooking.checkout = ? AND roombooking.r_no = ?";
+        Object[] args = {Date.valueOf(checkout), rno};
+        return (Booking)getSingle(sql, args, "getCheckoutBookingForDate", r -> mapToBooking(r));
+    }
+    
     private Booking createBooking(int custNo, double cost, String notes) throws ModelException {
         String sql = "INSERT INTO hotelbooking.booking(" +
             "c_no, b_cost, b_outstanding, b_notes)" +
@@ -134,4 +213,28 @@ public class BookingManager extends AbstractManager {
         }
     }
     //</editor-fold>
+    
+    public static void main(String[] args) throws ModelException {
+        Model model = new Model();
+        Customer cust = new Customer("Testing Name", "A@B.C", "Neston", "V", "20/17", "2304930498");
+        Room room = new Room();
+        room.setRoomClass("sup_d");
+        List<Room> list = new ArrayList<>();
+        list.add(room);
+        Room extra = new Room();
+        extra.setRoomClass("sup_t");
+        List<Room> addOn = new ArrayList<>();
+        addOn.add(extra);
+        try {
+            //make the booking
+            Booking b = model.BOOKINGS.makeBooking(cust, list, LocalDate.parse("2017-12-17"), LocalDate.parse("2017-12-18"));
+            System.out.println(b);
+            //add a room on
+            b = model.BOOKINGS.addRoom(b.getRef(), addOn);
+            System.out.println(b);
+        } catch (ModelException e) {
+            e.printStackTrace();
+        }
+        //add something
+    }
 }

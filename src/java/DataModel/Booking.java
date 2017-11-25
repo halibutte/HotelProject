@@ -5,6 +5,7 @@
  */
 package DataModel;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +46,11 @@ public class Booking {
 
     public double getOutstanding() {
         return outstanding;
+    }
+    
+    public String getOutstandingString() {
+        DecimalFormat format = new DecimalFormat("###,##0.00");
+        return format.format(outstanding);
     }
 
     public String getNotes() {
@@ -91,4 +97,7 @@ public class Booking {
         this.customer = customer;
     }
     
+    public String toString() {
+        return "ID: " + this.getRef() + "||" +customer + "||Rooms " + rooms.size();
+    }
 }

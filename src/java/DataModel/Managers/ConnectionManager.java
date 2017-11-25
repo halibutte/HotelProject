@@ -30,7 +30,12 @@ public class ConnectionManager {
         conn = makeConnection();
     }
     
-    private Connection makeConnection() throws SQLException{
+    private Connection makeConnection() throws SQLException {
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            throw new SQLException(e);
+        }
         Connection connection = DriverManager.getConnection(
                 CONN_STRING, 
                 USERNAME, 

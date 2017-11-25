@@ -46,7 +46,7 @@ create table booking (
 
 create table roombooking (
 	r_no integer references room,
-	b_ref integer references booking,
+	b_ref integer references booking ON DELETE CASCADE,
 	checkin date not null,
 	checkout date not null,
 	primary key (r_no, b_ref)
@@ -54,6 +54,7 @@ create table roombooking (
 
 CREATE VIEW roomrate AS SELECT room.*, rates.price FROM room JOIN rates ON room.r_class = rates.r_class;
 
+--Return a table of rooms which are available for certain date range
 CREATE OR REPLACE FUNCTION rooms_avail(d_start DATE, d_end DATE)
 RETURNS TABLE (r_no INTEGER, r_class CHARACTER(5), r_status CHARACTER(1), r_notes VARCHAR, price NUMERIC)
 AS $$
@@ -69,6 +70,7 @@ AS $$
 $$
 LANGUAGE 'plpgsql';
 
+--Make new customer ref
 CREATE OR REPLACE FUNCTION new_cno()
 RETURNS integer AS $$
 DECLARE
@@ -80,6 +82,7 @@ new_id integer DEFAULT 0;
 $$
 LANGUAGE 'plpgsql';
 
+--Make new booking ref
 CREATE OR REPLACE FUNCTION new_bref()
 RETURNS integer AS $$
 DECLARE
@@ -90,6 +93,39 @@ new_id integer DEFAULT 0;
 	END;
 $$
 LANGUAGE 'plpgsql';
+
+--Trigger to increase booking total when room added
+CREATE OR REPLACE FUNCTION add_to_total() RETURNS TRIGGER AS $$
+DECLARE
+	cost NUMERIC;
+BEGIN
+--Function adds the cost of a room onto a booking
+--Find the cost of the room
+SELECT price INTO cost FROM roomrate WHERE r_no = NEW.r_no;
+--Add this price to the booking
+UPDATE booking SET b_cost = b_cost + cost, b_outstanding = b_outstanding + cost WHERE booking.b_ref = NEW.b_ref;
+RETURN NEW;
+END;
+$$
+LANGUAGE 'plpgsql';
+
+CREATE TRIGGER add_cost AFTER INSERT ON roombooking FOR EACH ROW EXECUTE PROCEDURE add_to_total();
+
+--Trigger to decrease booking total when room removed
+CREATE OR REPLACE FUNCTION remove_from_total() RETURNS TRIGGER AS $$
+DECLARE
+	cost NUMERIC;
+BEGIN
+--Find the cost of the room
+SELECT price INTO cost FROM roomrate WHERE r_no = OLD.r_no;
+--remove this price from the booking
+UPDATE booking SET b_cost = b_cost - cost, b_outstanding = b_outstanding - cost WHERE booking.bref = OLD.b_ref;
+RETURN OLD;
+END;
+$$
+LANGUAGE 'plpgsql';
+
+CREATE TRIGGER remove_cost AFTER DELETE ON roombooking FOR EACH ROW EXECUTE PROCEDURE remove_from_total();
 
 ALTER TABLE booking ALTER b_ref SET DEFAULT new_bref();
 ALTER TABLE customer ALTER c_no SET DEFAULT new_cno();

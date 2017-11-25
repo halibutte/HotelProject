@@ -29,7 +29,7 @@ public class Model {
     public RoomBookingManager ROOMBOOKINGS;
     public BookingManager BOOKINGS;
 
-    public Model() throws IllegalStateException {
+    public Model() throws ModelException {
         try {
             //initialise the connection manager
             conn = new ConnectionManager();
@@ -38,7 +38,7 @@ public class Model {
             ROOMBOOKINGS = new RoomBookingManager(this);
             BOOKINGS = new BookingManager(this);
         } catch (SQLException e) {
-            throw new IllegalStateException("Unable to initialise database connection");
+            throw new ModelException(e.getMessage());
         }
     }
     
@@ -47,12 +47,12 @@ public class Model {
     }
   
     public static void main(String[] args) {
-        Model m = new Model();
-        Customer c = new Customer("Pam Satan III", "bad@inter.net", "Norwich", "V", "02/12", "2136871466");
         //Room request = new Room();
         //request.setRoomClass("sup_d");
         try {
-            c = m.CUSTOMERS.getCustomer(c.getName(), c.getEmail());
+            Model m = new Model();
+            //Customer c = new Customer("Pam Satan III", "bad@inter.net", "Norwich", "V", "02/12", "2136871466");
+            //c = m.CUSTOMERS.getCustomer(c.getName(), c.getEmail());
             /*Customer pam = m.CUSTOMERS.createCustomer(c);
             System.out.println(pam);
             List<Room> list = new ArrayList<>();
@@ -64,10 +64,10 @@ public class Model {
             }
             //Booking booktest = m.BOOKINGS.getBooking(15976);
             int foo = 1;*/
-            c.setName("Jordan Jorgens");
-            m.CUSTOMERS.updateCustomer(c);
-            Customer check = m.CUSTOMERS.getCustomer(12955);
-            System.out.println(check);
+            //c.setName("Jordan Jorgens");
+            //m.CUSTOMERS.updateCustomer(c);
+            //Customer check = m.CUSTOMERS.getCustomer(12955);
+            //System.out.println(check);
         }
         catch (Exception e) {
             e.printStackTrace();

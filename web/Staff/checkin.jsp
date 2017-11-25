@@ -15,6 +15,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width">
         <title>JSP Page</title>
         <link rel="stylesheet" type="text/css" href="staff.css">
     </head>
@@ -22,17 +23,27 @@
         <div class="main-container">
             
         <div class="col-minwidth">
-            <div class="flexItem">
-                <h4>View Date</h4>
-                <form method="GET">
-                    <input type="date" name="forDate" value="<% out.print(request.getAttribute("viewdate")); %>" class="form-spacing">
-                    <button type="submit" class="button">Submit</button>
-                </form>
+            <div class="flexCont">
+                <div class="flexItem">
+                    <h4>View Date</h4>
+                    <form method="GET">
+                        <input type="date" name="forDate" value="<% out.print(request.getAttribute("viewdate")); %>" class="form-spacing">
+                        <button type="submit" class="button">Submit</button>
+                    </form>
+                </div>
+                <% List<String> msgs = (List<String>)request.getAttribute("messages");
+                for(String s : msgs) {
+                    String[] arr = s.split("#");
+                %>
+                <div class="flexItem message-<% out.print(arr[0]); %>" onclick="this.parentNode.removeChild(this)">
+                    <% out.print(arr[1]); %>
+                </div>
+                <% }%>   
             </div>
         </div>
                     
         <div class="col-half">
-        <h2>Expected Arrivals</h2>
+        <h2>Arriving Today</h2>
         <div class="flexCont">
             <%  //iterate over checkins and put in boxes
                 Map<Room, Booking> map = (Map<Room, Booking>)request.getAttribute("checkins");
@@ -72,7 +83,7 @@
         </div>
         
         <div class="col-half">
-        <h2>Expected Departures</h2>
+        <h2>Leaving Today</h2>
         <div class="flexCont">
             <%  //iterate over checkins and put in boxes
                 map = (Map<Room, Booking>)request.getAttribute("checkouts");

@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.TreeMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -121,7 +122,7 @@ public class RoomManager extends AbstractManager {
                 RoomManager::mapToRoom
         );
         
-        Map<Room, Booking> map = new HashMap<>();
+        Map<Room, Booking> map = new TreeMap<>();
         for(Room r : rooms) {
             //get bookings for rooms
             map.put(r, model.BOOKINGS.getCheckinBooking(r.getNo(), date));
@@ -143,7 +144,7 @@ public class RoomManager extends AbstractManager {
                 RoomManager::mapToRoom
         );
         
-        Map<Room, Booking> map = new HashMap<>();
+        Map<Room, Booking> map = new TreeMap<>();
         for(Room r : rooms) {
             //get bookings for rooms
             map.put(r, model.BOOKINGS.getCheckoutBooking(r.getNo(), date));

@@ -9,7 +9,7 @@ package DataModel;
  *
  * @author Hal
  */
-public class Room {
+public class Room implements Comparable {
     private Integer no;
     private String roomClass;
     private String status;
@@ -68,6 +68,11 @@ public class Room {
     
     public String toString() {
         return this.getNo() + "::" + this.getRoomClass() + "::" + this.getStatus() + "::" + this.getNotes() + "::" + this.getPrice();
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        return Integer.compare(this.getNo(), ((Room)o).getNo());
     }
     
     

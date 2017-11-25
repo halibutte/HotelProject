@@ -11,7 +11,10 @@ import DataModel.ModelException;
 import DataModel.Room;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.NumberFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -40,6 +43,8 @@ public class Checkin extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            //list to add messages into, to be displayed in sidebar
+            List<String> messages = new ArrayList<>();
             //get some parameters
             String forDate = (String)request.getParameter("forDate");
             String roomNo = (String)request.getParameter("roomNo");
@@ -61,7 +66,7 @@ public class Checkin extends HttpServlet {
             try {
                 model = new Model();
             } catch (ModelException e) {
-                e.printStackTrace(out);
+                messages.add("error#Cannot connect to databse");
             }
             
             //update a room status if this was requested
@@ -70,8 +75,9 @@ public class Checkin extends HttpServlet {
                     Room r = model.ROOMS.getRoom(Integer.parseInt(roomNo));                    
                     r.setStatus(roomStatus);
                     model.ROOMS.updateRoom(r);
+                    messages.add("confirm#Room " + r.getNo() + " status updated to " + r.getStatus());
                 } catch (Exception e) {
-                    e.printStackTrace(out);
+                    messages.add("error#Failed to update room status");
                 }
             }
            
@@ -79,8 +85,17 @@ public class Checkin extends HttpServlet {
             if(!Objects.isNull(actType)) {
                 if(actType.equals("checkout")) {
                     Booking b = model.BOOKINGS.getBooking(Integer.parseInt(bref));
-                    Double pay = Double.parseDouble(balance);
-                    model.BOOKINGS.takePayment(b, pay);
+                    Double pay = 0.0;
+                    try {
+                        pay = Double.parseDouble(balance);
+                        if(pay > 0) {
+                            model.BOOKINGS.takePayment(b, pay);
+                            messages.add("confirm#Payment of " + NumberFormat.getCurrencyInstance().format(pay) + " processed for booking " + b.getRef());
+                        }
+                    } catch (Exception e) {
+                        //unable to parse payment amount
+                        messages.add("error#Unable to process payment");
+                    }
                 }
             }
             
@@ -89,6 +104,7 @@ public class Checkin extends HttpServlet {
             request.setAttribute("checkins", checkins);
             request.setAttribute("checkouts", checkouts);
             request.setAttribute("viewdate", viewDate);
+            request.setAttribute("messages", messages);
             
             RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/Staff/checkin.jsp");
             dispatcher.forward(request, response);

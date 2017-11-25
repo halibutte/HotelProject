@@ -58,18 +58,12 @@ h1, h2, h3, h4, h5, h6 {
 .form-spacing-small {
     margin-bottom: 1ex;
 }
-.flexCont {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    width: 100%;
+
+.message-confirm {
+    background-color: palegreen !important;
 }
-.flexItem {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    background-color: white;
-    width: 200px;
-    margin: 0.5em;
-    padding: 1em;
+.message-error {
+    background-color: lightpink !important;
 }
 
 @media screen and (min-width: 810px) {
@@ -84,7 +78,20 @@ h1, h2, h3, h4, h5, h6 {
     .col-half {
         display: table-cell;
         width: 50%;
-        padding-left: 1em;
+        padding-left: 2em;
+    }
+    .flexCont {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        width: 100%;
+    }
+    .flexItem {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        background-color: white;
+        width: 200px;
+        margin: 0.5em;
+        padding: 1em;
     }
 }
 
@@ -99,5 +106,30 @@ h1, h2, h3, h4, h5, h6 {
     .col-half {
         display: block;
     }
+    .flexCont {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        width: 100%;
+    }
+    .flexItem {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        background-color: white;
+        width: 200px;
+        margin: 0.5em;
+        padding: 1em;
+    }
 }
-
+@media screen and (max-width: 510px) {
+    .flexCont {
+        display: block;
+        width: 100%;
+        text-align: center;
+    }
+    .flexItem {
+        text-align: left;
+        display: inline-block;
+        width: 90%;
+        box-sizing: border-box;
+    }
+}

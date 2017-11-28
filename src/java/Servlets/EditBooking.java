@@ -74,7 +74,6 @@ public class EditBooking extends HttpServlet {
                     
                     //now we want to work out what rooms are being added, what rooms
                     //are being removed
-                    c.
                 }
 
                 //if a booking reference is set, we want to find details and display

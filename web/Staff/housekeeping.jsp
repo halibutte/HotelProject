@@ -52,6 +52,7 @@
                         <select name="roomStatus">
                             <option value="C"<% if(r.getStatus().equals("C")) { out.print(" selected"); } %>>Checked Out</option>
                             <option value="X"<% if(r.getStatus().equals("X")) { out.print(" selected"); } %>>Unavailable</option>
+                            <option value="A"<% if(r.getStatus().equals("A")) { out.print(" selected"); } %>>Available</option>
                         </select>
                         </div>
                         

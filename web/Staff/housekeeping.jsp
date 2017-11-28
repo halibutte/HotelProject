@@ -21,6 +21,7 @@
         <script src="housekeeping.js"></script>
     </head>
     <body>
+        <%@include file="staff_header.jsp" %>
         <div class="main-container">
         <div class="col-minwidth" id="message_div">
             <h2>Messages</h2>

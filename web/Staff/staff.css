@@ -5,6 +5,7 @@
 body {
     background-color: lightsteelblue;
     font-family: Calibri;
+    margin: 0;
 }
 
 input, select {
@@ -29,13 +30,22 @@ input:hover, select:hover {
     transition-duration: 0.2s;
     background-color: #b9d6f7;
 }
-h1, h2, h3, h4, h5, h6 {
+h2, h3, h4, h5, h6 {
     margin-top: 1em;
     margin-bottom: 1em;
     font-family: "Bookman Old Style";
     font-weight: normal;
     letter-spacing: .4ex;
     border-bottom: thin solid lightslategray;
+}
+h1 {
+    font-family: "Brush Script MT", cursive;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 500;
+    line-height: 26.4px;
+    text-align: left;
+    padding-left: 30px;
 }
 .button {
     font-family: Calibri;
@@ -66,8 +76,38 @@ h1, h2, h3, h4, h5, h6 {
     background-color: lightpink !important;
 }
 
+.header {
+    width: 100%;
+}
+
+ul.nav {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border: none;
+    background-color: #eaf1f9;
+}
+ul.nav li {
+    list-style-type: none;
+    float: left;
+}
+ul.nav li a {
+    display: block;
+    color: black;
+    text-align: center;
+    padding: 1ex;
+    text-decoration: none;
+}
+ul.nav li a:hover {
+    background-color: #b9d6f7;
+}
+
 @media screen and (min-width: 810px) {
+    h1 {
+        font-size: 70px;
+    }
     .main-container {
+        clear: both;
         display: table;
         width: 100%;
     }
@@ -98,8 +138,11 @@ h1, h2, h3, h4, h5, h6 {
 
 @media screen and (max-width: 809px) {
     .main-container {
+        clear: both;
         display: block;
         width: 100%;
+        margin-left: 1ex;
+        margin-right: 1ex;
     }
 
     .col-minwidth {

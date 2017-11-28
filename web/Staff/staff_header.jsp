@@ -6,7 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <div class="header">
-    <h1>The Hotel Heartbreak</h1>
+    <h1>The Heartache Hotel</h1>
     <div>
         <ul class="nav">
             <li><a href="./Checkin">Check In & Out</a></li>

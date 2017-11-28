@@ -8,6 +8,10 @@
         <servlet-name>Checkin</servlet-name>
         <servlet-class>Servlets.Staff.Checkin</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Housekeeping</servlet-name>
+        <servlet-class>Servlets.Staff.Housekeeping</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CustomerList</servlet-name>
         <url-pattern>/CustomerList</url-pattern>
@@ -15,6 +19,10 @@
     <servlet-mapping>
         <servlet-name>Checkin</servlet-name>
         <url-pattern>/Staff/Checkin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Housekeeping</servlet-name>
+        <url-pattern>/Staff/Housekeeping</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

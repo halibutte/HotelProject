@@ -20,10 +20,18 @@ public class ConnectionManager {
     //members to deal with database 
     //holds the jdbc connection to postgre db
     Connection conn;
+    /* LOCAL CONNECTION */
+    /*
     final String CONN_STRING = "jdbc:postgresql://localhost:5432/studentdb";
     final String SCHEMA = "hotelbooking";
     final String USERNAME = "student";
-    final String PW = "dbpassword";
+    final String PW = "dbpassword"; 
+    *
+    /* DEPLOYED CONNECTION */
+    final String CONN_STRING = "jdbc:postgresql://cmpstudb-02.cmp.uea.ac.uk:5432/groupee";
+    final String SCHEMA = "hotelbooking";
+    final String USERNAME = "groupee";
+    final String PW = "groupee";
 
     public ConnectionManager() throws SQLException {
         //attempt to create a connection, throw an SQLException if not poss

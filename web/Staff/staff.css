@@ -69,6 +69,7 @@ h1, h2, h3, h4, h5, h6 {
 @media screen and (min-width: 810px) {
     .main-container {
         display: table;
+        width: 100%;
     }
 
     .col-minwidth {
@@ -98,6 +99,7 @@ h1, h2, h3, h4, h5, h6 {
 @media screen and (max-width: 809px) {
     .main-container {
         display: block;
+        width: 100%;
     }
 
     .col-minwidth {

@@ -5,6 +5,10 @@
  */
 package DataModel;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
 /**
  *
  * @author Hal
@@ -15,6 +19,7 @@ public class Room implements Comparable {
     private String status;
     private String notes;
     private double price;
+    private Map<String, String> statusLookup = Room.createStatusMap();
 
     public Room() {
     }
@@ -49,6 +54,18 @@ public class Room implements Comparable {
     public void setStatus(String status) {
         this.status = status;
     }
+    
+    public String getLongStatus() {
+        Optional<String> desc = statusLookup.entrySet().stream()
+                .filter((e) -> e.getKey().equals(this.getStatus()))
+                .map((e) -> e.getValue())
+                .findFirst();
+        String res = "Invalid State";
+        if(desc.isPresent()) {
+            res = desc.get();
+        }
+        return res;
+    }
 
     public String getRoomClass() {
         return roomClass;
@@ -70,6 +87,15 @@ public class Room implements Comparable {
         return this.getNo() + "::" + this.getRoomClass() + "::" + this.getStatus() + "::" + this.getNotes() + "::" + this.getPrice();
     }
 
+    static Map<String, String> createStatusMap() {
+        Map<String, String> map = new HashMap<>();
+        map.put("C", "Checked Out");
+        map.put("X", "Unavailable");
+        map.put("O", "Occupied");
+        map.put("A", "Available");
+        return map;
+    }
+    
     @Override
     public int compareTo(Object o) {
         return Integer.compare(this.getNo(), ((Room)o).getNo());

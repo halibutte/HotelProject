@@ -6,6 +6,10 @@ body {
     background-color: lightsteelblue;
     font-family: Calibri;
     margin: 0;
+    height: 100%;
+}
+html {
+    height: 100%;
 }
 
 input, select {
@@ -100,6 +104,11 @@ ul.nav li a {
 }
 ul.nav li a:hover {
     background-color: #b9d6f7;
+}
+
+.main-container {
+    height: 100%;
+    background-image: url("img/clean-textile.png");
 }
 
 @media screen and (min-width: 810px) {

@@ -150,8 +150,6 @@ ul.nav li a:hover {
         clear: both;
         display: block;
         width: 100%;
-        margin-left: 1ex;
-        margin-right: 1ex;
     }
 
     .col-minwidth {

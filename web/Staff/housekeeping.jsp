@@ -21,6 +21,7 @@
         <script src="housekeeping.js"></script>
     </head>
     <body>
+        <div class="main-container">
         <div class="col-minwidth" id="message_div">
             <h2>Messages</h2>
             <div class="flexCont">

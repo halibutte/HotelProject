@@ -1,0 +1,25 @@
+<%-- any content can be specified here e.g.: --%>
+<%@ page pageEncoding="UTF-8" %>
+<!DOCTYPE html>
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="Main.css" rel="stylesheet" type="text/css"/>
+        <meta charset="windows-1252">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="js/jquery.min.js"></script>
+<body>
+<header>
+    <h1>The Heartache Hotel</h1>
+        <ul class="nav">
+            <li><a href="./home.html">Home</a></li>
+            <li><a href="./booking.html">Book</a></li>
+            <li><a href="./information.html">Info</a></li>
+            <li><a href="./events.html">Events</a></li>
+            <li><a href="./area.html">Area</a></li>
+            <li><a href="./about.html">About Us</a></li>
+            <li><a href="./check_booking.html">My Stay</a></li>
+        </ul>
+</header>
+<div class="bg-container">
+    <div class="container">
+        <div class="main-content">

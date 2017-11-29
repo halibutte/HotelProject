@@ -22,8 +22,7 @@ footer {
 }
 
 div.container {
-    max-width: 1600px;
-    min-height: 100%;
+    
 }
 
 div.bg-container {
@@ -33,6 +32,8 @@ div.bg-container {
 
 div.main-content {
     min-height: 100%;
+    max-width: 1600px;
+    margin: auto;
 }
 
 div.content {
@@ -57,11 +58,11 @@ h1, h2, h3, h4, h5, h6 {
     text-align: left;
     margin-left: 0.3em;
     padding: 0;
-    margin-top: 0;
     margin-bottom: 0;
 }
 h1 {
     font-size: 60px;
+    margin-top: 0;
 }
 h2 {
     font-size: 40px;
@@ -70,6 +71,112 @@ h3 {
     font-size: 20px;
 }
 
+/* SLIDESHOW STYLES */
+div.slideshow {
+    display: block;
+    width: 100%;
+    height: 300px;
+    text-align: center;
+    overflow: hidden;
+    margin-top: 0;
+}
+img.slide {
+    position: relative;
+    max-width: 100%;
+    width: 100%;
+    transform: translateY(-50%);
+    height: auto;
+}
+button.slide-button {
+    width: 50%;
+    padding: 0.5em;
+    float:left;
+}
+
+/*FORMS*/
+fieldset {
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    display: block;
+    border-radius: 1ex;
+    border: none;
+    padding: 2ex;
+    margin-top: 1em;
+    margin-left: 1ex;
+    margin-right: 1ex;
+}
+legend {
+    background-color: #63768D;
+    color: #e7f0f4;
+    min-width: 20ex;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 1ex;
+    border: none;
+    padding: 1ex;
+    margin-left: 1ex;
+}
+input, select {
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    border-bottom: thin solid lightslategray;
+    background-color: #eaf1f9;
+    font-family: Calibri;
+    font-size: medium;
+    padding: 0.5ex;
+    width: 100%;
+}
+input:focus, select:focus {
+    border: thin solid lightslategray;
+    background-color: #b9d6f7;
+    font-style: italic;
+    outline: none;
+}
+input:hover, select:hover, textarea:hover {
+    -webkit-transition-duration: 0.2s; /* Safari */
+    transition-duration: 0.2s;
+    background-color: #b9d6f7;
+}
+textarea {
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    border-bottom: thin solid lightslategray;
+    background-color: #eaf1f9;
+    font-family: Calibri;
+    font-size: medium;
+    padding: 0.5ex;
+    width: 100%;
+}
+textarea:focus {
+    border: thin solid lightslategray;
+    background-color: #b9d6f7;
+    outline: none;
+}
+.form-spacing {
+    margin-bottom: 2ex;
+}
+.form-spacing-small {
+    margin-bottom: 1ex;
+}
+.form-align-bottom {
+    position: absolute;
+    bottom: 0;
+}
+div.form-card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    background-color: white;
+    width: 200px;
+    margin: 0.5em;
+    padding: 1em;
+    position: relative;
+}
+div.form-card-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+}
 /* BUTTONS */
 button {
     font-family: Calibri;
@@ -85,38 +192,21 @@ button:hover {
     background-color: #b9d6f7;
     border: thin solid #b9d6f7;
 }
-
-/* SLIDESHOW STYLES */
-div.slideshow {
+/*FORM IMAGES*/
+img.room-thumb {
     display: block;
-    position: relative;
     width: 100%;
-    height: 300px;
-    text-align: center;
-    overflow: hidden;
-    padding: 0;
-    margin-top: 0;
-}
-img.slide {
-    position: relative;
-    transform: translate(0, -50%);
-    max-width: 100%;
-}
-button.slide-button {
-    width: 50%;
-    padding: 0.5em;
-    float:left;
+    min-height: 135px;
 }
 
 
-/*Styles for navigation elements*/
+/*NAVIGATION*/
 ul.nav {
     margin: 0;
     padding: 0;
     overflow: hidden;
     border: none;
     background-color: #eaf1f9;
-    box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.4);
 }
 ul.nav li {
     list-style-type: none;
@@ -128,18 +218,29 @@ ul.nav li a {
     text-align: center;
     padding: 1ex;
     text-decoration: none;
-    margin-left: 0.5ex;
-    margin-right: 0.5ex;
+    padding-left: 1ex;
+    padding-right: 1ex;
 }
 ul.nav li a:hover {
     -webkit-transition-duration: 0.2s; /* Safari */
     transition-duration: 0.2s;
     background-color: #b9d6f7;
 }
+
+/*GENERAL STYLES*/
+.dropshadow-bottom {
+    box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.4);
+}
+.content-bg {
+    /* Use to apply content section background color to elements */
+   background-color: #e7f0f4;
+}
+
+/*RESPONSIVE ELEMENTS*/
 @media screen and (max-width: 768px) {
     /*Tablet*/
     div.slideshow {
-        height: 200px;
+        max-height: 150px;
     }
 }
 @media screen and (max-width: 510px) {
@@ -151,10 +252,14 @@ ul.nav li a:hover {
         width: 100%;
     }
     div.slideshow {
-        height: 200px;
+        height: 100px;
+    }
+    div.form-card {
+        display: block;
+        width: 100%;
     }
 }
-@media screen and (max-width: 320px) {
+@media screen and (max-width: 375px) {
     /*Very small phones*/
     ul.nav li {
         display: block;

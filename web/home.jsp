@@ -6,19 +6,16 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@include file="/WEB-INF/header.jspf" %>
-    <article> 
-      <h2>Welcome</h2>
-      <div class="content">Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah </div>
-      <div class="content">This is an amazing website blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah </div>
-    <script src="js/slideshow.js"></script>
     <div class="slideshow">
       <img class="slide" src="images/bar.jpeg">
       <img class="slide" src="images/breakfast.jpeg">
       <img class="slide" src="images/bedroom.jpeg">
       <img class="slide" src="images/beach.jpeg">
-
-      <button class="display-left" onclick="plusDivs(-1)">&#10094;</button>
-      <button class="display-right" onclick="plusDivs(1)">&#10095;</button>
     </div>
-    </article>
+    <button class="slide-button" onclick="plusDivs(-1)">&#10094;</button>
+    <button class="slide-button" onclick="plusDivs(1)">&#10095;</button>
+    <h2>Welcome</h2>
+    <div class="content">Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah </div>
+    <div class="content">This is an amazing website blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah </div>
+    <script src="js/slideshow.js"></script>
 <%@include file="/WEB-INF/footer.jspf" %>

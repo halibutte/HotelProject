@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="Main.css" rel="stylesheet" type="text/css"/>
+        <meta charset="windows-1252">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<body>
+<div class="container">
+
+<div id=container>
+    <div id="header"></div>
+    <div id="Body"></div>
+    <div id="footer"></div>
+        
+<header>
+    <h1> The Heartache Hotel </h1><br> <br>
+    
+        <p><em>Home</em></p>
+        <a href="booking.html">Book</a>
+        <a href="information.html">Info</a>
+        <a href="Events.html">Events</a>
+        <a href="area.html">Area</a>
+        <a href="about.html">About us</a>
+        <a href="Check_booking.html">My stay</a>
+</header>
+<article> 
+  <h2>Welcome</h2>
+  <p>Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah </p>
+  <br><br>
+  <p>This is an amazing website blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah </p>
+</article>
+<article>
+
+<div class="slideshow">
+  <img class="Slide" src="images/bar.jpeg" style="width:400px">
+  <img class="Slide" src="images/breakfast.jpeg" style="width:400px">
+  <img class="Slide" src="images/bedroom.jpeg" style="width:400px">
+  <img class="Slide" src="images/beach.jpeg" style="width:400px">
+
+  <button class="display-left" onclick="plusDivs(-1)">&#10094;</button>
+  <button class="display-right" onclick="plusDivs(1)">&#10095;</button>
+</div>
+
+<script>
+var slideIndex = 1;
+showDivs(slideIndex);
+
+function plusDivs(n) {
+  showDivs(slideIndex += n);
+}
+
+function showDivs(n) {
+  var i;
+  var x = document.getElementsByClassName("Slide");
+  if (n > x.length) {slideIndex = 1}    
+  if (n < 1) {slideIndex = x.length}
+  for (i = 0; i < x.length; i++) {
+     x[i].style.display = "none";  
+  }
+  x[slideIndex-1].style.display = "block";  
+}
+</script>
+</article>
+
+<footer> Copyright &copy; University of East Anglia
+  <div class="right_link">
+    <a href="Reception.html">Reception</a>
+    <a href="House_Keeper.html">Room Service</a>
+    
+  </div>
+</footer>
+
+</div>
+
+</body>
+</html>

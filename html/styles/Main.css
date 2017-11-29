@@ -1,0 +1,50 @@
+div.container {
+    width: 100px;
+    border: 1px solid gray;
+    align-items: right;
+}
+
+.p1{
+    text-align: right;
+}
+.right_link
+{
+    text-align: right;
+    float:right;
+}
+
+header, footer {
+    padding: 1px;
+    color: white;
+    background-color: #2C3539;
+    clear: left;
+    text-align: center;
+    text-decoration-color: white;
+}
+
+body{
+background-color: #625D5D
+}
+
+nav {
+    float: left;
+    max-width: 160px;
+    margin: 0;
+    padding: 1em;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+   
+nav ul a {
+    text-decoration: none;
+}
+
+article {
+    margin-left: 170px;
+    border-left: 1px solid gray;
+    padding: 1em;
+    overflow: hidden;
+}

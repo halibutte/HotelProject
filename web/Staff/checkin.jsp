@@ -16,12 +16,12 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width">
-        <title>JSP Page</title>
+        <title>Check In & Out</title>
         <link rel="stylesheet" type="text/css" href="staff.css">
     </head>
     <body>
+        <%@include file="staff_header.jsp" %>
         <div class="main-container">
-            
         <div class="col-minwidth">
             <div class="flexCont">
                 <div class="flexItem">

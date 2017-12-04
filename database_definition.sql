@@ -125,6 +125,57 @@ END;
 $$
 LANGUAGE 'plpgsql';
 
+--function to generate reports for weekly occupancy / income
+CREATE OR REPLACE FUNCTION weekly_reports(start_date date, end_date date) RETURNS TABLE (
+	r_class character(5),
+	nights_occupied bigint,
+    nights_avail bigint,
+	income numeric,
+	percent_occupancy numeric,
+	date_start date,
+	date_end date
+)
+AS $$
+DECLARE 
+week_start date;
+week_end date;
+r record;
+	BEGIN
+		--Find the monday before the start date
+		--Thanks to https://stackoverflow.com/questions/27989762/get-this-weeks-mondays-date-in-postgres
+		SELECT start_date - (cast(extract(isodow from start_date) as int)-1) INTO week_start;
+		LOOP
+		EXIT WHEN week_start > end_date;
+			week_end := week_start + 7;
+			FOR r IN (
+				SELECT avail.r_class, COALESCE(occ.nights_occupied, 0) AS nights_occupied, COALESCE(occ.income, 0) AS income, ROUND((COALESCE(occ.nights_occupied::numeric, 0) / COALESCE(avail.nights_avail::numeric, 0)) * 100, 2) AS percent_occupancy, avail.nights_avail FROM
+					(SELECT room.r_class, COUNT(room.r_class) * (week_end - week_start) AS nights_avail FROM room GROUP BY room.r_class) avail
+					LEFT JOIN
+					(SELECT roomrate.r_class, SUM(checkout - checkin) AS nights_occupied, SUM((checkout - checkin) * price) AS income 
+					FROM roombooking NATURAL JOIN roomrate
+					WHERE 
+						(checkin <= week_start AND checkout >= week_start) 
+						OR 
+						(checkin >= week_start AND checkout <= week_end) 
+					GROUP BY roomrate.r_class) occ
+				ON occ.r_class = avail.r_class
+				)
+			LOOP
+				r_class := r.r_class;
+				nights_occupied := r.nights_occupied;
+                nights_avail := r.nights_avail;
+				income := r.income;
+				percent_occupancy := r.percent_occupancy;
+				date_start := week_start;
+				date_end := week_end;
+				RETURN NEXT;
+			END LOOP;
+			week_start := week_start + 7;
+		END LOOP;
+	END;
+$$ LANGUAGE 'plpgsql';
+
+
 CREATE TRIGGER remove_cost AFTER DELETE ON roombooking FOR EACH ROW EXECUTE PROCEDURE remove_from_total();
 
 ALTER TABLE booking ALTER b_ref SET DEFAULT new_bref();

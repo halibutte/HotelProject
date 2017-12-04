@@ -21,6 +21,7 @@
         <script src="housekeeping.js"></script>
     </head>
     <body>
+        <%@include file="staff_header.jsp" %>
         <div class="main-container">
         <div class="col-minwidth" id="message_div">
             <h2>Messages</h2>
@@ -52,6 +53,7 @@
                         <select name="roomStatus">
                             <option value="C"<% if(r.getStatus().equals("C")) { out.print(" selected"); } %>>Checked Out</option>
                             <option value="X"<% if(r.getStatus().equals("X")) { out.print(" selected"); } %>>Unavailable</option>
+                            <option value="A"<% if(r.getStatus().equals("A")) { out.print(" selected"); } %>>Available</option>
                         </select>
                         </div>
                         

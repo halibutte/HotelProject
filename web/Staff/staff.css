@@ -5,6 +5,11 @@
 body {
     background-color: lightsteelblue;
     font-family: Calibri;
+    margin: 0;
+    height: 100%;
+}
+html {
+    height: 100%;
 }
 
 input, select {
@@ -29,13 +34,22 @@ input:hover, select:hover {
     transition-duration: 0.2s;
     background-color: #b9d6f7;
 }
-h1, h2, h3, h4, h5, h6 {
+h2, h3, h4, h5, h6 {
     margin-top: 1em;
     margin-bottom: 1em;
     font-family: "Bookman Old Style";
     font-weight: normal;
     letter-spacing: .4ex;
     border-bottom: thin solid lightslategray;
+}
+h1 {
+    font-family: "Brush Script MT", cursive;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 500;
+    line-height: 26.4px;
+    text-align: left;
+    padding-left: 30px;
 }
 .button {
     font-family: Calibri;
@@ -66,8 +80,106 @@ h1, h2, h3, h4, h5, h6 {
     background-color: lightpink !important;
 }
 
+.header {
+    width: 100%;
+}
+
+ul.nav {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border: none;
+    background-color: #eaf1f9;
+    box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.4);
+}
+ul.nav li {
+    list-style-type: none;
+    float: left;
+}
+ul.nav li a {
+    display: block;
+    color: black;
+    text-align: center;
+    padding: 1ex;
+    text-decoration: none;
+}
+ul.nav li a:hover {
+    background-color: #b9d6f7;
+}
+
+.main-container {
+    height: 100%;
+    background-image: url("img/clean-textile.png");
+}
+
+.col-full {
+    margin: auto;
+    padding-left: 2em;
+    padding-right: 2em;
+}
+
+/* CLASSES TO MAKE REPORT TABLES */
+div.table {
+    display: table;
+    width: 100%;
+    margin-right: 1ex;
+    border-spacing: 0.5ex;
+}
+div.table-total {
+    
+}
+div.table-details {
+    
+}
+div.table-total .head-cell {
+    display: table-cell;
+    background-color: #63768D;
+    padding: 1ex;
+    color: white;
+    font-weight: bold;
+    width: 25%;
+}
+div.table-details .head-cell {
+    display: table-cell;
+    background-color: #63768D;
+    padding: 1ex;
+    color: white;
+    font-weight: bold;
+    width: 20%;
+}
+div.table-head {
+    display: table-header-group;
+}
+div.table-row {
+    display: table-row;
+}
+div.table-cell {
+    display: table-cell;
+    padding: 0.5ex;
+    background: white;
+}
+div.head-cell-blank {
+    max-width: 25%;
+}
+div.sub-table {
+    display: table-row-group;
+    margin-left: 2ex;
+}
+div.card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    background-color: white;
+    margin: auto;
+    margin: 0.5em;
+    padding: 1em;
+    display: block;
+}
+
 @media screen and (min-width: 810px) {
+    h1 {
+        font-size: 70px;
+    }
     .main-container {
+        clear: both;
         display: table;
         width: 100%;
     }
@@ -79,6 +191,11 @@ h1, h2, h3, h4, h5, h6 {
     .col-half {
         display: table-cell;
         width: 50%;
+        padding-left: 2em;
+    }
+    .col-full {
+        display: table-cell;
+        width: 100%;
         padding-left: 2em;
     }
     .flexCont {
@@ -98,6 +215,7 @@ h1, h2, h3, h4, h5, h6 {
 
 @media screen and (max-width: 809px) {
     .main-container {
+        clear: both;
         display: block;
         width: 100%;
     }
@@ -106,6 +224,9 @@ h1, h2, h3, h4, h5, h6 {
         display: block;
     }
     .col-half {
+        display: block;
+    }
+    .col-full {
         display: block;
     }
     .flexCont {

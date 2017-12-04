@@ -11,6 +11,7 @@ import DataModel.Report;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.servlet.RequestDispatcher;
@@ -42,13 +43,16 @@ public class Reports extends HttpServlet {
             String endDate = (String)request.getParameter("end_date");
             LocalDate start = LocalDate.now();
             LocalDate end = LocalDate.now();
+            //List for messages
+            List<String> messages = new ArrayList<>();
             
             if(!Objects.isNull(startDate)) {
                 try {
                     start = LocalDate.parse(startDate);
-                    end = LocalDate.parse(startDate);
+                    end = LocalDate.parse(endDate);
                 } catch (Exception e) {
                     //leave as defaults
+                    messages.add("error#Could not parse dates, used todays date as default");
                 }
             }
             List<Report> report = null;
@@ -57,10 +61,12 @@ public class Reports extends HttpServlet {
                 report = m.REPORTS.weeklyReport(start, end);
             } catch(ModelException e) {
                 //handle
+                messages.add("error#Could not retrieve reports from database");
             }
             
             //forward response
             request.setAttribute("report_list", report);
+            request.setAttribute("messages", messages);
             RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/Staff/reports.jsp");
             dispatcher.forward(request, response);
             

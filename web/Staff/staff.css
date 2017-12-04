@@ -112,6 +112,68 @@ ul.nav li a:hover {
     background-image: url("img/clean-textile.png");
 }
 
+.col-full {
+    margin: auto;
+    padding-left: 2em;
+    padding-right: 2em;
+}
+
+/* CLASSES TO MAKE REPORT TABLES */
+div.table {
+    display: table;
+    width: 100%;
+    margin-right: 1ex;
+    border-spacing: 0.5ex;
+}
+div.table-total {
+    
+}
+div.table-details {
+    
+}
+div.table-total .head-cell {
+    display: table-cell;
+    background-color: #63768D;
+    padding: 1ex;
+    color: white;
+    font-weight: bold;
+    width: 25%;
+}
+div.table-details .head-cell {
+    display: table-cell;
+    background-color: #63768D;
+    padding: 1ex;
+    color: white;
+    font-weight: bold;
+    width: 20%;
+}
+div.table-head {
+    display: table-header-group;
+}
+div.table-row {
+    display: table-row;
+}
+div.table-cell {
+    display: table-cell;
+    padding: 0.5ex;
+    background: white;
+}
+div.head-cell-blank {
+    max-width: 25%;
+}
+div.sub-table {
+    display: table-row-group;
+    margin-left: 2ex;
+}
+div.card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    background-color: white;
+    margin: auto;
+    margin: 0.5em;
+    padding: 1em;
+    display: block;
+}
+
 @media screen and (min-width: 810px) {
     h1 {
         font-size: 70px;
@@ -129,6 +191,11 @@ ul.nav li a:hover {
     .col-half {
         display: table-cell;
         width: 50%;
+        padding-left: 2em;
+    }
+    .col-full {
+        display: table-cell;
+        width: 100%;
         padding-left: 2em;
     }
     .flexCont {
@@ -157,6 +224,9 @@ ul.nav li a:hover {
         display: block;
     }
     .col-half {
+        display: block;
+    }
+    .col-full {
         display: block;
     }
     .flexCont {

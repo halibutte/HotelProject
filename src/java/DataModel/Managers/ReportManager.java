@@ -25,11 +25,12 @@ public class ReportManager extends AbstractManager {
     private static Report mapToReport(Map<String,Object> map) {
         Report report = new Report();
         report.setEndDate(LocalDate.parse(map.get("date_end").toString()));
-        report.setEndDate(LocalDate.parse(map.get("date_start").toString()));
+        report.setStartDate(LocalDate.parse(map.get("date_start").toString()));
         report.setRoomClass(map.get("r_class").toString());
         report.setIncome(((BigDecimal)map.get("income")).doubleValue());
         report.setPercentOccupancy(((BigDecimal)map.get("percent_occupancy")).doubleValue());
         report.setNightsOccupied(Integer.valueOf(((Long)map.get("nights_occupied")).intValue()));
+        report.setNightsAvail(Integer.valueOf(((Long)map.get("nights_avail")).intValue()));
         return report;
     }
     

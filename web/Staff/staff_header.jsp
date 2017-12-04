@@ -10,7 +10,8 @@
     <div>
         <ul class="nav">
             <li><a href="./Checkin">Check In & Out</a></li>
-            <li><a href="./Housekeeping ">Housekeeping</a></li>
+            <li><a href="./Housekeeping">Housekeeping</a></li>
+            <li><a href="./Reports">Reports</a></li>
         </ul>
     </div>
 </div>

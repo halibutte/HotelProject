@@ -129,6 +129,7 @@ LANGUAGE 'plpgsql';
 CREATE OR REPLACE FUNCTION weekly_reports(start_date date, end_date date) RETURNS TABLE (
 	r_class character(5),
 	nights_occupied bigint,
+    nights_avail bigint,
 	income numeric,
 	percent_occupancy numeric,
 	date_start date,
@@ -147,9 +148,9 @@ r record;
 		EXIT WHEN week_start > end_date;
 			week_end := week_start + 7;
 			FOR r IN (
-				SELECT occ.r_class, occ.nights_occupied, occ.income, ROUND(occ.nights_occupied::numeric / avail.nights_avail::numeric * 100, 2) AS percent_occupancy FROM
+				SELECT avail.r_class, COALESCE(occ.nights_occupied, 0) AS nights_occupied, COALESCE(occ.income, 0) AS income, ROUND((COALESCE(occ.nights_occupied::numeric, 0) / COALESCE(avail.nights_avail::numeric, 0)) * 100, 2) AS percent_occupancy, avail.nights_avail FROM
 					(SELECT room.r_class, COUNT(room.r_class) * (week_end - week_start) AS nights_avail FROM room GROUP BY room.r_class) avail
-					JOIN
+					LEFT JOIN
 					(SELECT roomrate.r_class, SUM(checkout - checkin) AS nights_occupied, SUM((checkout - checkin) * price) AS income 
 					FROM roombooking NATURAL JOIN roomrate
 					WHERE 
@@ -162,6 +163,7 @@ r record;
 			LOOP
 				r_class := r.r_class;
 				nights_occupied := r.nights_occupied;
+                nights_avail := r.nights_avail;
 				income := r.income;
 				percent_occupancy := r.percent_occupancy;
 				date_start := week_start;

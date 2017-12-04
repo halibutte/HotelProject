@@ -19,19 +19,30 @@ public class Report implements Comparable {
     private double income;
     private double percentOccupancy;
     private String roomClass;
+    private int nightsAvail;
 
     public Report() {
     }
 
-    public Report(LocalDate startDate, LocalDate endDate, int nightsOccupied, double income, double percentOccupancy, String roomClass) {
+    public Report(LocalDate startDate, LocalDate endDate, int nightsOccupied, double income, double percentOccupancy, String roomClass, int nightsAvail) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.nightsOccupied = nightsOccupied;
         this.income = income;
         this.percentOccupancy = percentOccupancy;
         this.roomClass = roomClass;
+        this.nightsAvail = nightsAvail;
     }
 
+    public int getNightsAvail() {
+        return nightsAvail;
+    }
+
+    public void setNightsAvail(int nightsAvail) {
+        this.nightsAvail = nightsAvail;
+    }
+
+    
     public LocalDate getEndDate() {
         return endDate;
     }

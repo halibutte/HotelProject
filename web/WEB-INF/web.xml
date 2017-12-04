@@ -13,10 +13,6 @@
         <servlet-class>Servlets.Staff.Housekeeping</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>EditBooking</servlet-name>
-        <servlet-class>Servlets.EditBooking</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>Reports</servlet-name>
         <servlet-class>Servlets.Staff.Reports</servlet-class>
     </servlet>
@@ -31,10 +27,6 @@
     <servlet-mapping>
         <servlet-name>Housekeeping</servlet-name>
         <url-pattern>/Staff/Housekeeping</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>EditBooking</servlet-name>
-        <url-pattern>/EditBooking</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>Reports</servlet-name>

@@ -177,8 +177,52 @@ r record;
 	END;
 $$ LANGUAGE 'plpgsql';
 
+CREATE TABLE billableitem (
+	item_code character(5) PRIMARY KEY,
+	item_name VARCHAR(20) NOT NULL,
+	item_price DECIMAL(5,2)
+);
+
+CREATE TABLE bookingitem (
+	id SERIAL PRIMARY KEY,
+	item_code character(5) REFERENCES billableitem NOT NULL,
+	b_ref INTEGER REFERENCES booking ON DELETE CASCADE NOT NULL,
+	item_desc VARCHAR(30),
+	price DECIMAL(7,2) NOT NULL
+);
+
+CREATE OR REPLACE FUNCTION add_item_to_total() RETURNS TRIGGER AS $$
+BEGIN
+--Function adds the cost of an item onto the bill
+--Add this price to the booking
+UPDATE booking SET b_cost = b_cost + NEW.price, b_outstanding = b_outstanding + NEW.price WHERE booking.b_ref = NEW.b_ref;
+RETURN NEW;
+END;
+$$
+LANGUAGE 'plpgsql';
+
+CREATE TRIGGER add_item_cost AFTER INSERT ON bookingitem FOR EACH ROW EXECUTE PROCEDURE add_item_to_total();
+
+CREATE OR REPLACE FUNCTION remove_item_from_total() RETURNS TRIGGER AS $$
+DECLARE
+	cost NUMERIC;
+BEGIN
+--Function adds the cost of an item onto the bill
+--Add this price to the booking
+UPDATE booking SET b_cost = b_cost - OLD.price, b_outstanding = b_outstanding - OLD.price WHERE booking.b_ref = OLD.b_ref;
+RETURN NEW;
+END;
+$$
+LANGUAGE 'plpgsql';
+
+CREATE TRIGGER remove_item_cost AFTER DELETE ON bookingitem FOR EACH ROW EXECUTE PROCEDURE remove_item_from_total();
+
 ALTER TABLE booking ALTER b_ref SET DEFAULT new_bref();
 ALTER TABLE customer ALTER c_no SET DEFAULT new_cno();
+
+INSERT INTO billableitem(item_code, item_name, item_price) VALUES ('DRINK', 'Drinks from Bar', 4.95);
+INSERT INTO billableitem(item_code, item_name, item_price) VALUES ('FOOD', 'Food in Restaurant', 10.95);
+INSERT INTO billableitem(item_code, item_name, item_price) VALUES ('OTHER', 'Other', 0.00);
 
 insert into room values (101, 'sup_d', 'A', '');
 insert into room values (102, 'sup_d', 'A', '');

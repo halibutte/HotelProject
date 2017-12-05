@@ -29,6 +29,7 @@ public class Model {
     public RoomBookingManager ROOMBOOKINGS;
     public BookingManager BOOKINGS;
     public ReportManager REPORTS;
+    public BillableManager BILLABLES;
 
     public Model() throws ModelException {
         try {
@@ -39,6 +40,7 @@ public class Model {
             ROOMBOOKINGS = new RoomBookingManager(this);
             BOOKINGS = new BookingManager(this);
             REPORTS = new ReportManager(this);
+            BILLABLES = new BillableManager(this);
         } catch (SQLException e) {
             throw new ModelException(e.getMessage());
         }

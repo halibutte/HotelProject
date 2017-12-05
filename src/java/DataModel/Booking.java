@@ -23,6 +23,7 @@ public class Booking {
     private double outstanding;
     private String notes;
     private List<RoomBooking> rooms;
+    private List<BilledItem> billedItems;
     private Customer customer;
 
     public Booking() {
@@ -95,6 +96,14 @@ public class Booking {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    public List<BilledItem> getBilledItems() {
+        return billedItems;
+    }
+
+    public void setBilledItems(List<BilledItem> billedItems) {
+        this.billedItems = billedItems;
     }
     
     public String toString() {

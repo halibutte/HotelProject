@@ -16,8 +16,8 @@
         <meta name="viewport" content="width=device-width">
         <title>Weekly Reports</title>
         <link rel="stylesheet" type="text/css" href="staff.css">
-        <script src="jquery.min.js"></script>
-        <script src="reports.js"></script>
+        <script src="js/jquery.min.js"></script>
+        <script src="js/reports.js"></script>
     </head>
     <body>
         <%@include file="staff_header.jsp" %>

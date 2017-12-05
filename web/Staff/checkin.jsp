@@ -18,8 +18,9 @@
         <meta name="viewport" content="width=device-width">
         <title>Check In & Out</title>
         <link rel="stylesheet" type="text/css" href="staff.css">
-        <script src="jquery.min.js"></script>
-        <script src="empty_message.js"></script>
+        <script src="js/jquery.min.js"></script>
+        <script src="js/empty_message.js"></script>
+        <script src="js/checkin.js"></script>
     </head>
     <body>
         <%@include file="staff_header.jsp" %>
@@ -125,6 +126,21 @@
                         </div>
                         <div class="form-spacing-small">Payment Taken</div>
                         <input type="number" name="balOutstanding" value="0.00" class="form-spacing" step="0.01" min="0" max="<% out.print(b.getOutstanding()); %>">
+                        <div class="payment-detail-header">
+                            <div class="form-spacing"><span class="payment-expand-text">Payment Details</span>&nbsp;<span class="interactive payment-expand" onclick="toggle_payment(this)">[+]</span> </div>
+                            <div class="payment-details">
+                                <div class="form-spacing-small">Card Number</div>
+                                <input type="text" name="cardNum" value="<% out.print(c.getCardno()); %>" class="form-spacing" pattern="[\d]{8,19}">
+                                <div class="form-spacing-small">Card Type</div>
+                                <select name="cardType" class="form-spacing">
+                                    <option value="V"<% if(c.getCardtype().equals("V")) { out.print(" selected"); } %>>Visa</option>
+                                    <option value="MC"<% if(c.getCardtype().equals("MC")) { out.print(" selected"); } %>>Mastercard</option>
+                                    <option value="A"<% if(c.getCardtype().equals("A")) { out.print(" selected"); } %>>American Express</option>
+                                </select>
+                                <div class="form-spacing-small">Card Expiry</div>
+                                <input type="text" name="cardExp" value="<% out.print(c.getCardexp()); %>" class="form-spacing" pattern="[\d]{2}/\d{2}">
+                            </div>
+                        </div>
                         <button type="submit" class="button" name="submit">Submit</button>
                     </form>
                 </div>

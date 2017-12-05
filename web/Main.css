@@ -46,6 +46,7 @@ div.content {
     margin-top: 1em;
     margin-left: 1ex;
     margin-right: 1ex;
+    overflow: auto;
 }
 
 fieldset{
@@ -197,6 +198,16 @@ img.room-thumb {
     display: block;
     width: 100%;
     min-height: 135px;
+}
+img.float-left {
+    margin: 1ex;
+    float: left;
+    max-width: 40%;
+}
+img.float-right {
+    margin: 1ex;
+    float: right;
+    max-width: 40%;
 }
 
 

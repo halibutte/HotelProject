@@ -6,6 +6,7 @@
 package Servlets.Staff;
 
 import DataModel.Booking;
+import DataModel.Customer;
 import DataModel.Model;
 import DataModel.ModelException;
 import DataModel.Room;
@@ -52,6 +53,9 @@ public class Checkin extends HttpServlet {
             String actType = (String)request.getParameter("actType");
             String balance = (String)request.getParameter("balOutstanding");
             String bref = (String)request.getParameter("bookRef");
+            String cardExp = (String)request.getParameter("cardExp");
+            String cardType = (String)request.getParameter("cardType");
+            String cardNum = (String)request.getParameter("cardNum");
             //if the date is not null use date otherwise today
             LocalDate viewDate = LocalDate.now();
             if(!Objects.isNull(forDate)) {
@@ -85,6 +89,16 @@ public class Checkin extends HttpServlet {
             if(!Objects.isNull(actType)) {
                 if(actType.equals("checkout")) {
                     Booking b = model.BOOKINGS.getBooking(Integer.parseInt(bref));
+                    //update the customers payment details
+                    Customer c = b.getCustomer();
+                    if(!(c.getCardno().equals(cardNum) && c.getCardtype().equals(cardType) && c.getCardexp().equals(cardExp))) {
+                        c.setCardno(cardNum);
+                        c.setCardtype(cardType);
+                        c.setCardexp(cardExp);
+                        model.CUSTOMERS.updateCustomer(c);
+                        messages.add("confirm#Customer " + c.getName() + "'s payment details updated");
+                    }
+                    //now do payment on booking
                     Double pay = 0.0;
                     try {
                         pay = Double.parseDouble(balance);

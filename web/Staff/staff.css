@@ -173,6 +173,27 @@ div.card {
     padding: 1em;
     display: block;
 }
+div.empty {
+    background-image: url("img/envelope.png");
+    background-size: 100% 100%;
+    margin: 0.5em;
+    padding: 1em;
+    text-align: center;
+    vertical-align: middle;
+    width: 200px;
+    height: 200px;
+    position: relative;
+}
+div.empty div {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    font-weight: bold;
+    font-size: large;
+}
+div.empty-hide {
+    display: none;
+}
 
 @media screen and (min-width: 810px) {
     h1 {
@@ -211,6 +232,9 @@ div.card {
         margin: 0.5em;
         padding: 1em;
     }
+    div.empty {
+        width: 200px;
+    }
 }
 
 @media screen and (max-width: 809px) {
@@ -242,6 +266,9 @@ div.card {
         margin: 0.5em;
         padding: 1em;
     }
+    div.empty {
+        width: 200px;
+    }
 }
 @media screen and (max-width: 510px) {
     .flexCont {
@@ -254,5 +281,15 @@ div.card {
         display: inline-block;
         width: 90%;
         box-sizing: border-box;
+    }
+    div.empty {
+        display: block;
+        text-align: center;
+        position: relative;
+        margin: auto;
+    }
+    div.empty div {
+        display: block;
+        top: 100px;
     }
 }

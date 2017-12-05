@@ -18,6 +18,8 @@
         <meta name="viewport" content="width=device-width">
         <title>Check In & Out</title>
         <link rel="stylesheet" type="text/css" href="staff.css">
+        <script src="jquery.min.js"></script>
+        <script src="empty_message.js"></script>
     </head>
     <body>
         <%@include file="staff_header.jsp" %>
@@ -79,6 +81,11 @@
                 </div>
             </div>
             <% } %>
+            <div class="empty-hide">
+                <div class="empty">
+                    <div>No arrivals today</div>
+                </div>
+            </div>
         </div>
         </div>
         
@@ -123,6 +130,11 @@
                 </div>
             </div>
             <% }%>
+            <div class="empty-hide">
+                <div class="empty">
+                    <div>No departures today</div>
+                </div>
+            </div>
         </div>
         </div>
         

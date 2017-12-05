@@ -33,9 +33,9 @@
                         <h4>View Dates</h4>
                         <form method="GET">
                             <div class="form-spacing-small">From</div>
-                            <input type="date" name="start_date" value="<% out.print(request.getParameter("start_date")); %>" class="form-spacing">
+                            <input type="date" name="start_date" value="<% out.print(request.getAttribute("start_date")); %>" class="form-spacing">
                             <div class="form-spacing-small">To</div>
-                            <input type="date" name="end_date" value="<% out.print(request.getParameter("end_date")); %>" class="form-spacing">
+                            <input type="date" name="end_date" value="<% out.print(request.getAttribute("end_date")); %>" class="form-spacing">
                             <button type="submit" class="button">Submit</button>
                         </form>
                     </div>
@@ -94,7 +94,7 @@
                     </div>  
                 </div>
                 
-                <div class="table table-details" name="room_breakdown">
+                <div class="table table-details" data-name="room_breakdown">
                     <div class="table-head">
                         <div class="table-row">
                             <div class="head-cell">

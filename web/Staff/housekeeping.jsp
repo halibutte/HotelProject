@@ -19,6 +19,7 @@
         <link rel="stylesheet" type="text/css" href="staff.css">
         <script src="jquery.min.js"></script>
         <script src="housekeeping.js"></script>
+        <script src="empty_message.js"></script>
     </head>
     <body>
         <%@include file="staff_header.jsp" %>
@@ -62,6 +63,11 @@
                 </div>
             </div>
             <% } %>
+            <div class="empty-hide">
+                <div class="empty">
+                    <div>No rooms checked out</div>
+                </div>
+            </div>
         </div>
         </div>
         
@@ -88,6 +94,11 @@
                 </div>
             </div>
             <% }%>
+            <div class="empty-hide">
+                <div class="empty">
+                    <div>No rooms unavailable</div>
+                </div>
+            </div>
         </div>
         </div>
         

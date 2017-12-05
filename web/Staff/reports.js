@@ -11,7 +11,7 @@ function run_sums() {
        //get the card which is containing this element
        var card = $(el).closest(".card");
        var sum = 0;
-       $(card).find("[name='room_breakdown'] .table-row").each(function(idx, el) {
+       $(card).find("[data-name='room_breakdown'] .table-row").each(function(idx, el) {
            var thisVal = parseFloat($(el).find(".table-cell").eq(colSum).text().trim());
            if(!isNaN(thisVal)) {
                sum += thisVal;
@@ -30,7 +30,7 @@ function run_avgs() {
        var card = $(el).closest(".card");
        var num = 0;
        var denom = 0;
-       $(card).find("[name='room_breakdown'] .table-row").each(function(idx, el) {
+       $(card).find("[data-name='room_breakdown'] .table-row").each(function(idx, el) {
            var thisNum = parseFloat($(el).find(".table-cell").eq(avgCols[0]).text().trim());
            var thisDenom = parseFloat($(el).find(".table-cell").eq(avgCols[1]).text().trim());
            if(!isNaN(thisNum)) {

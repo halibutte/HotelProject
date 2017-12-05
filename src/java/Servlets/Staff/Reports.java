@@ -67,6 +67,8 @@ public class Reports extends HttpServlet {
             //forward response
             request.setAttribute("report_list", report);
             request.setAttribute("messages", messages);
+            request.setAttribute("start_date", start);
+            request.setAttribute("end_date", end);
             RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/Staff/reports.jsp");
             dispatcher.forward(request, response);
             

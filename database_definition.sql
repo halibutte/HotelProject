@@ -125,6 +125,8 @@ END;
 $$
 LANGUAGE 'plpgsql';
 
+CREATE TRIGGER remove_cost AFTER DELETE ON roombooking FOR EACH ROW EXECUTE PROCEDURE remove_from_total();
+
 --function to generate reports for weekly occupancy / income
 CREATE OR REPLACE FUNCTION weekly_reports(start_date date, end_date date) RETURNS TABLE (
 	r_class character(5),
@@ -174,9 +176,6 @@ r record;
 		END LOOP;
 	END;
 $$ LANGUAGE 'plpgsql';
-
-
-CREATE TRIGGER remove_cost AFTER DELETE ON roombooking FOR EACH ROW EXECUTE PROCEDURE remove_from_total();
 
 ALTER TABLE booking ALTER b_ref SET DEFAULT new_bref();
 ALTER TABLE customer ALTER c_no SET DEFAULT new_cno();

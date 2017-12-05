@@ -123,7 +123,7 @@ public class CustomerManager extends AbstractManager {
         //This should be passed to the createFromRecordset method
         Customer customer = new Customer();
         customer.setAddress((String)map.get("c_address"));
-        customer.setCardexp((String)map.get("c_exp"));
+        customer.setCardexp((String)map.get("c_cardexp"));
         customer.setCardno((String)map.get("c_cardno"));
         customer.setCardtype((String)map.get("c_cardtype"));
         customer.setEmail((String)map.get("c_email"));

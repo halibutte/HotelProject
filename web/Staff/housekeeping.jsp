@@ -17,9 +17,9 @@
         <meta name="viewport" content="width=device-width">
         <title>Housekeeping</title>
         <link rel="stylesheet" type="text/css" href="staff.css">
-        <script src="jquery.min.js"></script>
-        <script src="housekeeping.js"></script>
-        <script src="empty_message.js"></script>
+        <script src="js/jquery.min.js"></script>
+        <script src="js/housekeeping.js"></script>
+        <script src="js/empty_message.js"></script>
     </head>
     <body>
         <%@include file="staff_header.jsp" %>

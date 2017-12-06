@@ -16,6 +16,10 @@
         <servlet-name>Billing</servlet-name>
         <servlet-class>Servlets.Staff.Billing</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>BookingRoom</servlet-name>
+        <servlet-class>Servlets.Staff.BookingRoom</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Checkin</servlet-name>
         <url-pattern>/Staff/Checkin</url-pattern>
@@ -31,6 +35,10 @@
     <servlet-mapping>
         <servlet-name>Billing</servlet-name>
         <url-pattern>/Staff/Billing</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookingRoom</servlet-name>
+        <url-pattern>/BookingRoom</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

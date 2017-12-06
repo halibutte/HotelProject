@@ -234,6 +234,9 @@ img.float-right {
 .message-error {
     background-color: lightpink !important;
 }
+.message-relocate {
+    display: none;
+}
 
 /*NAVIGATION*/
 ul.nav {

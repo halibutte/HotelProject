@@ -124,6 +124,8 @@ public class BookingManager extends AbstractManager {
             if(!done) {
                 throw new ModelException("Unable to add room, may be unavailable");
             }
+            //remove the booked room from the list of available rooms
+            availRooms.remove(selectedRoom.get());
         }
         return true;
     }

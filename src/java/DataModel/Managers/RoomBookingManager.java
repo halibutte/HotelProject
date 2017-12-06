@@ -95,7 +95,7 @@ public class RoomBookingManager extends AbstractManager {
         Object[] res = createRecord(sql, args, "createRoomBooking");
         Integer res1 = (Integer)res[0];
         if(res1 > 0) {
-            return getRoomBooking(res1, (Integer)res[1]);
+            return getRoomBooking((Integer)res[1], res1);
         } else if (res1 < 0) {
             throw new ModelException("SQL Exception while creating RoomBooking");
         } else {

@@ -45,6 +45,12 @@
                             <button type="submit" class="button">Submit</button>
                         </form>
                     </div>
+                    <div class="flexItem">
+                        <h4 class="staff">Search Guests</h4>
+                        <form method="GET">
+                            <input id="search_val" type="text" name="search_guests" value="" class="form-spacing">
+                        </form>
+                    </div>
                     <% List<String> msgs = (List<String>)request.getAttribute("messages");
                     if(!Objects.isNull(msgs)) {
                     for(String s : msgs) {
@@ -68,14 +74,14 @@
                 List<RoomBooking> rooms = b.getRooms();
                 %>
                 <div class="flexItemLarge">
-                    <h3 class="staff"><% out.print(c.getName()); %>
+                    <h3 class="staff"><span data-searchon="<% out.print(c.getName()); %>"><% out.print(c.getName()); %></span>
                         <% for(int i = 0; i < rooms.size(); i++) {
                             RoomBooking r = rooms.get(i);
                             String end = ",&nbsp;";
                             if(i == 0) {
                                 end = "";
                             }
-                            out.print("<span class='payment-expand'>" + r.getRoomNo() + end + "</span>");
+                            out.print("<span class='payment-expand' data-searchon='" + r.getRoomNo() + "'>" + r.getRoomNo() + end + "</span>");
                         } %>
                     </h3>
                     <div class="table table-total form-spacing">

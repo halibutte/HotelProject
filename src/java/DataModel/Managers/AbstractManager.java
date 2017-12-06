@@ -91,7 +91,7 @@ public abstract class AbstractManager {
         } catch (Exception e) {
             return null;
         } finally {
-            try { rs.close(); } catch (SQLException e) {}
+            try { rs.close(); } catch (SQLException e) {} catch (Exception e) {}
             return result;
         }
     }

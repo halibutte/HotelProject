@@ -22,6 +22,15 @@ input, select, .interactive {
     font-size: medium;
     padding: 0.5ex;
 }
+/* HIDE NUMBER SPINNERS */
+input[type='number'] {
+    -moz-appearance:textfield;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
 input, select{
     width: 100%;
 }
@@ -64,6 +73,20 @@ h1 {
     border: thin solid #eaf1f9;
 }
 .button:hover {
+    background-color: #b9d6f7;
+    border: thin solid #b9d6f7;
+}
+.button-narrow {
+    font-family: Calibri;
+    font-size: medium;
+    padding: 0.5ex;
+    width: 100%;
+    background-color: #eaf1f9;
+    -webkit-transition-duration: 0.2s; /* Safari */
+    transition-duration: 0.2s;
+    border: thin solid #eaf1f9;
+}
+.button-narrow:hover {
     background-color: #b9d6f7;
     border: thin solid #b9d6f7;
 }
@@ -133,26 +156,38 @@ div.table-total {
 div.table-details {
     
 }
-div.table-total .head-cell {
-    display: table-cell;
-    background-color: #63768D;
-    padding: 1ex;
-    color: white;
-    font-weight: bold;
+div.width-50 {
+    width: 50%;
+}
+div.width-15 {
+    width: 15%;
+}
+div.width-20 {
+    width: 20%;
+}
+div.width-10 {
+    width: 10%;
+}
+div.width-35 {
+    width: 35%;
+}
+div.width-25 {
     width: 25%;
 }
-div.table-details .head-cell {
+div.head-cell {
     display: table-cell;
     background-color: #63768D;
     padding: 1ex;
     color: white;
     font-weight: bold;
-    width: 20%;
 }
 div.table-head {
     display: table-header-group;
 }
 div.table-row {
+    display: table-row;
+}
+form.table-row {
     display: table-row;
 }
 div.table-cell {
@@ -248,6 +283,13 @@ span.payment-expand-text {
         margin: 0.5em;
         padding: 1em;
     }
+    .flexItemLarge {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        background-color: white;
+        width: 500px;
+        margin: 0.5em;
+        padding: 1em;
+    }
     div.empty {
         width: 200px;
     }
@@ -282,6 +324,13 @@ span.payment-expand-text {
         margin: 0.5em;
         padding: 1em;
     }
+    .flexItemLarge {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        background-color: white;
+        width: 500px;
+        margin: 0.5em;
+        padding: 1em;
+    }
     div.empty {
         width: 200px;
     }
@@ -293,6 +342,12 @@ span.payment-expand-text {
         text-align: center;
     }
     .flexItem {
+        text-align: left;
+        display: inline-block;
+        width: 90%;
+        box-sizing: border-box;
+    }
+    .flexItemLarge {
         text-align: left;
         display: inline-block;
         width: 90%;

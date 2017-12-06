@@ -31,6 +31,7 @@ public class ReportManager extends AbstractManager {
         report.setPercentOccupancy(((BigDecimal)map.get("percent_occupancy")).doubleValue());
         report.setNightsOccupied(Integer.valueOf(((Long)map.get("nights_occupied")).intValue()));
         report.setNightsAvail(Integer.valueOf(((Long)map.get("nights_avail")).intValue()));
+        report.setExtraSpend(((BigDecimal)map.get("extra_spend")).doubleValue());
         return report;
     }
     

@@ -101,7 +101,7 @@ DECLARE
 BEGIN
 --Function adds the cost of a room onto a booking
 --Find the cost of the room
-SELECT price INTO cost FROM roomrate WHERE r_no = NEW.r_no;
+SELECT price * (NEW.checkout - NEW.checkin) INTO cost FROM roomrate WHERE r_no = NEW.r_no;
 --Add this price to the booking
 UPDATE booking SET b_cost = b_cost + cost, b_outstanding = b_outstanding + cost WHERE booking.b_ref = NEW.b_ref;
 RETURN NEW;
@@ -117,7 +117,7 @@ DECLARE
 	cost NUMERIC;
 BEGIN
 --Find the cost of the room
-SELECT price INTO cost FROM roomrate WHERE r_no = OLD.r_no;
+SELECT price * (OLD.checkout - OLD.checkin) INTO cost FROM roomrate WHERE r_no = OLD.r_no;
 --remove this price from the booking
 UPDATE booking SET b_cost = b_cost - cost, b_outstanding = b_outstanding - cost WHERE booking.bref = OLD.b_ref;
 RETURN OLD;
@@ -135,12 +135,14 @@ CREATE OR REPLACE FUNCTION weekly_reports(start_date date, end_date date) RETURN
 	income numeric,
 	percent_occupancy numeric,
 	date_start date,
-	date_end date
+	date_end date,
+	extra_spend numeric
 )
 AS $$
 DECLARE 
 week_start date;
 week_end date;
+week_extra numeric;
 r record;
 	BEGIN
 		--Find the monday before the start date
@@ -149,16 +151,33 @@ r record;
 		LOOP
 		EXIT WHEN week_start > end_date;
 			week_end := week_start + 7;
+			--Get this weeks non-room spend
+			SELECT SUM(b_cost - sq2.room_cost) INTO week_extra
+			FROM booking 
+			JOIN
+			(
+				SELECT b_ref FROM roombooking WHERE
+				checkout BETWEEN week_start AND week_end
+			) sq ON booking.b_ref = sq.b_ref
+			JOIN
+			(
+				SELECT SUM(roomrate.price * (roombooking.checkout - roombooking.checkin)) AS room_cost, b_ref 
+				FROM roombooking NATURAL JOIN roomrate
+				GROUP BY b_ref
+			) sq2 ON sq2.b_ref = sq.b_ref;
+			--Work out rent for each type of room
 			FOR r IN (
 				SELECT avail.r_class, COALESCE(occ.nights_occupied, 0) AS nights_occupied, COALESCE(occ.income, 0) AS income, ROUND((COALESCE(occ.nights_occupied::numeric, 0) / COALESCE(avail.nights_avail::numeric, 0)) * 100, 2) AS percent_occupancy, avail.nights_avail FROM
 					(SELECT room.r_class, COUNT(room.r_class) * (week_end - week_start) AS nights_avail FROM room GROUP BY room.r_class) avail
 					LEFT JOIN
-					(SELECT roomrate.r_class, SUM(checkout - checkin) AS nights_occupied, SUM((checkout - checkin) * price) AS income 
+					(SELECT roomrate.r_class, SUM(LEAST(checkout, week_end) - GREATEST(checkin, week_start)) AS nights_occupied, SUM((LEAST(checkout, week_end) - GREATEST(checkin, week_start)) * price) AS income 
 					FROM roombooking NATURAL JOIN roomrate
 					WHERE 
 						(checkin <= week_start AND checkout >= week_start) 
-						OR 
-						(checkin >= week_start AND checkout <= week_end) 
+						OR
+						(checkout BETWEEN week_start AND week_end)
+						OR
+						(checkin BETWEEN week_start AND week_end)
 					GROUP BY roomrate.r_class) occ
 				ON occ.r_class = avail.r_class
 				)
@@ -170,6 +189,7 @@ r record;
 				percent_occupancy := r.percent_occupancy;
 				date_start := week_start;
 				date_end := week_end;
+				extra_spend := week_extra;
 				RETURN NEXT;
 			END LOOP;
 			week_start := week_start + 7;
@@ -177,8 +197,52 @@ r record;
 	END;
 $$ LANGUAGE 'plpgsql';
 
+CREATE TABLE billableitem (
+	item_code character(5) PRIMARY KEY,
+	item_name VARCHAR(20) NOT NULL,
+	item_price DECIMAL(5,2)
+);
+
+CREATE TABLE bookingitem (
+	id SERIAL PRIMARY KEY,
+	item_code character(5) REFERENCES billableitem NOT NULL,
+	b_ref INTEGER REFERENCES booking ON DELETE CASCADE NOT NULL,
+	item_desc VARCHAR(30),
+	price DECIMAL(7,2) NOT NULL
+);
+
+CREATE OR REPLACE FUNCTION add_item_to_total() RETURNS TRIGGER AS $$
+BEGIN
+--Function adds the cost of an item onto the bill
+--Add this price to the booking
+UPDATE booking SET b_cost = b_cost + NEW.price, b_outstanding = b_outstanding + NEW.price WHERE booking.b_ref = NEW.b_ref;
+RETURN NEW;
+END;
+$$
+LANGUAGE 'plpgsql';
+
+CREATE TRIGGER add_item_cost AFTER INSERT ON bookingitem FOR EACH ROW EXECUTE PROCEDURE add_item_to_total();
+
+CREATE OR REPLACE FUNCTION remove_item_from_total() RETURNS TRIGGER AS $$
+DECLARE
+	cost NUMERIC;
+BEGIN
+--Function adds the cost of an item onto the bill
+--Add this price to the booking
+UPDATE booking SET b_cost = b_cost - OLD.price, b_outstanding = b_outstanding - OLD.price WHERE booking.b_ref = OLD.b_ref;
+RETURN NEW;
+END;
+$$
+LANGUAGE 'plpgsql';
+
+CREATE TRIGGER remove_item_cost AFTER DELETE ON bookingitem FOR EACH ROW EXECUTE PROCEDURE remove_item_from_total();
+
 ALTER TABLE booking ALTER b_ref SET DEFAULT new_bref();
 ALTER TABLE customer ALTER c_no SET DEFAULT new_cno();
+
+INSERT INTO billableitem(item_code, item_name, item_price) VALUES ('DRINK', 'Drinks from Bar', 4.95);
+INSERT INTO billableitem(item_code, item_name, item_price) VALUES ('FOOD', 'Food in Restaurant', 10.95);
+INSERT INTO billableitem(item_code, item_name, item_price) VALUES ('OTHER', 'Other', 0.00);
 
 insert into room values (101, 'sup_d', 'A', '');
 insert into room values (102, 'sup_d', 'A', '');
@@ -368,110 +432,6 @@ insert into booking values (15934, 12037, 0, 0, '');
 insert into booking values (15960, 12175, 0, 0, '');
 insert into booking values (15975, 12596, 0, 0, '');
 
-update booking set b_cost=130.00 where b_ref=13011;
-update booking set b_cost=308.00 where b_ref=13052;
-update booking set b_cost=770.00 where b_ref=13066;
-update booking set b_cost=556.00 where b_ref=13083;
-update booking set b_cost=636.00 where b_ref=13098;
-update booking set b_cost=186.00 where b_ref=13109;
-update booking set b_cost=186.00 where b_ref=13138;
-update booking set b_cost=548.00 where b_ref=13168;
-update booking set b_cost=300.00 where b_ref=13180;
-update booking set b_cost=608.00 where b_ref=13202;
-update booking set b_cost=408.00 where b_ref=13220;
-update booking set b_cost=62.00 where b_ref=13246;
-update booking set b_cost=308.00 where b_ref=13250;
-update booking set b_cost=408.00 where b_ref=13262;
-update booking set b_cost=65.00 where b_ref=13324;
-update booking set b_cost=496.00 where b_ref=13325;
-update booking set b_cost=231.00 where b_ref=13332;
-update booking set b_cost=195.00 where b_ref=13339;
-update booking set b_cost=325.00 where b_ref=13358;
-update booking set b_cost=65.00 where b_ref=13385;
-update booking set b_cost=150.00 where b_ref=13421;
-update booking set b_cost=225.00 where b_ref=13425;
-update booking set b_cost=308.00 where b_ref=13429;
-update booking set b_cost=308.00 where b_ref=13476;
-update booking set b_cost=195.00 where b_ref=13482;
-update booking set b_cost=420.00 where b_ref=13503;
-update booking set b_cost=434.00 where b_ref=13505;
-update booking set b_cost=381.00 where b_ref=13541;
-update booking set b_cost=260.00 where b_ref=13559;
-update booking set b_cost=195.00 where b_ref=13585;
-update booking set b_cost=154.00 where b_ref=13602;
-update booking set b_cost=687.00 where b_ref=13627;
-update booking set b_cost=195.00 where b_ref=13631;
-update booking set b_cost=300.00 where b_ref=13663;
-update booking set b_cost=186.00 where b_ref=13801;
-update booking set b_cost=231.00 where b_ref=13836;
-update booking set b_cost=139.00 where b_ref=13853;
-update booking set b_cost=612.00 where b_ref=13872;
-update booking set b_cost=137.00 where b_ref=13881;
-update booking set b_cost=568.00 where b_ref=13886;
-update booking set b_cost=65.00 where b_ref=13893;
-update booking set b_cost=77.00 where b_ref=13906;
-update booking set b_cost=150.00 where b_ref=13925;
-update booking set b_cost=248.00 where b_ref=13970;
-update booking set b_cost=140.00 where b_ref=13977;
-update booking set b_cost=1085.00 where b_ref=14038;
-update booking set b_cost=214.00 where b_ref=14074;
-update booking set b_cost=608.00 where b_ref=14101;
-update booking set b_cost=142.00 where b_ref=14154;
-update booking set b_cost=152.00 where b_ref=14172;
-update booking set b_cost=608.00 where b_ref=14184;
-update booking set b_cost=154.00 where b_ref=14239;
-update booking set b_cost=65.00 where b_ref=14276;
-update booking set b_cost=154.00 where b_ref=14277;
-update booking set b_cost=186.00 where b_ref=14301;
-update booking set b_cost=300.00 where b_ref=14400;
-update booking set b_cost=280.00 where b_ref=14403;
-update booking set b_cost=154.00 where b_ref=14446;
-update booking set b_cost=608.00 where b_ref=14460;
-update booking set b_cost=75.00 where b_ref=14507;
-update booking set b_cost=848.00 where b_ref=14593;
-update booking set b_cost=300.00 where b_ref=14633;
-update booking set b_cost=150.00 where b_ref=14671;
-update booking set b_cost=137.00 where b_ref=14679;
-update booking set b_cost=548.00 where b_ref=14690;
-update booking set b_cost=308.00 where b_ref=14705;
-update booking set b_cost=816.00 where b_ref=14797;
-update booking set b_cost=576.00 where b_ref=14844;
-update booking set b_cost=62.00 where b_ref=14853;
-update booking set b_cost=616.00 where b_ref=14855;
-update booking set b_cost=456.00 where b_ref=14930;
-update booking set b_cost=248.00 where b_ref=14963;
-update booking set b_cost=225.00 where b_ref=14971;
-update booking set b_cost=62.00 where b_ref=15091;
-update booking set b_cost=254.00 where b_ref=15142;
-update booking set b_cost=248.00 where b_ref=15150;
-update booking set b_cost=199.00 where b_ref=15160;
-update booking set b_cost=62.00 where b_ref=15242;
-update booking set b_cost=260.00 where b_ref=15246;
-update booking set b_cost=225.00 where b_ref=15258;
-update booking set b_cost=548.00 where b_ref=15286;
-update booking set b_cost=77.00 where b_ref=15301;
-update booking set b_cost=231.00 where b_ref=15318;
-update booking set b_cost=274.00 where b_ref=15349;
-update booking set b_cost=411.00 where b_ref=15367;
-update booking set b_cost=75.00 where b_ref=15410;
-update booking set b_cost=201.00 where b_ref=15446;
-update booking set b_cost=648.00 where b_ref=15489;
-update booking set b_cost=248.00 where b_ref=15500;
-update booking set b_cost=77.00 where b_ref=15539;
-update booking set b_cost=75.00 where b_ref=15543;
-update booking set b_cost=248.00 where b_ref=15565;
-update booking set b_cost=186.00 where b_ref=15566;
-update booking set b_cost=225.00 where b_ref=15656;
-update booking set b_cost=606.00 where b_ref=15731;
-update booking set b_cost=426.00 where b_ref=15735;
-update booking set b_cost=124.00 where b_ref=15801;
-update booking set b_cost=231.00 where b_ref=15822;
-update booking set b_cost=124.00 where b_ref=15934;
-update booking set b_cost=556.00 where b_ref=15960;
-update booking set b_cost=186.00 where b_ref=15975;
-
-update booking set b_outstanding = b_cost;
-
 insert into roombooking values (101, 13505, '29Jan2018', '31Jan2018');
 insert into roombooking values (101, 14101, '18Nov2017', '22Nov2017');
 insert into roombooking values (101, 15489, '01Feb2018', '04Feb2018');
@@ -637,6 +597,111 @@ select b.b_ref from booking b, roombooking rb
 where b.b_ref=rb.b_ref and rb.checkout < '16Oct2017');
 
 --- end of database setup ---
+
+--- removed inserts ----
+update booking set b_cost=130.00 where b_ref=13011;
+update booking set b_cost=308.00 where b_ref=13052;
+update booking set b_cost=770.00 where b_ref=13066;
+update booking set b_cost=556.00 where b_ref=13083;
+update booking set b_cost=636.00 where b_ref=13098;
+update booking set b_cost=186.00 where b_ref=13109;
+update booking set b_cost=186.00 where b_ref=13138;
+update booking set b_cost=548.00 where b_ref=13168;
+update booking set b_cost=300.00 where b_ref=13180;
+update booking set b_cost=608.00 where b_ref=13202;
+update booking set b_cost=408.00 where b_ref=13220;
+update booking set b_cost=62.00 where b_ref=13246;
+update booking set b_cost=308.00 where b_ref=13250;
+update booking set b_cost=408.00 where b_ref=13262;
+update booking set b_cost=65.00 where b_ref=13324;
+update booking set b_cost=496.00 where b_ref=13325;
+update booking set b_cost=231.00 where b_ref=13332;
+update booking set b_cost=195.00 where b_ref=13339;
+update booking set b_cost=325.00 where b_ref=13358;
+update booking set b_cost=65.00 where b_ref=13385;
+update booking set b_cost=150.00 where b_ref=13421;
+update booking set b_cost=225.00 where b_ref=13425;
+update booking set b_cost=308.00 where b_ref=13429;
+update booking set b_cost=308.00 where b_ref=13476;
+update booking set b_cost=195.00 where b_ref=13482;
+update booking set b_cost=420.00 where b_ref=13503;
+update booking set b_cost=434.00 where b_ref=13505;
+update booking set b_cost=381.00 where b_ref=13541;
+update booking set b_cost=260.00 where b_ref=13559;
+update booking set b_cost=195.00 where b_ref=13585;
+update booking set b_cost=154.00 where b_ref=13602;
+update booking set b_cost=687.00 where b_ref=13627;
+update booking set b_cost=195.00 where b_ref=13631;
+update booking set b_cost=300.00 where b_ref=13663;
+update booking set b_cost=186.00 where b_ref=13801;
+update booking set b_cost=231.00 where b_ref=13836;
+update booking set b_cost=139.00 where b_ref=13853;
+update booking set b_cost=612.00 where b_ref=13872;
+update booking set b_cost=137.00 where b_ref=13881;
+update booking set b_cost=568.00 where b_ref=13886;
+update booking set b_cost=65.00 where b_ref=13893;
+update booking set b_cost=77.00 where b_ref=13906;
+update booking set b_cost=150.00 where b_ref=13925;
+update booking set b_cost=248.00 where b_ref=13970;
+update booking set b_cost=140.00 where b_ref=13977;
+update booking set b_cost=1085.00 where b_ref=14038;
+update booking set b_cost=214.00 where b_ref=14074;
+update booking set b_cost=608.00 where b_ref=14101;
+update booking set b_cost=142.00 where b_ref=14154;
+update booking set b_cost=152.00 where b_ref=14172;
+update booking set b_cost=608.00 where b_ref=14184;
+update booking set b_cost=154.00 where b_ref=14239;
+update booking set b_cost=65.00 where b_ref=14276;
+update booking set b_cost=154.00 where b_ref=14277;
+update booking set b_cost=186.00 where b_ref=14301;
+update booking set b_cost=300.00 where b_ref=14400;
+update booking set b_cost=280.00 where b_ref=14403;
+update booking set b_cost=154.00 where b_ref=14446;
+update booking set b_cost=608.00 where b_ref=14460;
+update booking set b_cost=75.00 where b_ref=14507;
+update booking set b_cost=848.00 where b_ref=14593;
+update booking set b_cost=300.00 where b_ref=14633;
+update booking set b_cost=150.00 where b_ref=14671;
+update booking set b_cost=137.00 where b_ref=14679;
+update booking set b_cost=548.00 where b_ref=14690;
+update booking set b_cost=308.00 where b_ref=14705;
+update booking set b_cost=816.00 where b_ref=14797;
+update booking set b_cost=576.00 where b_ref=14844;
+update booking set b_cost=62.00 where b_ref=14853;
+update booking set b_cost=616.00 where b_ref=14855;
+update booking set b_cost=456.00 where b_ref=14930;
+update booking set b_cost=248.00 where b_ref=14963;
+update booking set b_cost=225.00 where b_ref=14971;
+update booking set b_cost=62.00 where b_ref=15091;
+update booking set b_cost=254.00 where b_ref=15142;
+update booking set b_cost=248.00 where b_ref=15150;
+update booking set b_cost=199.00 where b_ref=15160;
+update booking set b_cost=62.00 where b_ref=15242;
+update booking set b_cost=260.00 where b_ref=15246;
+update booking set b_cost=225.00 where b_ref=15258;
+update booking set b_cost=548.00 where b_ref=15286;
+update booking set b_cost=77.00 where b_ref=15301;
+update booking set b_cost=231.00 where b_ref=15318;
+update booking set b_cost=274.00 where b_ref=15349;
+update booking set b_cost=411.00 where b_ref=15367;
+update booking set b_cost=75.00 where b_ref=15410;
+update booking set b_cost=201.00 where b_ref=15446;
+update booking set b_cost=648.00 where b_ref=15489;
+update booking set b_cost=248.00 where b_ref=15500;
+update booking set b_cost=77.00 where b_ref=15539;
+update booking set b_cost=75.00 where b_ref=15543;
+update booking set b_cost=248.00 where b_ref=15565;
+update booking set b_cost=186.00 where b_ref=15566;
+update booking set b_cost=225.00 where b_ref=15656;
+update booking set b_cost=606.00 where b_ref=15731;
+update booking set b_cost=426.00 where b_ref=15735;
+update booking set b_cost=124.00 where b_ref=15801;
+update booking set b_cost=231.00 where b_ref=15822;
+update booking set b_cost=124.00 where b_ref=15934;
+update booking set b_cost=556.00 where b_ref=15960;
+update booking set b_cost=186.00 where b_ref=15975;
+
+update booking set b_outstanding = b_cost;
 
 --- useful queries ---
 

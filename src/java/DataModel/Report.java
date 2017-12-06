@@ -20,6 +20,7 @@ public class Report implements Comparable {
     private double percentOccupancy;
     private String roomClass;
     private int nightsAvail;
+    private double extraSpend;
 
     public Report() {
     }
@@ -34,6 +35,18 @@ public class Report implements Comparable {
         this.nightsAvail = nightsAvail;
     }
 
+    public double getExtraSpend() {
+        return extraSpend;
+    }
+
+    public void setExtraSpend(double extraSpend) {
+        this.extraSpend = extraSpend;
+    }
+    
+    public double totalIncome() {
+        return extraSpend + income;
+    }
+    
     public int getNightsAvail() {
         return nightsAvail;
     }

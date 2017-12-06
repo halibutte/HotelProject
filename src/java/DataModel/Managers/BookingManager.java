@@ -45,6 +45,7 @@ public class BookingManager extends AbstractManager {
         booking.setRef((Integer)map.get("b_ref"));
         booking.setRooms(model.ROOMBOOKINGS.getRoomBookings(booking.getRef()));
         booking.setCustomer(model.CUSTOMERS.getCustomer(booking.getCustomerNo()));
+        booking.setBilledItems(model.BILLABLES.getBilledItems(booking.getRef()));
         return booking;
     }
     
@@ -181,6 +182,18 @@ public class BookingManager extends AbstractManager {
         return (Booking)getSingle(sql, args, "getCurrentBookingForRoom", r -> mapToBooking(r));
     }
     
+    public List<Booking> getAllOccupants(LocalDate date) {
+        String sql = "SELECT booking.* FROM booking WHERE booking.b_ref IN " +
+            "(SELECT roombooking.b_ref FROM roombooking " +
+            "WHERE roombooking.checkin <= ? " +
+            "AND roombooking.checkout >= ?)";
+        Object[] args = {
+            Date.valueOf(date),
+            Date.valueOf(date)
+        };
+        return (List<Booking>)(List<?>)getList(sql, args, "getAllOccupantsOnDate", r -> mapToBooking(r));
+    }
+    
     public Booking getCheckinBooking(int rno, LocalDate checkin) {
         String sql = "SELECT booking.* "+
             "FROM roombooking NATURAL JOIN booking " +
@@ -227,12 +240,12 @@ public class BookingManager extends AbstractManager {
         addOn.add(extra);
         try {
             //make the booking
-            Booking b = model.BOOKINGS.makeBooking(cust, list, LocalDate.parse("2017-12-17"), LocalDate.parse("2017-12-18"));
-            System.out.println(b);
+            //Booking b = model.BOOKINGS.makeBooking(cust, list, LocalDate.parse("2017-12-17"), LocalDate.parse("2017-12-18"));
+            //System.out.println(b);
             //add a room on
-            b = model.BOOKINGS.addRoom(b.getRef(), addOn);
+            Booking b = model.BOOKINGS.getBooking(13906);
             System.out.println(b);
-        } catch (ModelException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         //add something

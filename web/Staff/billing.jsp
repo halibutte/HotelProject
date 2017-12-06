@@ -21,7 +21,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width">
         <title>Billing</title>
-        <link rel="stylesheet" type="text/css" href="staff.css">
+        <link rel="stylesheet" type="text/css" href="../Main.css">
         <script src="js/jquery.min.js"></script>
         <script src="js/billing.js"></script>
         <script src="js/checkin.js"></script>
@@ -39,7 +39,7 @@
             <div class="col-minwidth">
                 <div class="flexCont">
                     <div class="flexItem">
-                        <h4>View Dates</h4>
+                        <h4 class="staff">View Dates</h4>
                         <form method="GET">
                             <input type="date" name="view_date" value="<% out.print(request.getAttribute("view_date")); %>" class="form-spacing">
                             <button type="submit" class="button">Submit</button>
@@ -60,7 +60,7 @@
             
                 
             <div class="col-full">
-                <h2>Guests</h2>
+                <h3 class="staff">Guests</h3>
                 <div class="flexCont">
                 <% for(Booking b : bookings) { 
                 Customer c = b.getCustomer();
@@ -68,7 +68,7 @@
                 List<RoomBooking> rooms = b.getRooms();
                 %>
                 <div class="flexItemLarge">
-                    <h4><% out.print(c.getName()); %>
+                    <h3 class="staff"><% out.print(c.getName()); %>
                         <% for(int i = 0; i < rooms.size(); i++) {
                             RoomBooking r = rooms.get(i);
                             String end = ",&nbsp;";
@@ -77,7 +77,7 @@
                             }
                             out.print("<span class='payment-expand'>" + r.getRoomNo() + end + "</span>");
                         } %>
-                    </h4>
+                    </h3>
                     <div class="table table-total form-spacing">
                         <div class="table-head">
                                 <div class="table-row">

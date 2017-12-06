@@ -16,7 +16,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width">
         <title>Housekeeping</title>
-        <link rel="stylesheet" type="text/css" href="staff.css">
+        <link rel="stylesheet" type="text/css" href="../Main.css">
         <script src="js/jquery.min.js"></script>
         <script src="js/housekeeping.js"></script>
         <script src="js/empty_message.js"></script>
@@ -25,7 +25,7 @@
         <%@include file="staff_header.jsp" %>
         <div class="main-container">
         <div class="col-minwidth" id="message_div">
-            <h2>Messages</h2>
+            <h2 class="staff">Messages</h2>
             <div class="flexCont">
                 <% List<String> msgs = (List<String>)request.getAttribute("messages");
                 for(String s : msgs) {
@@ -39,14 +39,14 @@
         </div>
             
         <div class="col-half">
-        <h2>Checked Out</h2>
+        <h3 class="staff">Checked Out</h3>
         <div class="flexCont">
             <%  //iterate over checkins and put in boxes
                 List<Room> checkedout = (List<Room>)request.getAttribute("statusC");
                 for(Room r : checkedout) {
             %>
             <div class="flexItem">
-                <h4>Room <% out.print(r.getNo()); %></h4>
+                <h4 class="staff">Room <% out.print(r.getNo()); %></h4>
                 <div>
                     <form method="POST">
                         <input type="hidden" name="roomNo"  value="<% out.print(r.getNo()); %>"/>
@@ -72,14 +72,14 @@
         </div>
         
         <div class="col-half">
-        <h2>Unavailable</h2>
+        <h3 class="staff">Unavailable</h3>
         <div class="flexCont">
             <%  //iterate over checkins and put in boxes
                 List<Room> unavail = (List<Room>)request.getAttribute("statusX");
                 for(Room r : unavail) {
             %>
             <div class="flexItem">
-                <h4>Room <% out.print(r.getNo()); %></h4>
+                <h4 class="staff">Room <% out.print(r.getNo()); %></h4>
                 <div>
                     <form method="POST">
                         <input type="hidden" name="roomNo"  value="<% out.print(r.getNo()); %>">

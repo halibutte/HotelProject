@@ -16,7 +16,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width">
         <title>Weekly Reports</title>
-        <link rel="stylesheet" type="text/css" href="staff.css">
+        <link rel="stylesheet" type="text/css" href="../Main.css">
         <script src="js/jquery.min.js"></script>
         <script src="js/reports.js"></script>
     </head>
@@ -32,7 +32,7 @@
             <div class="col-minwidth">
                 <div class="flexCont">
                     <div class="flexItem">
-                        <h4>View Dates</h4>
+                        <h4 class="staff">View Dates</h4>
                         <form method="GET">
                             <div class="form-spacing-small">From</div>
                             <input type="date" name="start_date" value="<% out.print(request.getAttribute("start_date")); %>" class="form-spacing">
@@ -56,7 +56,7 @@
             
                 
             <div class="col-full">
-                <h2>Weekly Reports</h2>
+                <h3 class="staff">Weekly Reports</h3>
                 <% 
                 LocalDate thisDate = null;
                 LocalDate lastDate = null;
@@ -65,7 +65,7 @@
                     if(!thisDate.equals(lastDate)) { 
                         if(!Objects.isNull(lastDate)) { out.print("</div></div>"); } %>   
                 <div class="card">
-                <h4>Week <% out.print(thisDate); %></h4>  
+                <h4 class="staff">Week <% out.print(thisDate); %></h4>  
                 
                 <div class="table table-total form-spacing">
                     <div class="table-head">

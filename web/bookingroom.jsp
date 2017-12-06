@@ -5,6 +5,9 @@
 --%>
 
 
+<%@page import="java.text.DecimalFormat"%>
+<%@page import="java.util.Objects"%>
+<%@page import="java.util.Map"%>
 <%@page import="DataModel.ModelException"%>
 <%@page import="DataModel.Model"%>
 <%@page import="DataModel.Customer"%>
@@ -16,6 +19,10 @@
 <% 
     String rooms_msg = "";
     String payment_msg = "";
+    Map<String,Long> countAvail = (Map<String,Long>) request.getAttribute("count_avail");
+    Map<String,Double> roomRate = (Map<String,Double>) request.getAttribute("room_rates");
+    DecimalFormat df = new DecimalFormat("###,##0.00");
+    boolean showQuant = !Objects.isNull(countAvail);
 %>
 <script src="js/bookingroom.js"></script>
 <div class="main-content">
@@ -27,30 +34,58 @@
                 <div class="form-card">
                     Standard Double Room
                     <img src="images/std_d.jpeg" class="room-thumb" alt="Standard Double Room">
-                    <div class="form-spacing">£? per night</div>
+                    <div class="form-spacing">£<% out.print(df.format(roomRate.get("std_d"))); %> per night</div>
                     <label for="checkin" class="form-spacing-small">Quantity</label>
-                    <input type="number" name="std_d" min="0" value="<% out.print(request.getAttribute("StdDno")); %>">
+                    <input class="form-spacing" type="number" name="std_d" min="0" value="<% out.print(request.getAttribute("StdDno")); %>">
+                    <%-- This section should only be displayed if a query was submitted --%>
+                    <% if(showQuant) { %>
+                    <div>
+                        <div class="form-spacing-small">Available</div>
+                        <div class="count_avail"><% out.print((countAvail.get("std_d") == null ? 0 : countAvail.get("std_d"))); %></div>
+                    </div>
+                    <% } %>
                 </div>
                 <div class="form-card">
                     Standard Twin Room
                     <img src="images/std_t.jpg" class="room-thumb" alt="Standard Twin Room">
-                    <div class="form-spacing">£? per night</div>
+                    <div class="form-spacing">£<% out.print(df.format(roomRate.get("std_t"))); %> per night</div>
                     <label for="checkin" class="form-spacing-small">Quantity</label>
-                    <input type="number" name="std_t" min="0" value="<% out.print(request.getAttribute("StdTno")); %>">
+                    <input class="form-spacing" type="number" name="std_t" min="0" value="<% out.print(request.getAttribute("StdTno")); %>">
+                    <%-- This section should only be displayed if a query was submitted --%>
+                    <% if(showQuant) { %>
+                    <div>
+                        <div class="form-spacing-small">Available</div>
+                        <div class="count_avail"><% out.print((countAvail.get("std_t") == null ? 0 : countAvail.get("std_t"))); %></div>
+                    </div>
+                    <% } %>
                 </div>
                 <div class="form-card">
                     Superior Double Room
                     <img src="images/sup_d.jpg" class="room-thumb" alt="Superior Double Room">
-                    <div class="form-spacing">£? per night</div>
+                    <div class="form-spacing">£<% out.print(df.format(roomRate.get("sup_d"))); %> per night</div>
                     <label for="checkin" class="form-spacing-small">Quantity</label>
-                    <input type="number" name="sup_d" min="0" value="<% out.print(request.getAttribute("SupDno")); %>">
+                    <input class="form-spacing" type="number" name="sup_d" min="0" value="<% out.print(request.getAttribute("SupDno")); %>">
+                    <%-- This section should only be displayed if a query was submitted --%>
+                    <% if(showQuant) { %>
+                    <div>
+                        <div class="form-spacing-small">Available</div>
+                        <div class="count_avail"><% out.print((countAvail.get("sup_d") == null ? 0 : countAvail.get("sup_d"))); %></div>
+                    </div>
+                    <% } %>                
                 </div>
                 <div class="form-card">
                     Superior Twin Room
                     <img src="images/sup_t.jpg" class="room-thumb" alt="Superior Twin Room">
-                    <div class="form-spacing">£? per night</div>
+                    <div class="form-spacing">£<% out.print(df.format(roomRate.get("sup_t"))); %> per night</div>
                     <label for="checkin" class="form-spacing-small">Quantity</label>
-                    <input type="number" name="sup_t" min="0" value="<% out.print(request.getAttribute("SupTno")); %>">
+                    <input class="form-spacing" type="number" name="sup_t" min="0" value="<% out.print(request.getAttribute("SupTno")); %>">
+                    <%-- This section should only be displayed if a query was submitted --%>
+                    <% if(showQuant) { %>
+                    <div>
+                        <div class="form-spacing-small">Available</div>
+                        <div class="count_avail"><% out.print((countAvail.get("sup_t") == null ? 0 : countAvail.get("sup_t"))); %></div>
+                    </div>
+                    <% } %>
                 </div>
                 <div class="form-card">
                     <div class="form-spacing-small">Customer ID</div> 

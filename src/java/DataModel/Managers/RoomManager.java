@@ -175,6 +175,17 @@ public class RoomManager extends AbstractManager {
             return getRoom(room.getNo());
         }
     }
+    
+    public Map<String,Double> getRates() {
+        List<Room> rooms = getAllRooms();
+        Map<String,Double> map = new HashMap<>();
+        for(Room r : rooms) {
+            if(!map.containsKey(r.getRoomClass())) {
+                map.put(r.getRoomClass(), Double.valueOf(r.getPrice()));
+            }
+        }
+        return map;
+    }
 
     private static Room mapToRoom(Map<String, Object> map) {
         Room room = new Room();

@@ -15,7 +15,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -139,9 +141,11 @@ public class BookingRoom extends HttpServlet {
             String supd_message = "";
             String c_message = "";
 
+            Map<String,Double> room_rates = new HashMap<>();
             Model model = null;
             try {
                 model = new Model();
+                room_rates = model.ROOMS.getRates();
             } catch (ModelException e) {
                 String errorMessage = "error#Cannot connect to databse";
             }
@@ -172,7 +176,8 @@ public class BookingRoom extends HttpServlet {
             if (StdTno == 0 && StdDno == 0 && SupTno == 0 && SupDno == 0) {
                 b_message = "Enter number of rooms";
             }
-
+            //get a map of String (class) to amnt avail to pass to page for display
+            Map<String,Long> countAvail = model.ROOMS.getCountRoomsAvailByDate(Checkin, Checkout);
             if (StdTno > nStdT) {
                 stdt_message = "Not enough Standard twin rooms available. There are " + nStdT + " rooms left for your chosen period.";
             }
@@ -337,6 +342,8 @@ public class BookingRoom extends HttpServlet {
             request.setAttribute("Cardtype", Cardtype);
             request.setAttribute("Cardexp", Cardexp);
             request.setAttribute("Cardno", Cardno);
+            request.setAttribute("count_avail", countAvail);
+            request.setAttribute("room_rates", room_rates);
 
             RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/bookingroom.jsp");
             dispatcher.forward(request, response);

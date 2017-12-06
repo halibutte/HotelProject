@@ -6,6 +6,7 @@ body {
     background-color: lightsteelblue;
     font-family: Calibri;
     margin: 0;
+    background-image: url("images/clean-textile.png");
     height: 100%;
 }
 html {

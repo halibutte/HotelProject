@@ -125,7 +125,7 @@
                     <% } %>
                     <div class="table-row">
                         <div class="table-cell">
-                            <% out.println(r.getRoomClass()); %>
+                            <% out.println(r.getRoomClassFull()); %>
                         </div>
                         <div class="table-cell">
                             <% out.println(df.format(r.getIncome())); %>

@@ -6,6 +6,8 @@
 package DataModel;
 
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -21,6 +23,7 @@ public class Report implements Comparable {
     private String roomClass;
     private int nightsAvail;
     private double extraSpend;
+    private static Map<String, String> classNameMap = initClassNameMap();
 
     public Report() {
     }
@@ -102,6 +105,22 @@ public class Report implements Comparable {
 
     public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
+    }
+    
+    private static Map<String, String> initClassNameMap() {
+        Map<String, String> temp = new HashMap<>();
+        temp.put("sup_d", "Superior Double");
+        temp.put("sup_t", "Superior Twin");
+        temp.put("std_d", "Standard Double");
+        temp.put("std_t", "Standard Twin");
+        return temp;
+    }
+    public String getRoomClassFull() {
+        if(classNameMap.containsKey(roomClass)) {
+            return classNameMap.get(roomClass);
+        } else {
+            return "Unknown Type";
+        }
     }
 
     @Override

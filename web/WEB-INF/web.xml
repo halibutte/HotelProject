@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
     <servlet>
-        <servlet-name>CustomerList</servlet-name>
-        <servlet-class>Servlets.CustomerList</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>Checkin</servlet-name>
         <servlet-class>Servlets.Staff.Checkin</servlet-class>
     </servlet>
@@ -20,10 +16,6 @@
         <servlet-name>Billing</servlet-name>
         <servlet-class>Servlets.Staff.Billing</servlet-class>
     </servlet>
-    <servlet-mapping>
-        <servlet-name>CustomerList</servlet-name>
-        <url-pattern>/CustomerList</url-pattern>
-    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>Checkin</servlet-name>
         <url-pattern>/Staff/Checkin</url-pattern>

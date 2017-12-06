@@ -64,7 +64,8 @@ AS $$
         (
             SELECT roombooking.r_no FROM roombooking 
             WHERE (roombooking.checkin <= d_start AND roombooking.checkout > d_start) 
-            OR (roombooking.checkin BETWEEN d_start AND d_end)
+            OR (roombooking.checkin BETWEEN d_start AND d_end - 1)
+			OR (roombooking.checkout BETWEEN d_start + 1 AND d_end)
         );
     END;
 $$

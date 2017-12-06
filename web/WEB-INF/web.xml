@@ -20,6 +20,10 @@
         <servlet-name>BookingRoom</servlet-name>
         <servlet-class>Servlets.Staff.BookingRoom</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CheckinHome</servlet-name>
+        <servlet-class>Servlets.Staff.Checkin</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Checkin</servlet-name>
         <url-pattern>/Staff/Checkin</url-pattern>
@@ -39,6 +43,10 @@
     <servlet-mapping>
         <servlet-name>BookingRoom</servlet-name>
         <url-pattern>/BookingRoom</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CheckinHome</servlet-name>
+        <url-pattern>/Staff/Home</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -156,7 +156,7 @@ r record;
 			FROM booking 
 			JOIN
 			(
-				SELECT b_ref FROM roombooking WHERE
+				SELECT DISTINCT b_ref FROM roombooking WHERE
 				checkout BETWEEN week_start AND week_end
 			) sq ON booking.b_ref = sq.b_ref
 			JOIN

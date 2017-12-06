@@ -69,6 +69,14 @@ public class BillableManager extends AbstractManager {
         }
     }
     
+    public boolean deleteBilledItem(int id) {
+        String sql = "DELETE FROM bookingitem WHERE id = ?";
+        Object[] args = {
+            id
+        };
+        return updateRecord(sql, args, "deleteBilledItem");
+    }
+    
     public List<BillableItem> getAllBillableItems() {
         String sql = "SELECT * FROM billableitem";
         Object[] args = {  

@@ -32,7 +32,7 @@
             //get the report list
             List<Booking> bookings = (List<Booking>)request.getAttribute("bookings");
             List<BillableItem> items = (List<BillableItem>)request.getAttribute("items");
-            DecimalFormat df = new DecimalFormat("###,###.00");
+            DecimalFormat df = new DecimalFormat("###,##0.00");
         %>
         <div class="main-container">
             
@@ -78,14 +78,13 @@
                             out.print("<span class='payment-expand'>" + r.getRoomNo() + end + "</span>");
                         } %>
                     </h4>
-                    <div class="form-spacing-small">Items on Bill</div>
                     <div class="table table-total form-spacing">
                         <div class="table-head">
                                 <div class="table-row">
-                                <div class="head-cell-35">Name</div>
-                                <div class="head-cell-35">Description</div>
-                                <div class="head-cell-15">Price</div>
-                                <div class="head-cell-15"></div>
+                                <div class="head-cell width-35">Name</div>
+                                <div class="head-cell width-35">Description</div>
+                                <div class="head-cell width-15">Price</div>
+                                <div class="head-cell width-15"></div>
                             </div>
                         </div>
                         <% for(BilledItem bitem : billItems) { %>
@@ -95,13 +94,14 @@
                             <div class="table-cell"><% out.print(df.format(bitem.getPrice())); %></div>
                             <div class="table-cell">
                                 <form method="POST">
-                                    <input type="submit" value="Remove">
-                                    <input type="hidden" value="<% bitem.getId(); %>" name="remove_item">
+                                    <button type="submit" class="button-narrow">Remove</button>
+                                    <input type="hidden" value="remove" name="act_type">
+                                    <input type="hidden" value="<% out.print(bitem.getId()); %>" name="remove_item">
                                 </form>
                             </div>    
                         </div>
                         <% } %>
-                        <form class="table-row">
+                        <form class="table-row" method="POST">
                             <div class="table-cell">
                                 <select name="item_code">
                                     <%
@@ -120,38 +120,41 @@
                                 <input type="number" name="item_price" min="0" step="0.01">
                             </div>
                             <div class="table-cell">
-                                <input type="hidden" value="<% b.getRef(); %>" name="item_bref">
-                                <input type="submit" value="Add">
+                                <input type="hidden" value="add" name="act_type">
+                                <input type="hidden" value="<% out.print(b.getRef()); %>" name="item_bref">
+                                <button type="submit" class="button-narrow">Add</button>
                             </div>
                         </form>
                     </div>
                         <div>
                         <form method="POST">
                             <div class="table">
-                                <div class="table-cell-50">
+                                <div class="table-cell width-50">
                                     <div class="form-spacing-small">Outstanding Balance</div>
                                     <div class="form-spacing">£<% out.print(df.format(b.getOutstanding())); %></div>
                                 </div>
-                                <div class="table-cell-50">
+                                <div class="table-cell width-50">
                                     <div class="form-spacing-small">Payment Taken</div>
-                                    <input type="number" name="balOutstanding" value="0.00" class="form-spacing" step="0.01" min="0" max="<% out.print(b.getOutstanding()); %>">
+                                    <input type="number" name="card_amnt" value="0.00" class="form-spacing" step="0.01" min="0" max="<% out.print(b.getOutstanding()); %>">
                                 </div>
                             </div>
                             <div class="payment-detail-header">
                                 <div class="form-spacing"><span class="payment-expand-text">Payment Details</span>&nbsp;<span class="interactive payment-expand" onclick="toggle_payment(this)">[+]</span> </div>
                                 <div class="payment-details">
                                     <div class="form-spacing-small">Card Number</div>
-                                    <input type="text" name="cardNum" value="<% out.print(c.getCardno()); %>" class="form-spacing" pattern="[\d]{8,19}">
+                                    <input type="text" name="card_num" value="<% out.print(c.getCardno()); %>" class="form-spacing" pattern="[\d]{8,19}">
                                     <div class="form-spacing-small">Card Type</div>
-                                    <select name="cardType" class="form-spacing">
+                                    <select name="card_type" class="form-spacing">
                                         <option value="V"<% if(c.getCardtype().equals("V")) { out.print(" selected"); } %>>Visa</option>
                                         <option value="MC"<% if(c.getCardtype().equals("MC")) { out.print(" selected"); } %>>Mastercard</option>
                                         <option value="A"<% if(c.getCardtype().equals("A")) { out.print(" selected"); } %>>American Express</option>
                                     </select>
                                     <div class="form-spacing-small">Card Expiry</div>
-                                    <input type="text" name="cardExp" value="<% out.print(c.getCardexp()); %>" class="form-spacing" pattern="[\d]{2}/\d{2}">
+                                    <input type="text" name="card_exp" value="<% out.print(c.getCardexp()); %>" class="form-spacing" pattern="[\d]{2}/\d{2}">
                                 </div>
                             </div>
+                            <input type="hidden" value="pay" name="act_type">
+                            <input type="hidden" value="<% out.print(b.getRef()); %>" name="card_bref">
                             <button type="submit" class="button" name="submit">Take Payment</button>
                         </form>
                     </div>

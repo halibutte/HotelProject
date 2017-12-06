@@ -4,6 +4,7 @@
     Author     : x3041557
 --%>
 
+<%@page import="java.text.DecimalFormat"%>
 <%@page import="java.time.LocalDate"%>
 <%@page import="DataModel.Report"%>
 <%@page import="java.util.Objects"%>
@@ -24,6 +25,7 @@
         <%
             //get the report list
             List<Report> report = (List<Report>)request.getAttribute("report_list");
+            DecimalFormat df = new DecimalFormat("###,##0.00");
         %>
         <div class="main-container">
             
@@ -68,16 +70,19 @@
                 <div class="table table-total form-spacing">
                     <div class="table-head">
                         <div class="table-row">
-                            <div class="head-cell">
+                            <div class="head-cell width-20">
                             </div>
-                            <div class="head-cell">
-                                Income
+                            <div class="head-cell width-20">
+                                Room Income
                             </div>
-                            <div class="head-cell">
+                            <div class="head-cell width-20">
                                 Occupancy %
                             </div>
-                            <div class="head-cell">
+                            <div class="head-cell width-20">
                                 Nights Occupied
+                            </div>
+                            <div class="head-cell width-20">
+                                Extra Income
                             </div>
                         </div>
                     </div>   
@@ -85,11 +90,14 @@
                         <div class="head-cell">
                             Total
                         </div>
-                        <div class="table-cell" data-sum="2">
+                        <div class="table-cell" data-sum="1">
                         </div>
                         <div class="table-cell" data-avg="3,4">
                         </div>
                         <div class="table-cell" data-sum="3">
+                        </div>
+                        <div class="table-cell">
+                            <% out.print(df.format(r.getExtraSpend())); %>
                         </div>
                     </div>  
                 </div>
@@ -97,19 +105,19 @@
                 <div class="table table-details" data-name="room_breakdown">
                     <div class="table-head">
                         <div class="table-row">
-                            <div class="head-cell">
+                            <div class="head-cell width-20">
                                 Room Type
                             </div>
-                            <div class="head-cell">
-                                Occupancy %
-                            </div>
-                            <div class="head-cell">
+                            <div class="head-cell width-20">
                                 Income
                             </div>
-                            <div class="head-cell">
+                            <div class="head-cell width-20">
+                                Occupancy %
+                            </div>
+                            <div class="head-cell width-20">
                                 Nights Occupied
                             </div>
-                            <div class="head-cell">
+                            <div class="head-cell width-20">
                                 Nights Available
                             </div>
                         </div>
@@ -120,10 +128,10 @@
                             <% out.println(r.getRoomClass()); %>
                         </div>
                         <div class="table-cell">
-                            <% out.println(r.getPercentOccupancy()); %>
+                            <% out.println(df.format(r.getIncome())); %>
                         </div>
                         <div class="table-cell">
-                            <% out.println(r.getIncome()); %>
+                            <% out.println(r.getPercentOccupancy()); %>
                         </div>
                         <div class="table-cell">
                             <% out.println(r.getNightsOccupied()); %>

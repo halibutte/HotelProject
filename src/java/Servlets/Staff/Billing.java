@@ -6,7 +6,9 @@
 package Servlets.Staff;
 
 import DataModel.BillableItem;
+import DataModel.BilledItem;
 import DataModel.Booking;
+import DataModel.Customer;
 import DataModel.Model;
 import DataModel.ModelException;
 import java.io.IOException;
@@ -14,6 +16,7 @@ import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -44,7 +47,23 @@ public class Billing extends HttpServlet {
             List<BillableItem> items = new ArrayList<>();
             //get parameters from forms
             String viewDate = request.getParameter("view_date");
+            String actType = request.getParameter("act_type");
+            //add item parameters
+            String itemCode = request.getParameter("item_code");
+            String itemDesc = request.getParameter("item_desc");
+            String itemPrice = request.getParameter("item_price");
+            String itemBref = request.getParameter("item_bref");
+            //take payment parameters
+            String payNum = request.getParameter("card_num");
+            String payType = request.getParameter("card_type");
+            String payExp = request.getParameter("card_exp");
+            String payBref = request.getParameter("card_bref");
+            String payAmnt = request.getParameter("card_amnt");
+            //remove item parameters
+            String remId = request.getParameter("remove_item");
+            
             LocalDate date = LocalDate.now();
+            
             
             try {
                 Model model = new Model();
@@ -53,6 +72,39 @@ public class Billing extends HttpServlet {
                 } catch (Exception e) {
                     //leave as now
                 }
+                
+                //try processing any actions received
+                if(!Objects.isNull(actType)) {
+                    //adding an item to the bill
+                    if(actType.equals("add")) {
+                        if(addItem(itemCode, itemDesc, itemPrice, itemBref, model)) {
+                            messages.add("confirm#Added item to bill");
+                        } else {
+                            messages.add("error#Failed adding item to bill");
+                        }
+                    }
+                    
+                    //removing an item from the bill
+                    if(actType.equals("remove")) {
+                        if(removeItem(remId, model)) {
+                            messages.add("confirm#Deleted item from bill");
+                        } else {
+                            messages.add("error#Failed when trying to delete item from bill");
+                        }
+                    }
+                    
+                    //taking some payment
+                    if(actType.equals("pay")) {
+                        boolean accepted = takePayment(payBref, payAmnt, payNum, payExp, payType, model);
+                        if(accepted) {
+                            messages.add("confirm#Payment accepted");
+                        } else {
+                            messages.add("error#Issue processing payment");
+                        }
+                    }
+                }
+                
+                //get info to pass to JSP
                 //get all the current bookings
                 bookings = model.BOOKINGS.getAllOccupants(date);
                 items = model.BILLABLES.getAllBillableItems();
@@ -60,6 +112,7 @@ public class Billing extends HttpServlet {
                 messages.add("error#Problem connecting to database");
             }
             
+            //forward to JSP for display
             request.setAttribute("messages", messages);
             request.setAttribute("bookings", bookings);
             request.setAttribute("items", items);
@@ -67,6 +120,50 @@ public class Billing extends HttpServlet {
             RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/Staff/billing.jsp");
             dispatcher.forward(request, response);
         }
+    }
+    
+    protected boolean addItem(String code, String desc, String price, String bref, Model model) {
+        //cast to correct types
+        int castBref = Integer.parseInt(bref);
+        double castPrice = Double.parseDouble(price);
+        try {
+            BilledItem bi = model.BILLABLES.addBilledItem(castBref, code, desc, castPrice);
+            return true;
+        } catch (ModelException e) {
+            return false;
+        }
+    }
+    
+    protected boolean removeItem(String id, Model model) {
+        //cast to right types
+        int castId = Integer.parseInt(id);
+        return model.BILLABLES.deleteBilledItem(castId);
+    }
+    
+    protected boolean takePayment(String bref, String amount, String cardNo, String cardExp, String cardType, Model model) {
+        //cast to correct types
+        int castBref = Integer.parseInt(bref);
+        double castAmount = Double.parseDouble(amount);
+        
+        //retrieve booking object
+        Booking booking = model.BOOKINGS.getBooking(castBref);
+        
+        //update customer payment details
+        Customer cust = booking.getCustomer();
+        cust.setCardexp(cardExp);
+        cust.setCardno(cardNo);
+        cust.setCardtype(cardType);
+        
+        //try update then pay
+        try {
+            model.CUSTOMERS.updateCustomer(cust);
+            model.BOOKINGS.takePayment(booking, castAmount);
+            return true;
+        } catch (ModelException e) {
+            //errored, return false
+            return false;
+        }
+                    
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

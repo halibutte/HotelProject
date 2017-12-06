@@ -177,7 +177,10 @@ public class BookingRoom extends HttpServlet {
                 b_message = "Enter number of rooms";
             }
             //get a map of String (class) to amnt avail to pass to page for display
-            Map<String,Long> countAvail = model.ROOMS.getCountRoomsAvailByDate(Checkin, Checkout);
+            Map<String,Long> countAvail = null;
+            if(!Objects.isNull(c_in_date)) {
+                countAvail = model.ROOMS.getCountRoomsAvailByDate(Checkin, Checkout);
+            }
             if (StdTno > nStdT) {
                 stdt_message = "Not enough Standard twin rooms available. There are " + nStdT + " rooms left for your chosen period.";
             }

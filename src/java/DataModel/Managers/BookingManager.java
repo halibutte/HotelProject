@@ -197,11 +197,11 @@ public class BookingManager extends AbstractManager {
             if(!bookList(rooms, checkin, checkout, book)) {
                 throw new ModelException("Failed to book all rooms");
             }
-            
+                       
             //retrieve the booking with updated info
             updated = model.BOOKINGS.getBooking(book.getRef());
             if(Objects.isNull(updated)) {
-                throw new ModelException("Failled to retrieve booking");
+                throw new ModelException("Failed to retrieve booking");
             }
             
             //commmit all of this
@@ -315,7 +315,7 @@ public class BookingManager extends AbstractManager {
         a.setRoomClass("std_t");
         askfor.add(a);
         try {
-            model.BOOKINGS.updateBooking(15489, askfor, LocalDate.now(), LocalDate.parse("2017-12-09"));
+            model.BOOKINGS.updateBooking(13505, askfor, LocalDate.now(), LocalDate.parse("2017-12-09"));
         } catch (Exception e) {
             e.printStackTrace();
         }

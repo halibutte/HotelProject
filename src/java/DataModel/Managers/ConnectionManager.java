@@ -65,7 +65,7 @@ public class ConnectionManager {
     
     public boolean startTransaction() {
         try{
-            conn.setAutoCommit(true);
+            conn.setAutoCommit(false);
             return true;
         } catch (SQLException e) {
             return false;
@@ -74,7 +74,7 @@ public class ConnectionManager {
     
     public boolean endTransaction() {
         try{
-            conn.setAutoCommit(false);
+            conn.setAutoCommit(true);
             return true;
         } catch (SQLException e) {
             return false;

@@ -38,7 +38,7 @@
         <div class="main-container">
             
             <div class="col-minwidth">
-                <div class="flexCont">
+                <div class="flexCont center-flex">
                     <div class="flexItem">
                         <h4 class="staff">View Dates</h4>
                         <form method="GET">
@@ -69,7 +69,7 @@
                 
             <div class="col-full">
                 <h3 class="staff">Guests</h3>
-                <div class="flexCont">
+                <div class="flexCont center-flex">
                 <% for(Booking b : bookings) { 
                 Customer c = b.getCustomer();
                 List<BilledItem> billItems = b.getBilledItems();

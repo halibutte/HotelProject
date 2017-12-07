@@ -454,6 +454,9 @@ span.payment-expand-text {
     .col-minwidth {
         display: block;
     }
+    .center-flex {
+        justify-content: center;
+    }
     .col-half {
         display: block;
     }

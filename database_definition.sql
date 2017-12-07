@@ -71,6 +71,25 @@ AS $$
 $$
 LANGUAGE 'plpgsql';
 
+--Return a table of rooms which are available for certain date range, considering any rooms booked for b_ref = ignore_ref to be available for this search
+CREATE OR REPLACE FUNCTION rooms_avail(d_start DATE, d_end DATE, ignore_ref INTEGER)
+RETURNS TABLE (r_no INTEGER, r_class CHARACTER(5), r_status CHARACTER(1), r_notes VARCHAR, price NUMERIC)
+AS $$
+	BEGIN
+    	RETURN QUERY
+        SELECT roomrate.r_no, roomrate.r_class, roomrate.r_status, roomrate.r_notes, roomrate.price FROM roomrate WHERE roomrate.r_no NOT IN
+        (
+            SELECT roombooking.r_no FROM roombooking 
+            WHERE ((roombooking.checkin <= d_start AND roombooking.checkout > d_start) 
+            OR (roombooking.checkin BETWEEN d_start AND d_end - 1)
+			OR (roombooking.checkout BETWEEN d_start + 1 AND d_end))
+			AND roombooking.b_ref <> ignore_ref
+        );
+    END;
+$$
+LANGUAGE 'plpgsql';
+
+
 --Make new customer ref
 CREATE OR REPLACE FUNCTION new_cno()
 RETURNS integer AS $$

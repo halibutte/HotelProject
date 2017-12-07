@@ -135,12 +135,12 @@
                 <div class="form-card">
                     <input type="hidden" name="c_id"  value="<% out.print(request.getAttribute("CustID")); %>"  >
                     <input type="text" name="name" id="name" placeholder="Name" class="form-spacing" value="<% out.print(request.getAttribute("Name")); %>" required>
-                    <input type="text" name="email" id="email" placeholder="Email Address" class="form-spacing" value="<% out.print(request.getAttribute("Email")); %>" required>
+                    <input type="email" name="email" id="email" placeholder="Email Address" class="form-spacing" value="<% out.print(request.getAttribute("Email")); %>" required>
                     <label for="address" class="form-spacing-small">Address</label>
                     <textarea id="address" name="address" required><% out.print(request.getAttribute("Address")); %></textarea>
                 </div>
                 <div class="form-card">
-                    <input type="text" name="cardno" id="card_no" placeholder="Card Number, without spaces" class="form-spacing" value="<% out.print(request.getAttribute("Cardno")); %>" required>
+                    <input type="text" name="cardno" id="card_no" placeholder="Card Number, without spaces" class="form-spacing" value="<% out.print(request.getAttribute("Cardno")); %>" pattern="\d{16}" required>
                     <input type="text" name="cardexp" id="card_exp" placeholder="Card Expiry (MM/YY)" pattern="\d{2}\/\d{2}" class="form-spacing" value="<% out.print(request.getAttribute("Cardexp")); %>" required>
                     <label for="address" class="form-spacing-small"></label>
                     <select name="cardtype" id="card_type" class="form-spacing" required>

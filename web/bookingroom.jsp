@@ -96,7 +96,7 @@
                     <input class="form-spacing" type="date" name="c_in_date" value="<% out.print(request.getAttribute("Checkin")); %>" id="rooms_check_in" onchange="sanity_dates(this); hide_payment()" required>
                     <div class="form-spacing-small">Check-out Date</div>
                     <input class="form-spacing" type="date" name="c_out_date" value="<% out.print(request.getAttribute("Checkout")); %>" id="rooms_check_out" onchange="sanity_dates(this); hide_payment()" required>
-                    <button type="submit" class="button">Submit</button>
+                    <button type="submit" class="button">Search Rooms</button>
                 </div>
             </div>
         </fieldset>
@@ -123,7 +123,7 @@
                 if (request.getAttribute("s_message").equals("Please change your selection")) {
                     messages.add(request.getAttribute("s_message").toString());
                 }
-                if (request.getAttribute("s_message").equals("Preference available. You can proceed to enter your details and make a booking")) {
+                if (request.getAttribute("s_message").equals("Preference available. You can proceed to enter your details and make a booking or serach for other preferences")) {
                     messages.add(rooms_msg = request.getAttribute("s_message").toString());
     %>
     <span id="pay_open"></span>
@@ -140,8 +140,9 @@
                     <textarea id="address" name="address" required><% out.print(request.getAttribute("Address")); %></textarea>
                 </div>
                 <div class="form-card">
-                    <input type="text" name="cardno" id="card_no" placeholder="Card Number, without spaces" class="form-spacing" value="<% out.print(request.getAttribute("Cardno")); %>" pattern="\d{16}" required>
-                    <input type="text" name="cardexp" id="card_exp" placeholder="Card Expiry (MM/YY)" pattern="\d{2}\/\d{2}" class="form-spacing" value="<% out.print(request.getAttribute("Cardexp")); %>" required>
+                    <input type="number" name="cardno" id="card_no" min="999999999999999" max="9999999999999999" placeholder="Card Number, without spaces" class="form-spacing" value="<% out.print(request.getAttribute("Cardno")); %>" required>
+                    <input type="text" name="cardexp" id="card_exp" placeholder="Card Expiry (MM/YY)" pattern="\d{2}\/\d{2}" class="form-spacing" value="<% out.print(request.getAttribute("Cardexp")); %>" required> 
+                    <% if(request.getAttribute("c_message").equals("Enter valid card expiry")){out.print("<div class=\"message-error form-spacing card-nowidth\">" + request.getAttribute("c_message") + "</div>");}%>
                     <label for="address" class="form-spacing-small"></label>
                     <select name="cardtype" id="card_type" class="form-spacing" required>
                         <option value="" disabled <% if (request.getAttribute("Cardtype").equals("")) { out.print(" selected"); } %>>Select Card Type</option>

@@ -139,7 +139,7 @@ BEGIN
 --Find the cost of the room
 SELECT price * (OLD.checkout - OLD.checkin) INTO cost FROM roomrate WHERE r_no = OLD.r_no;
 --remove this price from the booking
-UPDATE booking SET b_cost = b_cost - cost, b_outstanding = b_outstanding - cost WHERE booking.bref = OLD.b_ref;
+UPDATE booking SET b_cost = b_cost - cost, b_outstanding = b_outstanding - cost WHERE booking.b_ref = OLD.b_ref;
 RETURN OLD;
 END;
 $$

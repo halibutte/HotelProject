@@ -87,6 +87,18 @@ public class RoomManager extends AbstractManager {
         return (List<Room>)(List<?>)getList(sql, args, "getRoomsAvail", RoomManager::mapToRoom);
     }
     
+    public List<Room> getRoomsAvailByDate(LocalDate checkin, LocalDate checkout, int bref) {
+        //Finds rooms which are available between checkin and checkout, treating rooms which ae in booking bref as available
+        //For use when trying to update a booking.
+        String sql = "SELECT * FROM rooms_avail(?, ?, ?)";
+        Object[] args = {
+            Date.valueOf(checkin),
+            Date.valueOf(checkout),
+            bref
+        };
+        return (List<Room>)(List<?>)getList(sql, args, "getRoomsAvailEdit", RoomManager::mapToRoom);
+    }
+    
     public Map<String,Long> getCountRoomsAvailByDate(LocalDate checkin, LocalDate checkout) {
         //returns a number of available rooms for a specific date range
         List<Room> avail = getRoomsAvailByDate(checkin, checkout);

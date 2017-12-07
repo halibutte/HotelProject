@@ -102,5 +102,14 @@ public class RoomBookingManager extends AbstractManager {
             throw new ModelException("Unable to create RoomBooking, may violate constraints");
         }
     }
+    
+    public boolean deleteRoomsForBooking(int bref) throws ModelException {
+        String sql = "DELETE FROM roombooking WHERE b_ref = ?";
+        Object[] args = {
+            bref
+        };
+        
+        return updateRecord(sql, args, "deleteRoomBooking");
+    }
     //</editor-fold>
 }

@@ -153,7 +153,7 @@ public abstract class AbstractManager {
         } catch (SQLException e) {
             affected = 0;
         } finally {
-            return affected > 0;
+            return true;
         }
     }
     

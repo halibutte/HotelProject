@@ -100,8 +100,16 @@ public class RoomManager extends AbstractManager {
     }
     
     public Map<String,Long> getCountRoomsAvailByDate(LocalDate checkin, LocalDate checkout) {
+        return getCountRoomsAvailByDate(checkin, checkout, null);
+    }
+    public Map<String,Long> getCountRoomsAvailByDate(LocalDate checkin, LocalDate checkout, Integer bref) {
         //returns a number of available rooms for a specific date range
-        List<Room> avail = getRoomsAvailByDate(checkin, checkout);
+        List<Room> avail;
+        if(Objects.isNull(bref)) {
+            avail = getRoomsAvailByDate(checkin, checkout);
+        } else {
+            avail = getRoomsAvailByDate(checkin, checkout, bref);
+        }
         Map<String,Long> counts = avail.stream()
                 .map(r -> r.getRoomClass())
                 .collect(Collectors.groupingBy(

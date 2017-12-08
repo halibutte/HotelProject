@@ -17,7 +17,7 @@
             <li><a href="./info.jsp">Info</a></li>
             <li><a href="./area.jsp">Area</a></li>
             <li><a href="./about.jsp">About Us</a></li>
-            <li><a href="./check_booking.jsp">Check Booking</a></li>
+            <li><a href="./EditBooking">Check Booking</a></li>
         </ul>
 </header>
 <div class="bg-container">

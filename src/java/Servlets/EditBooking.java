@@ -70,6 +70,9 @@ public class EditBooking extends HttpServlet {
                     int int_bref = Integer.parseInt(bref);
                     //get the booking
                     booking = model.BOOKINGS.getBooking(int_bref);
+                    if(Objects.isNull(booking)) {
+                        throw new ModelException("Could not find booking for reference " + int_bref);
+                    }
                     request.setAttribute("booking", booking);
                     LocalDate checkin, checkout;
                     try {
@@ -78,6 +81,11 @@ public class EditBooking extends HttpServlet {
                     } catch (Exception e) {
                         checkin = booking.getRooms().get(0).getCheckin();
                         checkout = booking.getRooms().get(0).getCheckout();
+                    }
+                    
+                    //if booking has already commenced, do not allow editing
+                    if(checkin.isBefore(LocalDate.now()) || checkin.isEqual(LocalDate.now())) {
+                        throw new ModelException("Sorry, you can only change your booking up to one day before checkin");
                     }
                     
                     try {
@@ -93,12 +101,12 @@ public class EditBooking extends HttpServlet {
                     if(!Objects.isNull(btnClicked)) {
                         //an update has been requested
                         //set the rooms which were requested
-                        request.setAttribute("rooms_requested", mapRequest(request));
                         responsePage = "/edit_booking.jsp";
                         if(validateUpdate(request, messages, model)) {                       
                             //try updating booking
                             Booking updated = updateBooking(request, model);
                             request.setAttribute("booking", updated);
+                            request.setAttribute("rooms_requested", mapBookedRooms(updated, model));
                             //try updating customer details
                             Customer cust = updated.getCustomer();
                             cust.setAddress(request.getParameter("address"));
@@ -112,6 +120,8 @@ public class EditBooking extends HttpServlet {
                         } else {
                             //set booking details to the posted info
                             //so it displays if there's an error
+                            //set the rooms requested to those requested
+                            request.setAttribute("rooms_requested", mapRequest(request));
                             Customer c = booking.getCustomer();
                             c.setAddress(request.getParameter("address"));
                             c.setCardexp(request.getParameter("cardexp"));
@@ -187,7 +197,7 @@ public class EditBooking extends HttpServlet {
         Map<String, Integer> map = booking.getRooms().stream()
                 .map((RoomBooking r) -> {
                     Optional<String> room = rooms.stream()
-                            .filter(t -> t.getNo() == r.getRoomNo())
+                            .filter(t -> r.getRoomNo().equals(t.getNo()))
                             .map(t -> t.getRoomClass())
                             .findFirst();
                     if(room.isPresent()) {

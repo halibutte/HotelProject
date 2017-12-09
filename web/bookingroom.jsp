@@ -28,6 +28,7 @@
 <script src="js/bookingroom.js"></script>
 <div class="main-content">
     <h2>Booking</h2>
+    <div class="flexCont" id="message_container"> </div>
     <form method="GET">
         <fieldset class="content-bg">
             <legend>Rooms</legend>
@@ -35,9 +36,9 @@
                 <div class="form-card">
                     Standard Double Room
                     <img src="images/std_d.jpeg" class="room-thumb" alt="Standard Double Room">
-                    <div class="form-spacing">£<% out.print(df.format(roomRate.get("std_d"))); %> per night</div>
+                    <div class="form-spacing">£<span data-roomtype="std_d" data-roomprice="<% out.print(df.format(roomRate.get("std_d"))); %>"><% out.print(df.format(roomRate.get("std_d"))); %></span> per night</div>
                     <label for="std_d" class="form-spacing-small">Quantity</label>
-                    <input id="std_d" class="form-spacing" type="number" name="std_d" min="0" value="<% out.print(request.getAttribute("StdDno")); %>" onchange="hide_payment()">
+                    <input id="std_d" class="form-spacing" type="number" name="std_d" min="0" value="<% out.print(request.getAttribute("StdDno")); %>" onchange="hide_payment(); calc_price();">
                     <%-- This section should only be displayed if a query was submitted --%>
                     <% if (showQuant) { %>
                     <div>
@@ -49,9 +50,9 @@
                 <div class="form-card">
                     Standard Twin Room
                     <img src="images/std_t.jpg" class="room-thumb" alt="Standard Twin Room">
-                    <div class="form-spacing">£<% out.print(df.format(roomRate.get("std_t"))); %> per night</div>
+                    <div class="form-spacing">£<span data-roomtype="std_t" data-roomprice="<% out.print(df.format(roomRate.get("std_t"))); %>"><% out.print(df.format(roomRate.get("std_t"))); %></span> per night</div>
                     <label for="std_t" class="form-spacing-small">Quantity</label>
-                    <input id="std_t" class="form-spacing" type="number" name="std_t" min="0" value="<% out.print(request.getAttribute("StdTno")); %>" onchange="hide_payment()">
+                    <input id="std_t" class="form-spacing" type="number" name="std_t" min="0" value="<% out.print(request.getAttribute("StdTno")); %>" onchange="hide_payment(); calc_price();">
                     <%-- This section should only be displayed if a query was submitted --%>
                     <% if (showQuant) { %>
                     <div>
@@ -63,9 +64,9 @@
                 <div class="form-card">
                     Superior Double Room
                     <img src="images/sup_d.jpg" class="room-thumb" alt="Superior Double Room">
-                    <div class="form-spacing">£<% out.print(df.format(roomRate.get("sup_d"))); %> per night</div>
+                    <div class="form-spacing">£<span data-roomtype="sup_d" data-roomprice="<% out.print(df.format(roomRate.get("sup_d"))); %>"><% out.print(df.format(roomRate.get("sup_d"))); %></span> per night</div>
                     <label for="sup_d" class="form-spacing-small">Quantity</label>
-                    <input id="sup_d" class="form-spacing" type="number" name="sup_d" min="0" value="<% out.print(request.getAttribute("SupDno")); %>" onchange="hide_payment()">
+                    <input id="sup_d" class="form-spacing" type="number" name="sup_d" min="0" value="<% out.print(request.getAttribute("SupDno")); %>" onchange="hide_payment(); calc_price();">
                     <%-- This section should only be displayed if a query was submitted --%>
                     <% if (showQuant) { %>
                     <div>
@@ -77,9 +78,9 @@
                 <div class="form-card">
                     Superior Twin Room
                     <img src="images/sup_t.jpg" class="room-thumb" alt="Superior Twin Room">
-                    <div class="form-spacing">£<% out.print(df.format(roomRate.get("sup_t"))); %> per night</div>
+                    <div class="form-spacing">£<span data-roomtype="sup_t" data-roomprice="<% out.print(df.format(roomRate.get("sup_t"))); %>"><% out.print(df.format(roomRate.get("sup_t"))); %></span> per night</div>
                     <label for="sup_t" class="form-spacing-small">Quantity</label>
-                    <input id="sup_t" class="form-spacing" type="number" name="sup_t" min="0" value="<% out.print(request.getAttribute("SupTno")); %>" onchange="hide_payment()">
+                    <input id="sup_t" class="form-spacing" type="number" name="sup_t" min="0" value="<% out.print(request.getAttribute("SupTno")); %>" onchange="hide_payment(); calc_price();">
                     <%-- This section should only be displayed if a query was submitted --%>
                     <% if (showQuant) { %>
                     <div>
@@ -89,18 +90,21 @@
                     <% } %>
                 </div>
                 <div class="form-card">
+                    <div class="form-spacing-small">Price</div> 
+                    <div class="text-large">£<span id="cost_span">0.00</span></div>
                     <div class="form-spacing-small">Customer ID</div> 
                     <input class="form-spacing" type="number" name="c_id" id="c_id" size="10" value="<% out.print(((request.getAttribute("CustID") == null ? "" : request.getAttribute("CustID")))); %>" placeholder="Can be blank" onchange="hide_payment()">
                     <%--Hide customer ID--%>
                     <div class="form-spacing-small">Check-in Date</div>
-                    <input class="form-spacing" type="date" name="c_in_date" value="<% out.print(request.getAttribute("Checkin")); %>" id="rooms_check_in" onchange="sanity_dates(this); hide_payment()" required>
+                    <input class="form-spacing" type="date" name="c_in_date" value="<% out.print(request.getAttribute("Checkin")); %>" id="rooms_check_in" onchange="sanity_dates(this); hide_payment(); calc_price();" required>
                     <div class="form-spacing-small">Check-out Date</div>
-                    <input class="form-spacing" type="date" name="c_out_date" value="<% out.print(request.getAttribute("Checkout")); %>" id="rooms_check_out" onchange="sanity_dates(this); hide_payment()" required>
+                    <input class="form-spacing" type="date" name="c_out_date" value="<% out.print(request.getAttribute("Checkout")); %>" id="rooms_check_out" onchange="sanity_dates(this); hide_payment(); calc_price();" required>
                     <button type="submit" class="button">Search Rooms</button>
                 </div>
             </div>
         </fieldset>
     </form>
+    <div class="flexCont" id="message_confirm"> </div>
     <%if (request.getAttribute("b_message").equals("Enter number of rooms")) {
             messages.add(request.getAttribute("b_message").toString());
         } else if (!request.getAttribute("b_message").equals("Enter number of rooms")) {

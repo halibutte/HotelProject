@@ -76,7 +76,7 @@
                 List<RoomBooking> rooms = b.getRooms();
                 %>
                 <div class="flexItemLarge">
-                    <h3 class="staff"><span data-searchon="<% out.print(c.getName()); %>" data-searchparent="flexItemLarge"><% out.print(c.getName()); %></span>
+                    <h3 class="staff clearfix"><span data-searchon="<% out.print(c.getName()); %>" data-searchparent="flexItemLarge"><% out.print(c.getName()); %></span>
                         <% for(int i = 0; i < rooms.size(); i++) {
                             RoomBooking r = rooms.get(i);
                             String end = ",&nbsp;";

@@ -276,11 +276,19 @@ ul.nav li a:hover {
 .main-container {
     height: 100%;
 }
+.text-large {
+    /*used for price*/
+    font-size: xx-large;
+    font-weight: bold;
+}
 
 .col-full {
     margin: auto;
     padding-left: 2em;
     padding-right: 2em;
+}
+.clearfix {
+    overflow: auto;
 }
 
 /* CLASSES TO MAKE REPORT TABLES */

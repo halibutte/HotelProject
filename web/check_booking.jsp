@@ -10,11 +10,10 @@
    <h2>Booking</h2>
     <form method="POST">
         <fieldset  class="content-bg">
-            <legend>Check My Booking</legend>
+            <legend>Update Your Booking</legend>
             <div class="form-card-container">
                 <div class="form-card">
-                    <input type="text" name="email" id="email" class="form-spacing" placeholder="Email Address" required>
-                    <input type="text" name="booking_ref" id="booking_ref" placeholder="Booking Reference" class="form-spacing" required>
+                    <input type="text" name="b_ref" id="booking_ref" placeholder="Booking Reference" class="form-spacing" required>
                     <button type="submit" value="submit">Show Booking</button>
                 </div>
             </div>

@@ -21,7 +21,6 @@ public class ConnectionManager {
     //holds the jdbc connection to postgre db
     Connection conn;
     /* LOCAL CONNECTION */
-    
     final String CONN_STRING = "jdbc:postgresql://localhost:5432/studentdb";
     final String SCHEMA = "hotelbooking";
     final String USERNAME = "student";
@@ -62,6 +61,44 @@ public class ConnectionManager {
             conn = makeConnection();
         }
         return conn;
+    }
+    
+    public boolean startTransaction() {
+        try{
+            conn.setAutoCommit(false);
+            return true;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+    
+    public boolean endTransaction() {
+        try{
+            conn.setAutoCommit(true);
+            return true;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+    
+    public boolean commitTransaction() {
+        try{
+            conn.commit();
+            endTransaction();
+            return true;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+    
+    public boolean rollbackTransaction() {
+        try{
+            conn.rollback();
+            endTransaction();
+            return true;
+        } catch (SQLException e) {
+            return false;
+        }
     }
     
     @Override

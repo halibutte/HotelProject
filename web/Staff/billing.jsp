@@ -25,6 +25,7 @@
         <script src="js/jquery.min.js"></script>
         <script src="js/billing.js"></script>
         <script src="js/checkin.js"></script>
+        <script src="js/search.js"></script>
     </head>
     <body>
         <%@include file="staff_header.jsp" %>
@@ -37,7 +38,7 @@
         <div class="main-container">
             
             <div class="col-minwidth">
-                <div class="flexCont">
+                <div class="flexCont center-flex">
                     <div class="flexItem">
                         <h4 class="staff">View Dates</h4>
                         <form method="GET">
@@ -48,8 +49,9 @@
                     <div class="flexItem">
                         <h4 class="staff">Search Guests</h4>
                         <form method="GET">
-                            <input id="search_val" type="text" name="search_guests" value="" class="form-spacing">
+                            <input id="search_val" type="text" name="search_guests" value="" class="form-spacing" oninput="search()">
                         </form>
+                        <div class="form-spacing-small">Search by name or room number</div>
                     </div>
                     <% List<String> msgs = (List<String>)request.getAttribute("messages");
                     if(!Objects.isNull(msgs)) {
@@ -67,21 +69,21 @@
                 
             <div class="col-full">
                 <h3 class="staff">Guests</h3>
-                <div class="flexCont">
+                <div class="flexCont center-flex">
                 <% for(Booking b : bookings) { 
                 Customer c = b.getCustomer();
                 List<BilledItem> billItems = b.getBilledItems();
                 List<RoomBooking> rooms = b.getRooms();
                 %>
                 <div class="flexItemLarge">
-                    <h3 class="staff"><span data-searchon="<% out.print(c.getName()); %>"><% out.print(c.getName()); %></span>
+                    <h3 class="staff"><span data-searchon="<% out.print(c.getName()); %>" data-searchparent="flexItemLarge"><% out.print(c.getName()); %></span>
                         <% for(int i = 0; i < rooms.size(); i++) {
                             RoomBooking r = rooms.get(i);
                             String end = ",&nbsp;";
                             if(i == 0) {
                                 end = "";
                             }
-                            out.print("<span class='payment-expand' data-searchon='" + r.getRoomNo() + "'>" + r.getRoomNo() + end + "</span>");
+                            out.print("<span class='payment-expand' data-searchon='" + r.getRoomNo() + "' data-searchparent='flexItemLarge'>" + r.getRoomNo() + end + "</span>");
                         } %>
                     </h3>
                     <div class="table table-total form-spacing">
@@ -168,5 +170,6 @@
                 <% } %>
                 </div>
             </div>
+        </div>
     </body>
 </html>

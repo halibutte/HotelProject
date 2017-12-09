@@ -15,7 +15,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -139,9 +141,11 @@ public class BookingRoom extends HttpServlet {
             String supd_message = "";
             String c_message = "";
 
+            Map<String,Double> room_rates = new HashMap<>();
             Model model = null;
             try {
                 model = new Model();
+                room_rates = model.ROOMS.getRates();
             } catch (ModelException e) {
                 String errorMessage = "error#Cannot connect to databse";
             }
@@ -172,7 +176,11 @@ public class BookingRoom extends HttpServlet {
             if (StdTno == 0 && StdDno == 0 && SupTno == 0 && SupDno == 0) {
                 b_message = "Enter number of rooms";
             }
-
+            //get a map of String (class) to amnt avail to pass to page for display
+            Map<String,Long> countAvail = null;
+            if(!Objects.isNull(c_in_date)) {
+                countAvail = model.ROOMS.getCountRoomsAvailByDate(Checkin, Checkout);
+            }
             if (StdTno > nStdT) {
                 stdt_message = "Not enough Standard twin rooms available. There are " + nStdT + " rooms left for your chosen period.";
             }
@@ -195,7 +203,7 @@ public class BookingRoom extends HttpServlet {
             if (StdTno > nStdT || StdDno > nStdD || SupTno > nSupT || SupDno > nSupD) {
                 s_message = "Please change your selection";
             } else {
-                s_message = "Preference available. You can proceed to enter your details and make a booking";
+                s_message = "Preference available. You can proceed to enter your details and make a booking or serach for other preferences";
             }
 
             if (CustID != null) {
@@ -253,24 +261,31 @@ public class BookingRoom extends HttpServlet {
                 }
             }
 
-            String[] cardexpS = new String[2];
+            String[] cardexpS1 = null;
 
             if (Cardexp.contains("/")) {
-                String[] cardexpS1 = Cardexp.split("/");
-                cardexpS[0] = cardexpS1[0];
-                cardexpS[1] = cardexpS1[1];
+                cardexpS1 = Cardexp.split("/");
+               
             }
+            
 
             //To finish of
-            // if (Integer.parseInt(cardexpS[1]) > 99 || Integer.parseInt(cardexpS[1]) < (LocalDate.now().getYear() % 100) || Integer.parseInt(cardexpS[0]) < 1
-            // || Integer.parseInt(cardexpS[0]) > 12 )||
-            if (!Cardexp.contains("/") || Cardexp.length() > 5) {
+            //If statement for this years month and av
+            if(cardexpS1!=null){
+            if (Integer.parseInt(cardexpS1[1]) > 99 || Integer.parseInt(cardexpS1[1]) < (LocalDate.now().getYear() % 100) || Integer.parseInt(cardexpS1[0]) < 1
+            || Integer.parseInt(cardexpS1[0]) > 12 || !Cardexp.contains("/") || Cardexp.length() > 5) {
                 c_message = "Enter valid card expiry";
+            }
+            if(LocalDate.now().getYear() % 100 == Integer.parseInt(cardexpS1[1])
+                    && Integer.parseInt(cardexpS1[0])<LocalDate.now().getMonthValue() ){
+                c_message = "Enter valid card expiry";
+            }
             }
 
             Customer customer = new Customer(Name, Email, Address, Cardtype, Cardexp, Cardno);
             Customer customer1 = model.CUSTOMERS.getCustomer(Name, Email);
             
+            if(!c_message.equals("Enter valid card expiry")){
             if (customer1 == null) {
 
                 try {
@@ -282,6 +297,7 @@ public class BookingRoom extends HttpServlet {
             try {
                 model.CUSTOMERS.updateCustomer(customer);
             } catch (Exception e) {
+            }
             }
             if(bCustID!=null){customer.setNo(bCustID);}
             List<Room> r_availableB = new ArrayList<>();
@@ -308,7 +324,7 @@ public class BookingRoom extends HttpServlet {
             }
          
             
-       if(request.getParameter("bButton")!=null){
+       if(request.getParameter("bButton")!=null && !c_message.equals("Enter valid card expiry")){
             try {
                 model.BOOKINGS.makeBooking(customer, r_availableB, Checkin, Checkout);
             } catch (Exception e) {
@@ -337,6 +353,8 @@ public class BookingRoom extends HttpServlet {
             request.setAttribute("Cardtype", Cardtype);
             request.setAttribute("Cardexp", Cardexp);
             request.setAttribute("Cardno", Cardno);
+            request.setAttribute("count_avail", countAvail);
+            request.setAttribute("room_rates", room_rates);
 
             RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/bookingroom.jsp");
             dispatcher.forward(request, response);

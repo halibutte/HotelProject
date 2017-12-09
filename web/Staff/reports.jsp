@@ -30,7 +30,7 @@
         <div class="main-container">
             
             <div class="col-minwidth">
-                <div class="flexCont">
+                <div class="flexCont center-flex">
                     <div class="flexItem">
                         <h4 class="staff">View Dates</h4>
                         <form method="GET">

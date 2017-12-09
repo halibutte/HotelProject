@@ -13,11 +13,11 @@
     <h1>The Heartache Hotel</h1>
         <ul class="nav dropshadow-bottom">
             <li><a href="./home.jsp">Home</a></li>
-            <li><a href="./booking.jsp">Book</a></li>
+            <li><a href="./BookingRoom">Book</a></li>
             <li><a href="./info.jsp">Info</a></li>
             <li><a href="./area.jsp">Area</a></li>
             <li><a href="./about.jsp">About Us</a></li>
-            <li><a href="./check_booking.jsp">Check Booking</a></li>
+            <li><a href="./EditBooking">Check Booking</a></li>
         </ul>
 </header>
 <div class="bg-container">

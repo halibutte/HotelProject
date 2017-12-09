@@ -87,9 +87,29 @@ public class RoomManager extends AbstractManager {
         return (List<Room>)(List<?>)getList(sql, args, "getRoomsAvail", RoomManager::mapToRoom);
     }
     
+    public List<Room> getRoomsAvailByDate(LocalDate checkin, LocalDate checkout, int bref) {
+        //Finds rooms which are available between checkin and checkout, treating rooms which ae in booking bref as available
+        //For use when trying to update a booking.
+        String sql = "SELECT * FROM rooms_avail(?, ?, ?)";
+        Object[] args = {
+            Date.valueOf(checkin),
+            Date.valueOf(checkout),
+            bref
+        };
+        return (List<Room>)(List<?>)getList(sql, args, "getRoomsAvailEdit", RoomManager::mapToRoom);
+    }
+    
     public Map<String,Long> getCountRoomsAvailByDate(LocalDate checkin, LocalDate checkout) {
+        return getCountRoomsAvailByDate(checkin, checkout, null);
+    }
+    public Map<String,Long> getCountRoomsAvailByDate(LocalDate checkin, LocalDate checkout, Integer bref) {
         //returns a number of available rooms for a specific date range
-        List<Room> avail = getRoomsAvailByDate(checkin, checkout);
+        List<Room> avail;
+        if(Objects.isNull(bref)) {
+            avail = getRoomsAvailByDate(checkin, checkout);
+        } else {
+            avail = getRoomsAvailByDate(checkin, checkout, bref);
+        }
         Map<String,Long> counts = avail.stream()
                 .map(r -> r.getRoomClass())
                 .collect(Collectors.groupingBy(
@@ -174,6 +194,17 @@ public class RoomManager extends AbstractManager {
         } else {
             return getRoom(room.getNo());
         }
+    }
+    
+    public Map<String,Double> getRates() {
+        List<Room> rooms = getAllRooms();
+        Map<String,Double> map = new HashMap<>();
+        for(Room r : rooms) {
+            if(!map.containsKey(r.getRoomClass())) {
+                map.put(r.getRoomClass(), Double.valueOf(r.getPrice()));
+            }
+        }
+        return map;
     }
 
     private static Room mapToRoom(Map<String, Object> map) {

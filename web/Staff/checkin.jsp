@@ -21,6 +21,7 @@
         <script src="js/jquery.min.js"></script>
         <script src="js/empty_message.js"></script>
         <script src="js/checkin.js"></script>
+        <script src="js/search.js"></script>
     </head>
     <body>
         <%@include file="staff_header.jsp" %>
@@ -33,6 +34,13 @@
                         <input type="date" name="forDate" value="<% out.print(request.getAttribute("viewdate")); %>" class="form-spacing">
                         <button type="submit" class="button">Submit</button>
                     </form>
+                </div>
+                <div class="flexItem">
+                    <h4 class="staff">Search Guests</h4>
+                    <form method="GET">
+                        <input id="search_val" type="text" name="search_guests" value="" class="form-spacing" oninput="search()">
+                    </form>
+                    <div class="form-spacing-small">Search by name, room number, or booking reference</div>
                 </div>
                 <% List<String> msgs = (List<String>)request.getAttribute("messages");
                 for(String s : msgs) {
@@ -53,16 +61,16 @@
                 for(Room r : map.keySet()) {
             %>
             <div class="flexItem">
-                <h4 class="staff">Room <% out.print(r.getNo()); %></h4>
+                <h4 class="staff">Room <span data-searchon="<% out.print(r.getNo()); %>" data-searchparent="flexItem"><% out.print(r.getNo()); %></span></h4>
                 <div class="form-spacing-small">
                 <% 
                 Booking b = map.get(r);
-                Customer c = b.getCustomer();
-                out.print(c.getName()); %>
+                Customer c = b.getCustomer(); %>
+                <span data-searchon="<% out.print(c.getName()); %>" data-searchparent="flexItem"><% out.print(c.getName()); %></span>
                 <br>
                 </div>
                 <div class="form-spacing">
-                Booking <% out.print(b.getRef()); %>
+                Booking <span data-searchon="<% out.print(b.getRef()); %>" data-searchparent="flexItem"><% out.print(b.getRef()); %></span>
                 </div>
                 <div>
                     <form method="POST">
@@ -98,12 +106,13 @@
                 for(Room r : map.keySet()) {
             %>
             <div class="flexItem">
-                <h4 class="staff">Room <% out.print(r.getNo()); %></h4>
+                <h4 class="staff">Room <span data-searchon="<% out.print(r.getNo()); %>" data-searchparent="flexItem"><% out.print(r.getNo()); %></span></h4>
                 <div class="form-spacing-small">
                 <% 
                 Booking b = map.get(r);
                 Customer c = b.getCustomer();
-                out.print(c.getName() + " (" + b.getRef() + ")"); %>
+                %>
+                <span data-searchon="<% out.print(c.getName()); %>" data-searchparent="flexItem"><% out.print(c.getName()); %></span> <span data-searchon="<% out.print(b.getRef()); %>" data-searchparent="flexItem">(<% out.print(b.getRef()); %>)</span>
                 </div>
                 <div class="form-spacing-small">
                 Outstanding Balance

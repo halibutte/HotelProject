@@ -181,7 +181,7 @@ textarea:focus {
 div.form-card {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     background-color: white;
-    width: 200px;
+    width: 190px;
     margin: 0.5em;
     padding: 1em;
     position: relative;
@@ -351,6 +351,10 @@ div.card {
     display: block;
     min-width: 500px;
 }
+div.card-nowidth {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    padding: 1ex;
+}
 
 /* EMPTY STATE STYLES */
 div.empty {
@@ -453,6 +457,9 @@ span.payment-expand-text {
 
     .col-minwidth {
         display: block;
+    }
+    .center-flex {
+        justify-content: center;
     }
     .col-half {
         display: block;

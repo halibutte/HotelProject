@@ -64,11 +64,31 @@ AS $$
         (
             SELECT roombooking.r_no FROM roombooking 
             WHERE (roombooking.checkin <= d_start AND roombooking.checkout > d_start) 
-            OR (roombooking.checkin BETWEEN d_start AND d_end)
+            OR (roombooking.checkin BETWEEN d_start AND d_end - 1)
+			OR (roombooking.checkout BETWEEN d_start + 1 AND d_end)
         );
     END;
 $$
 LANGUAGE 'plpgsql';
+
+--Return a table of rooms which are available for certain date range, considering any rooms booked for b_ref = ignore_ref to be available for this search
+CREATE OR REPLACE FUNCTION rooms_avail(d_start DATE, d_end DATE, ignore_ref INTEGER)
+RETURNS TABLE (r_no INTEGER, r_class CHARACTER(5), r_status CHARACTER(1), r_notes VARCHAR, price NUMERIC)
+AS $$
+	BEGIN
+    	RETURN QUERY
+        SELECT roomrate.r_no, roomrate.r_class, roomrate.r_status, roomrate.r_notes, roomrate.price FROM roomrate WHERE roomrate.r_no NOT IN
+        (
+            SELECT roombooking.r_no FROM roombooking 
+            WHERE ((roombooking.checkin <= d_start AND roombooking.checkout > d_start) 
+            OR (roombooking.checkin BETWEEN d_start AND d_end - 1)
+			OR (roombooking.checkout BETWEEN d_start + 1 AND d_end))
+			AND roombooking.b_ref <> ignore_ref
+        );
+    END;
+$$
+LANGUAGE 'plpgsql';
+
 
 --Make new customer ref
 CREATE OR REPLACE FUNCTION new_cno()
@@ -119,7 +139,7 @@ BEGIN
 --Find the cost of the room
 SELECT price * (OLD.checkout - OLD.checkin) INTO cost FROM roomrate WHERE r_no = OLD.r_no;
 --remove this price from the booking
-UPDATE booking SET b_cost = b_cost - cost, b_outstanding = b_outstanding - cost WHERE booking.bref = OLD.b_ref;
+UPDATE booking SET b_cost = b_cost - cost, b_outstanding = b_outstanding - cost WHERE booking.b_ref = OLD.b_ref;
 RETURN OLD;
 END;
 $$

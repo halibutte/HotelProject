@@ -13,6 +13,7 @@ import DataModel.Room;
 import DataModel.RoomBooking;
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -131,9 +132,18 @@ public class BookingManager extends AbstractManager {
     }
     
     private boolean allAvail(List<Room> rooms, LocalDate checkin, LocalDate checkout) {
+        return allAvail(rooms, checkin, checkout, null);
+    }
+    
+    private boolean allAvail(List<Room> rooms, LocalDate checkin, LocalDate checkout, Integer bref) {
         //check all the requires rooms in the list are available
         //rooms only need to specify the type
-        List<Room> avail = model.ROOMS.getRoomsAvailByDate(checkin, checkout);
+        List<Room> avail;
+        if(Objects.isNull(bref)) {
+            avail = model.ROOMS.getRoomsAvailByDate(checkin, checkout);
+        } else {
+            avail = model.ROOMS.getRoomsAvailByDate(checkin, checkout, bref);
+        }
         final Map<String,Long> countAvail = avail.stream()
                 .map(r -> r.getRoomClass())
                 .collect(Collectors.groupingBy(
@@ -157,6 +167,55 @@ public class BookingManager extends AbstractManager {
         }).sum();
         
         return notAvail <= 0;
+    }
+    
+    public Booking updateBooking(int bref, List<Room> rooms, LocalDate checkin, LocalDate checkout) throws ModelException {
+        //Method to change a booking. Will first check if update is possible, will then delete all existing roombooking records
+        //then create anew. All wraped up in a transaction, so if there is a fail midway we can roll back.
+        Booking updated = null;
+        try {
+            //check the list of requested rooms is not empty
+            if(rooms.size() <= 0) {
+                throw new ModelException("List of requested rooms is empty");
+            }
+            
+            model.getConnection().startTransaction();
+            if(!allAvail(rooms, checkin, checkout, bref)) {
+                throw new ModelException("Rooms not available");
+            }
+            
+            //restore the booking
+            Booking book = model.BOOKINGS.getBooking(bref);
+            
+            //delete all the roombookings from the list
+            boolean done = model.ROOMBOOKINGS.deleteRoomsForBooking(bref);
+            if(!done) {
+                throw new ModelException("Failed to delete old roombookings");
+            }
+            
+            //make new roombookings of the requested list
+            if(!bookList(rooms, checkin, checkout, book)) {
+                throw new ModelException("Failed to book all rooms");
+            }
+                       
+            //retrieve the booking with updated info
+            updated = model.BOOKINGS.getBooking(book.getRef());
+            if(Objects.isNull(updated)) {
+                throw new ModelException("Failed to retrieve booking");
+            }
+            
+            //commmit all of this
+            model.getConnection().commitTransaction();
+        } catch (ModelException e) {
+            model.getConnection().rollbackTransaction();
+            throw new ModelException(e.getMessage());
+        } catch (Exception e) {
+            model.getConnection().rollbackTransaction();
+        } 
+        finally {
+            model.getConnection().endTransaction();
+        }
+        return updated;
     }
     
     public Booking takePayment(Booking booking, double amount) throws ModelException {
@@ -231,7 +290,7 @@ public class BookingManager extends AbstractManager {
     
     public static void main(String[] args) throws ModelException {
         Model model = new Model();
-        Customer cust = new Customer("Testing Name", "A@B.C", "Neston", "V", "20/17", "2304930498");
+        /*Customer cust = new Customer("Testing Name", "A@B.C", "Neston", "V", "20/17", "2304930498");
         Room room = new Room();
         room.setRoomClass("sup_d");
         List<Room> list = new ArrayList<>();
@@ -250,6 +309,15 @@ public class BookingManager extends AbstractManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //add something
+        //add something*/
+        List<Room> askfor = new ArrayList<>();
+        Room a = new Room();
+        a.setRoomClass("std_t");
+        askfor.add(a);
+        try {
+            model.BOOKINGS.updateBooking(13505, askfor, LocalDate.now(), LocalDate.parse("2017-12-09"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

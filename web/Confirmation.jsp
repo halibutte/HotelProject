@@ -16,8 +16,10 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@include file="/WEB-INF/header.jspf" %>
 <%  Integer bookingRef = (Integer)request.getAttribute("b_ref");
+    Integer cus_id;
     String cus_name;
     String cus_email;
+    String booking_notes;
     Double b_cost;
     LocalDate in_d;
     LocalDate out_d;
@@ -34,13 +36,15 @@
                 String errorMessage = "error#Cannot connect to databse";
             }
             Booking b = new Booking();
-            b = model.BOOKINGS.getBooking(bookingRef);//b_ref
+            b = model.BOOKINGS.getBooking(bookingRef);
+            cus_id = b.getCustomer().getNo();
             cus_name = b.getCustomer().getName();
             cus_email = b.getCustomer().getEmail();
+            booking_notes = b.getNotes();
             b_cost = b.getCost();
             in_d = b.getRooms().get(0).getCheckin();
             out_d = b.getRooms().get(0).getCheckout();
-            List<Room> rm = (List<Room>)request.getAttribute("room_con");//prev page
+            List<Room> rm = (List<Room>)request.getAttribute("room_con");
             Integer nStdT = 0, nStdD = 0, nSupT = 0, nSupD = 0;
             for(Room c: rm){
 
@@ -94,11 +98,13 @@
                 This is an email confirmation for your order, please retain this information for future reference. <br><br>
                 Your booking has been received and reserved. <br> <br>
                 <h7>Order details:</h7><br><br>
+                <h8>Customer ID: <% out.print(cus_id); %></h8><br>
                 <h8>Email Address: <% out.print(cus_email); %></h8><br>
-                <h8>Reference number: <% out.print(b.getRef()); %> </h8><br>
+                <h8>Booking Reference number: <% out.print(b.getRef()); %> </h8><br>
                 <h8>Checkin Date: <% out.print(in_d); %> </h8><br>
-                <h8>Checkout Date: <% out.print(out_d); %> </h8><br><br>
-                
+                <h8>Checkout Date: <% out.print(out_d); %> </h8><br>
+                  <h8>Total cost: <% out.print(b_cost); %> </h8><br>
+                <h8>Notes: <% out.print(booking_notes); %> </h8><br><br>
                 <h8>The following rooms have been reserved for you: </h8>
                 <ul>
                     <% if(nStdT > 0) { %>

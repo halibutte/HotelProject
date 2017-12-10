@@ -14,6 +14,7 @@ import DataModel.RoomBooking;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -221,6 +222,36 @@ public class BookingManager extends AbstractManager {
     public Booking takePayment(Booking booking, double amount) throws ModelException {
         if(Objects.isNull(booking.getRef())) {
             throw new ModelException("Booking must have reference");
+        }
+        
+        Customer c = booking.getCustomer();
+        //do some validation
+        if(!c.getCardno().matches("\\d{13,19}")) {
+            throw new ModelException("Card number must be a 13 to 19 digit number");
+        }
+
+        //validate card exp
+        if(c.getCardexp().matches("\\d{2}/\\d{2}")) {
+            //convert to date
+            String cardexp = c.getCardexp();
+            String[] parts = cardexp.split("/");
+            try {
+                LocalDate expDate = LocalDate.of(Integer.parseInt("20"+parts[1]), Integer.parseInt(parts[0]), 1);
+                LocalDate thisMonth = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonthValue(), 1);
+                if(expDate.isBefore(thisMonth)) {
+                    throw new ModelException("Card has expired, please enter alternate payment details");
+                }
+            } catch (DateTimeException e) {
+                throw new ModelException("Card expiry invalid, check month and year are correction");
+            }
+        } else {
+            throw new ModelException("Enter card expiry in format MM/YY");
+        }
+
+        //validate card type
+        String cardtype = c.getCardtype();
+        if(!(cardtype.equals("V")||cardtype.equals("MC")||cardtype.equals("A"))) {
+            throw new ModelException("Card type invalid");
         }
         
         String sql = "UPDATE booking SET b_outstanding = b_outstanding - ? WHERE b_ref = ?";

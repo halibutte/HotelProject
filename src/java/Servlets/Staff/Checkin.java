@@ -76,10 +76,12 @@ public class Checkin extends HttpServlet {
             //update a room status if this was requested
             if(!Objects.isNull(roomNo)) {
                 try {
-                    Room r = model.ROOMS.getRoom(Integer.parseInt(roomNo));                    
-                    r.setStatus(roomStatus);
-                    model.ROOMS.updateRoom(r);
-                    messages.add("confirm#Room " + r.getNo() + " status updated to " + r.getStatus());
+                    Room r = model.ROOMS.getRoom(Integer.parseInt(roomNo));
+                    if(!r.getStatus().equals(roomStatus)) {
+                        r.setStatus(roomStatus);
+                        model.ROOMS.updateRoom(r);
+                        messages.add("confirm#Room " + r.getNo() + " status updated to " + r.getLongStatus());
+                    }
                 } catch (Exception e) {
                     messages.add("error#Failed to update room status");
                 }
@@ -106,8 +108,10 @@ public class Checkin extends HttpServlet {
                             model.BOOKINGS.takePayment(b, pay);
                             messages.add("confirm#Payment of " + NumberFormat.getCurrencyInstance().format(pay) + " processed for booking " + b.getRef());
                         }
-                    } catch (Exception e) {
+                    } catch (ModelException e) {
                         //unable to parse payment amount
+                        messages.add("error#" + e.getMessage());
+                    } catch (Exception e) {
                         messages.add("error#Unable to process payment");
                     }
                 }

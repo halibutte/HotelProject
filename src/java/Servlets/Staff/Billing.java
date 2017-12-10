@@ -95,11 +95,11 @@ public class Billing extends HttpServlet {
                     
                     //taking some payment
                     if(actType.equals("pay")) {
-                        boolean accepted = takePayment(payBref, payAmnt, payNum, payExp, payType, model);
-                        if(accepted) {
+                        try {
+                            boolean accepted = takePayment(payBref, payAmnt, payNum, payExp, payType, model);
                             messages.add("confirm#Payment accepted");
-                        } else {
-                            messages.add("error#Issue processing payment");
+                        } catch (ModelException e) {
+                            messages.add("error#"+e.getMessage());
                         }
                     }
                 }
@@ -140,7 +140,8 @@ public class Billing extends HttpServlet {
         return model.BILLABLES.deleteBilledItem(castId);
     }
     
-    protected boolean takePayment(String bref, String amount, String cardNo, String cardExp, String cardType, Model model) {
+    protected boolean takePayment(String bref, String amount, String cardNo, String cardExp, String cardType, Model model)
+    throws ModelException {
         //cast to correct types
         int castBref = Integer.parseInt(bref);
         double castAmount = Double.parseDouble(amount);
@@ -155,15 +156,9 @@ public class Billing extends HttpServlet {
         cust.setCardtype(cardType);
         
         //try update then pay
-        try {
-            model.CUSTOMERS.updateCustomer(cust);
-            model.BOOKINGS.takePayment(booking, castAmount);
-            return true;
-        } catch (ModelException e) {
-            //errored, return false
-            return false;
-        }
-                    
+        model.CUSTOMERS.updateCustomer(cust);
+        model.BOOKINGS.takePayment(booking, castAmount);
+        return true;            
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

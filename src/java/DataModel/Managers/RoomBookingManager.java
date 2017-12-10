@@ -89,8 +89,8 @@ public class RoomBookingManager extends AbstractManager {
         Object[] args = {
             rb.getRoomNo(),
             rb.getRef(),
-            rb.getCheckin(),
-            rb.getCheckout()
+            java.sql.Date.valueOf(rb.getCheckin()),
+            java.sql.Date.valueOf(rb.getCheckout())
         };
         Object[] res = createRecord(sql, args, "createRoomBooking");
         Integer res1 = (Integer)res[0];

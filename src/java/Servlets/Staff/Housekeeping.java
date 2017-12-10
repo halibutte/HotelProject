@@ -49,9 +49,11 @@ public class Housekeeping extends HttpServlet {
                 //set this rooms status to the new value
                 try {
                     Room r = model.ROOMS.getRoom(Integer.parseInt(roomNo));
-                    r.setStatus(roomStatus);
-                    model.ROOMS.updateRoom(r);
-                    messages.add("confirm#Room " + r.getNo() + " updated to status " + r.getLongStatus());
+                    if(!r.getStatus().equals(roomStatus)) {
+                        r.setStatus(roomStatus);
+                        model.ROOMS.updateRoom(r);
+                        messages.add("confirm#Room " + r.getNo() + " updated to status " + r.getLongStatus());
+                    }
                 } catch(NumberFormatException e) {
                     messages.add("error#Unrecognised room number");
                 } catch(ModelException e) {

@@ -43,7 +43,7 @@ public class BookingManager extends AbstractManager {
         booking.setCost(((BigDecimal)map.get("b_cost")).doubleValue());
         booking.setOutstanding(((BigDecimal)map.get("b_outstanding")).doubleValue());
         booking.setCustomerNo((Integer)map.get("c_no"));
-        booking.setNotes((String)map.get("b_no"));
+        booking.setNotes((String)map.get("b_notes"));
         booking.setRef((Integer)map.get("b_ref"));
         booking.setRooms(model.ROOMBOOKINGS.getRoomBookings(booking.getRef()));
         booking.setCustomer(model.CUSTOMERS.getCustomer(booking.getCustomerNo()));
@@ -61,7 +61,8 @@ public class BookingManager extends AbstractManager {
             Customer customer, 
             List<Room> rooms,
             LocalDate checkin,
-            LocalDate checkout) throws ModelException 
+            LocalDate checkout,
+            String notes) throws ModelException 
     {
         //pass in a list of the require types of rooms desired, 
         //only need to provide type
@@ -73,7 +74,7 @@ public class BookingManager extends AbstractManager {
         //create customer will return existing record if there is one
         Customer c = model.CUSTOMERS.createCustomer(customer);
         //create a booking object
-        Booking b = createBooking(c.getNo(), 0, "");
+        Booking b = createBooking(c.getNo(), 0, notes);
         //create relevant roombookings
         boolean done = bookList(rooms, checkin, checkout, b);
         return getBooking(b.getRef());
@@ -170,7 +171,7 @@ public class BookingManager extends AbstractManager {
         return notAvail <= 0;
     }
     
-    public Booking updateBooking(int bref, List<Room> rooms, LocalDate checkin, LocalDate checkout) throws ModelException {
+    public Booking updateBooking(int bref, List<Room> rooms, LocalDate checkin, LocalDate checkout, String notes) throws ModelException {
         //Method to change a booking. Will first check if update is possible, will then delete all existing roombooking records
         //then create anew. All wraped up in a transaction, so if there is a fail midway we can roll back.
         Booking updated = null;
@@ -197,6 +198,11 @@ public class BookingManager extends AbstractManager {
             //make new roombookings of the requested list
             if(!bookList(rooms, checkin, checkout, book)) {
                 throw new ModelException("Failed to book all rooms");
+            }
+            
+            //update notes
+            if(!updateBookingNotes(bref, notes)) {
+                throw new ModelException("Could not change booking notes");
             }
                        
             //retrieve the booking with updated info
@@ -302,6 +308,12 @@ public class BookingManager extends AbstractManager {
         return (Booking)getSingle(sql, args, "getCheckoutBookingForDate", r -> mapToBooking(r));
     }
     
+    public boolean updateBookingNotes(int bref, String notes) {
+        String sql = "UPDATE booking SET b_notes = ? WHERE b_ref = ?";
+        Object[] args = { notes, bref };
+        return updateRecord(sql, args, "updateBookingNotes");
+    }
+    
     private Booking createBooking(int custNo, double cost, String notes) throws ModelException {
         String sql = "INSERT INTO hotelbooking.booking(" +
             "c_no, b_cost, b_outstanding, b_notes)" +
@@ -346,7 +358,7 @@ public class BookingManager extends AbstractManager {
         a.setRoomClass("std_t");
         askfor.add(a);
         try {
-            model.BOOKINGS.updateBooking(13505, askfor, LocalDate.now(), LocalDate.parse("2017-12-09"));
+            //model.BOOKINGS.updateBooking(13505, askfor, LocalDate.now(), LocalDate.parse("2017-12-09"));
         } catch (Exception e) {
             e.printStackTrace();
         }

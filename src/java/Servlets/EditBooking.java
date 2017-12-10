@@ -115,6 +115,7 @@ public class EditBooking extends HttpServlet {
                             cust.setCardtype(request.getParameter("cardtype"));
                             cust.setEmail(request.getParameter("email"));
                             model.CUSTOMERS.updateCustomer(cust);
+                            
                             doneUpdate = true;
                             responsePage = "/UpdateConfirmation.jsp";
                             request.setAttribute("b_ref", updated.getRef());
@@ -147,6 +148,7 @@ public class EditBooking extends HttpServlet {
                             c.setCardno(request.getParameter("cardno"));
                             c.setCardtype(request.getParameter("cardtype"));
                             c.setEmail(request.getParameter("email"));
+                            
                         }
                     } else if (!Objects.isNull(bref)) {
                         //no update requested, but ref provided
@@ -194,7 +196,7 @@ public class EditBooking extends HttpServlet {
         }
 
         //try to update the booking
-        booking = model.BOOKINGS.updateBooking(bref, roomsToBook, checkin, checkout);
+        booking = model.BOOKINGS.updateBooking(bref, roomsToBook, checkin, checkout, request.getParameter("notes"));
         return booking;
     }
     
@@ -307,6 +309,7 @@ public class EditBooking extends HttpServlet {
                 String cardno = request.getParameter("cardno");
                 String cardexp = request.getParameter("cardexp");
                 String cardtype = request.getParameter("cardtype");
+                String notes = request.getParameter("notes");
                 
                 //validate email
                 if(!email.matches(".*@.*\\..*")) {

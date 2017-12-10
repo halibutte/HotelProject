@@ -134,7 +134,7 @@
     <%-- This section will only print when okay to go ahead and make booking --%>
     <form method="POST" id="payment_form">
         <fieldset class="content-bg">
-            <legend id="pay_anchor">Payment Details</legend>
+            <legend id="pay_anchor">Payment Details and notes</legend>
             <div class="form-card-container">
                 <div class="form-card">
                     <input type="hidden" name="c_id"  value="<% out.print(request.getAttribute("CustID")); %>"  >
@@ -142,9 +142,11 @@
                     <input type="email" name="email" id="email" placeholder="Email Address" class="form-spacing" value="<% out.print(request.getAttribute("Email")); %>" required>
                     <label for="address" class="form-spacing-small">Address</label>
                     <textarea id="address" name="address" required><% out.print(request.getAttribute("Address")); %></textarea>
+                    <label for="notes" class="form-spacing-small">Notes</label>
+                    <textarea id="notes" name="notes"><% out.print(request.getAttribute("Notes")); %></textarea>
                 </div>
                 <div class="form-card">
-                    <input type="number" name="cardno" id="card_no" min="999999999999999" max="9999999999999999" placeholder="Card Number, without spaces" class="form-spacing" value="<% out.print(request.getAttribute("Cardno")); %>" required>
+                    <input type="text" name="cardno" id="card_no" pattern="[0-9]{15,19}"  placeholder="Card Number, without spaces" class="form-spacing" value="<% out.print(request.getAttribute("Cardno")); %>" required>
                     <input type="text" name="cardexp" id="card_exp" placeholder="Card Expiry (MM/YY)" pattern="\d{2}\/\d{2}" class="form-spacing" value="<% out.print(request.getAttribute("Cardexp")); %>" required> 
                     <% if(request.getAttribute("c_message").equals("Enter valid card expiry")){out.print("<div class=\"message-error form-spacing card-nowidth\">" + request.getAttribute("c_message") + "</div>");}%>
                     <label for="address" class="form-spacing-small"></label>

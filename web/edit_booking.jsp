@@ -119,7 +119,7 @@
     <span id="pay_open"></span>
     <%-- This section will only print when okay to go ahead and make booking --%>
         <fieldset class="content-bg">
-            <legend>Payment Details</legend>
+            <legend>Payment Details and notes</legend>
             <div class="form-card-container">
                 <div class="form-card">
                     <input type="hidden" name="c_id"  value="<% out.print(b.getCustomer().getNo()); %>"  >
@@ -128,6 +128,8 @@
                     <input type="email" name="email" id="email" placeholder="Email Address" class="form-spacing" value="<% out.print(b.getCustomer().getEmail()); %>" required>
                     <label for="address" class="form-spacing-small">Address</label>
                     <textarea id="address" name="address" required><% out.print(b.getCustomer().getAddress()); %></textarea>
+                     <label for="notes" class="form-spacing-small">Notes</label>
+                    <textarea id="notes" name="notes"><% out.print(b.getNotes()); %></textarea>
                 </div>
                 <div class="form-card">
                     <div class="form-spacing-small">Card Number</div>

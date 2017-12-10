@@ -56,6 +56,7 @@ public class BookingRoom extends HttpServlet {
             String name = (String) request.getParameter("name");
             String email = (String) request.getParameter("email");
             String address = (String) request.getParameter("address");
+            String notes = (String) request.getParameter("notes");
             String cardtype = (String) request.getParameter("cardtype");
             String cardno = (String) request.getParameter("cardno");
             String cardexp = (String) request.getParameter("cardexp");
@@ -120,6 +121,7 @@ public class BookingRoom extends HttpServlet {
             String Name = "";
             String Email = "";
             String Address = "";
+            String Notes = "";
             String Cardtype = "";
             String Cardno = "";
             String Cardexp = "";
@@ -239,6 +241,13 @@ public class BookingRoom extends HttpServlet {
 
                 }
             }
+            if (!Objects.isNull(notes)) {
+                try {
+                    Notes = notes;
+                } catch (Exception e) {
+
+                }
+            }
             if (!Objects.isNull(cardtype)) {
                 try {
                     Cardtype = cardtype;
@@ -326,7 +335,7 @@ public class BookingRoom extends HttpServlet {
        String requestJsp = "/bookingroom.jsp"  ;
        if(request.getParameter("bButton")!=null && !c_message.equals("Enter valid card expiry")){
             try {
-                Booking b = model.BOOKINGS.makeBooking(customer, r_availableB, Checkin, Checkout);
+                Booking b = model.BOOKINGS.makeBooking(customer, r_availableB, Checkin, Checkout,Notes);
                 request.setAttribute("b_ref", b.getRef());
                 request.setAttribute("room_con",r_availableB );
                 requestJsp = "/Confirmation.jsp";
@@ -353,6 +362,7 @@ public class BookingRoom extends HttpServlet {
             request.setAttribute("Name", Name);
             request.setAttribute("Email", Email);
             request.setAttribute("Address", Address);
+            request.setAttribute("Notes", Notes);
             request.setAttribute("Cardtype", Cardtype);
             request.setAttribute("Cardexp", Cardexp);
             request.setAttribute("Cardno", Cardno);

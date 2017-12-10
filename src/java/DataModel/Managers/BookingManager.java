@@ -278,7 +278,8 @@ public class BookingManager extends AbstractManager {
         String sql = "SELECT booking.* FROM booking WHERE booking.b_ref IN " +
             "(SELECT roombooking.b_ref FROM roombooking " +
             "WHERE roombooking.checkin <= ? " +
-            "AND roombooking.checkout >= ?)";
+            "AND roombooking.checkout >= ?) " + 
+            "ORDER BY booking.b_ref";
         Object[] args = {
             Date.valueOf(date),
             Date.valueOf(date)

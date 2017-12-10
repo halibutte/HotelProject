@@ -3,6 +3,7 @@ $(document).ready(function() {
        update_price($(this));
     });
     update_price($("select"));
+    highlight_updated();
 });
 function update_price(event) {
     //el is the combobox calling this

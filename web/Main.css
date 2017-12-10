@@ -427,16 +427,19 @@ span.payment-expand-text {
     .col-minwidth {
         display: table-cell;
         width: auto;
+        vertical-align: top;
     }
     .col-half {
         display: table-cell;
         width: 50%;
         padding-left: 2em;
+        vertical-align: top;
     }
     .col-full {
         display: table-cell;
         width: 100%;
         padding-left: 2em;
+        vertical-align: top;
     }
     .flexCont {
         display: flex;

@@ -78,6 +78,7 @@ public class Billing extends HttpServlet {
                     //adding an item to the bill
                     if(actType.equals("add")) {
                         if(addItem(itemCode, itemDesc, itemPrice, itemBref, model)) {
+                            request.setAttribute("highlight_bref", itemBref);
                             messages.add("confirm#Added item to bill");
                         } else {
                             messages.add("error#Failed adding item to bill");
@@ -88,6 +89,7 @@ public class Billing extends HttpServlet {
                     if(actType.equals("remove")) {
                         if(removeItem(remId, model)) {
                             messages.add("confirm#Deleted item from bill");
+                            request.setAttribute("highlight_bref", request.getParameter("item_bref"));
                         } else {
                             messages.add("error#Failed when trying to delete item from bill");
                         }
@@ -97,6 +99,7 @@ public class Billing extends HttpServlet {
                     if(actType.equals("pay")) {
                         try {
                             boolean accepted = takePayment(payBref, payAmnt, payNum, payExp, payType, model);
+                            request.setAttribute("highlight_bref", payBref);
                             messages.add("confirm#Payment accepted");
                         } catch (ModelException e) {
                             messages.add("error#"+e.getMessage());
@@ -130,6 +133,8 @@ public class Billing extends HttpServlet {
             BilledItem bi = model.BILLABLES.addBilledItem(castBref, code, desc, castPrice);
             return true;
         } catch (ModelException e) {
+            return false;
+        } catch (Exception e) {
             return false;
         }
     }

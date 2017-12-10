@@ -69,14 +69,14 @@
                 
             <div class="col-full">
                 <h3 class="staff">Guests</h3>
-                <div class="flexCont center-flex">
+                <div class="flexCont center-flex" data-highlightchild="<% out.print(request.getAttribute("highlight_bref")); %>" id="guest_container">
                 <% for(Booking b : bookings) { 
                 Customer c = b.getCustomer();
                 List<BilledItem> billItems = b.getBilledItems();
                 List<RoomBooking> rooms = b.getRooms();
                 %>
                 <div class="flexItemLarge">
-                    <h3 class="staff clearfix"><span data-searchon="<% out.print(c.getName()); %>" data-searchparent="flexItemLarge"><% out.print(c.getName()); %></span>
+                    <h3 class="staff clearfix" data-highlightnum="<% out.print(b.getRef()); %>"><span data-searchon="<% out.print(c.getName()); %>" data-searchparent="flexItemLarge"><% out.print(c.getName()); %></span>
                         <% for(int i = 0; i < rooms.size(); i++) {
                             RoomBooking r = rooms.get(i);
                             String end = ",&nbsp;";
@@ -104,6 +104,7 @@
                                 <form method="POST">
                                     <button type="submit" class="button-narrow">Remove</button>
                                     <input type="hidden" value="remove" name="act_type">
+                                    <input type="hidden" value="<% out.println(b.getRef()); %>" name="item_bref">
                                     <input type="hidden" value="<% out.print(bitem.getId()); %>" name="remove_item">
                                 </form>
                             </div>    

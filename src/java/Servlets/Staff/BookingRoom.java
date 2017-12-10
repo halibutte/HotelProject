@@ -323,10 +323,13 @@ public class BookingRoom extends HttpServlet {
                 r_availableB.add(a);
             }
          
-            
+       String requestJsp = "/bookingroom.jsp"  ;
        if(request.getParameter("bButton")!=null && !c_message.equals("Enter valid card expiry")){
             try {
-                model.BOOKINGS.makeBooking(customer, r_availableB, Checkin, Checkout);
+                Booking b = model.BOOKINGS.makeBooking(customer, r_availableB, Checkin, Checkout);
+                request.setAttribute("b_ref", b.getRef());
+                request.setAttribute("room_con",r_availableB );
+                requestJsp = "/Confirmation.jsp";
             } catch (Exception e) {
             }
        }
@@ -356,7 +359,7 @@ public class BookingRoom extends HttpServlet {
             request.setAttribute("count_avail", countAvail);
             request.setAttribute("room_rates", room_rates);
 
-            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/bookingroom.jsp");
+            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(requestJsp);
             dispatcher.forward(request, response);
         }
     }

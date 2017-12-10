@@ -116,6 +116,25 @@ public class EditBooking extends HttpServlet {
                             cust.setEmail(request.getParameter("email"));
                             model.CUSTOMERS.updateCustomer(cust);
                             doneUpdate = true;
+                            responsePage = "/UpdateConfirmation.jsp";
+                            request.setAttribute("b_ref", updated.getRef());
+                            request.setAttribute(bref, out);
+                            //make list of rooms
+                            Map<String,Integer> roomsRequested = new HashMap<>();
+                            String[] roomTypes = {"std_t", "std_d", "sup_t", "sup_d"};
+                            for(String type : roomTypes) {
+                                roomsRequested.put(type, Integer.parseInt(request.getParameter(type)));
+                            }
+                            //construct a list of rooms to book
+                            List<Room> roomsToBook = new ArrayList<>();
+                            for(Map.Entry<String,Integer> e : roomsRequested.entrySet()) {
+                                for(int i = 0; i < e.getValue(); i++) {
+                                    Room r = new Room();
+                                    r.setRoomClass(e.getKey());
+                                    roomsToBook.add(r);
+                                }
+                            }
+                            request.setAttribute("room_con", roomsToBook);
                             messages.add("confirm#Booking succesfully updated, new details shown");
                         } else {
                             //set booking details to the posted info

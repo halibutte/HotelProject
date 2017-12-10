@@ -134,6 +134,8 @@ public class Billing extends HttpServlet {
             return true;
         } catch (ModelException e) {
             return false;
+        } catch (Exception e) {
+            return false;
         }
     }
     

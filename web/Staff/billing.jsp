@@ -86,7 +86,7 @@
                             out.print("<span class='payment-expand' data-searchon='" + r.getRoomNo() + "' data-searchparent='flexItemLarge'>" + r.getRoomNo() + end + "</span>");
                         } %>
                     </h3>
-                    <h4 class="staff no-underline"><span>Checkin <% out.print(b.getRooms().get(0).getCheckin()); %></span><span class="payment-expand">Checkout <% out.print(b.getRooms().get(0).getCheckout()); %></span></h4>
+                    <h4 class="staff checkin-subtitle"><span>Checkin <% out.print(b.getRooms().get(0).getCheckin()); %></span><span class="payment-expand">Checkout <% out.print(b.getRooms().get(0).getCheckout()); %></span></h4>
                     <div class="table table-total form-spacing">
                         <div class="table-head">
                                 <div class="table-row">

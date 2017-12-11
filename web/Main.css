@@ -72,9 +72,11 @@ h2.staff, h3.staff, h4.staff, h5.staff, h6.staff {
     letter-spacing: .4ex;
     border-bottom: thin solid lightslategray;
 }
-h4.no-underline {
+h4.checkin-subtitle {
     border-bottom: none;
     letter-spacing: 0.1ex;
+    margin-top: 0;
+    margin-bottom: 0.7ex;
 }
 h7 {
     font-size: 25px;
@@ -365,6 +367,22 @@ div.sub-table {
     display: table-row-group;
     margin-left: 2ex;
 }
+/* COLLAPSING TABLE STYLES */
+div.table-collapse {
+    display: table;
+    width: 100%;    
+}
+div.table-row-collapse {
+    display: table-row;
+}
+div.table-cell-collapse {
+    display: table-cell;
+}
+div.table-50pc-collapse {
+    width: 50%;
+}
+
+/* FORM STYLES */
 div.card {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     background-color: white;

@@ -86,6 +86,7 @@
                             out.print("<span class='payment-expand' data-searchon='" + r.getRoomNo() + "' data-searchparent='flexItemLarge'>" + r.getRoomNo() + end + "</span>");
                         } %>
                     </h3>
+                    <h4 class="staff no-underline"><span>Checkin <% out.print(b.getRooms().get(0).getCheckin()); %></span><span class="payment-expand">Checkout <% out.print(b.getRooms().get(0).getCheckout()); %></span></h4>
                     <div class="table table-total form-spacing">
                         <div class="table-head">
                                 <div class="table-row">
@@ -151,7 +152,7 @@
                                 <div class="form-spacing"><span class="payment-expand-text">Payment Details</span>&nbsp;<span class="interactive payment-expand" onclick="toggle_payment(this)">[+]</span> </div>
                                 <div class="payment-details">
                                     <div class="form-spacing-small">Card Number</div>
-                                    <input type="text" name="card_num" value="<% out.print(c.getCardno()); %>" class="form-spacing" pattern="[\d]{8,19}">
+                                    <input type="text" name="card_num" value="<% out.print(c.getCardno()); %>" class="form-spacing" pattern="[0-9]{15,19}">
                                     <div class="form-spacing-small">Card Type</div>
                                     <select name="card_type" class="form-spacing">
                                         <option value="V"<% if(c.getCardtype().equals("V")) { out.print(" selected"); } %>>Visa</option>

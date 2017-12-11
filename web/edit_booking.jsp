@@ -133,7 +133,7 @@
                 </div>
                 <div class="form-card">
                     <div class="form-spacing-small">Card Number</div>
-                    <input type="number" name="cardno" id="cardno" min="999999999999999" max="9999999999999999" placeholder="Card Number, without spaces" class="form-spacing" value="<% out.print(b.getCustomer().getCardno()); %>" required>
+                    <input type="number" name="cardno" id="cardno" pattern="[0-9]{15,19}" placeholder="Card Number, without spaces" class="form-spacing" value="<% out.print(b.getCustomer().getCardno()); %>" required>
                     <div class="form-spacing-small">Card Expiry</div>
                     <input type="text" name="cardexp" id="cardexp" placeholder="Card Expiry (MM/YY)" pattern="\d{2}\/\d{2}" class="form-spacing" value="<% out.print(b.getCustomer().getCardexp()); %>" required> 
                     <div class="form-spacing-small">Card Type</div>

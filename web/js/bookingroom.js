@@ -145,7 +145,12 @@ function calc_price() {
     var checkin = new Date($("#rooms_check_in").val());
     var checkout = new Date($("#rooms_check_out").val());
     var length = daydiff(checkin, checkout);
-    total = total * length;
+    if(length > 0) {
+        total = total * length;
+    } else {
+        total = " ";
+    }
+    
     $("#cost_span").text(total);
 }
 

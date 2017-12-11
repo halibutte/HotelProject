@@ -17,7 +17,12 @@ function run_sums() {
                sum += thisVal;
            }
        });
-       $(el).text(sum.toFixed(2));
+       var trail = sum % 1;
+       var dp = 0;
+       if(trail != 0) {
+           dp = 2;
+       }
+       $(el).text(sum.toFixed(dp));
     });
 }
 

@@ -65,7 +65,7 @@
                     if(!thisDate.equals(lastDate)) { 
                         if(!Objects.isNull(lastDate)) { out.print("</div></div>"); } %>   
                 <div class="card">
-                <h4 class="staff">Week <% out.print(thisDate); %></h4>  
+                <h4 class="staff">Week Commencing <% out.print(thisDate); %></h4>  
                 
                 <div class="table table-total form-spacing">
                     <div class="table-head">

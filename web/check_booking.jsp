@@ -35,6 +35,7 @@
             <legend>Update Your Booking</legend>
             <div class="form-card-container">
                 <div class="form-card">
+                    <input type="email" name="email" id="email" placeholder="Email Address" class="form-spacing" required>
                     <input type="text" name="b_ref" id="booking_ref" placeholder="Booking Reference" class="form-spacing" required>
                     <button type="submit" value="submit">Show Booking</button>
                 </div>

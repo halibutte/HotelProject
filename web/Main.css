@@ -72,6 +72,10 @@ h2.staff, h3.staff, h4.staff, h5.staff, h6.staff {
     letter-spacing: .4ex;
     border-bottom: thin solid lightslategray;
 }
+h4.no-underline {
+    border-bottom: none;
+    letter-spacing: 0.1ex;
+}
 h7 {
     font-size: 25px;
     margin-top: 0;
@@ -295,6 +299,11 @@ ul.nav li a:hover {
 }
 .clearfix {
     overflow: auto;
+}
+
+a.no-decoration {
+    text-decoration: none;
+    color: black;
 }
 
 /* CLASSES TO MAKE REPORT TABLES */

@@ -54,6 +54,7 @@ public class EditBooking extends HttpServlet {
             //Will get get the bref, and display details, or process update
             //if update request has been submitted
             String bref = request.getParameter("b_ref");
+            String custEmail = request.getParameter("email");
             String btnClicked = request.getParameter("btn_update");
             List<String> messages = new ArrayList<>();
 
@@ -66,12 +67,24 @@ public class EditBooking extends HttpServlet {
             try {
                 if(!Objects.isNull(btnClicked) || !Objects.isNull(bref)) {
                     model = new Model();
+                    Integer int_bref = null;
                     //get the number of rooms available for these dates
-                    int int_bref = Integer.parseInt(bref);
+                    try {
+                        int_bref = Integer.parseInt(bref);
+                    } catch (Exception e) {
+                        throw new ModelException("Invalid booking reference");
+                    }
                     //get the booking
-                    booking = model.BOOKINGS.getBooking(int_bref);
+                    try {
+                        booking = model.BOOKINGS.getBooking(int_bref);
+                    } catch (Exception e) {
+                        booking = null;
+                    }
                     if(Objects.isNull(booking)) {
-                        throw new ModelException("Could not find booking for reference " + int_bref);
+                        throw new ModelException("Could not find booking for those details");
+                    }
+                    if(!booking.getCustomer().getEmail().equals(custEmail)) {
+                        throw new ModelException("Could not find booking for those details");
                     }
                     request.setAttribute("booking", booking);
                     LocalDate checkin, checkout;

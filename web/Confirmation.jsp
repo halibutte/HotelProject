@@ -103,7 +103,7 @@
                 <h8>Booking Reference number: <% out.print(b.getRef()); %> </h8><br>
                 <h8>Checkin Date: <% out.print(in_d); %> </h8><br>
                 <h8>Checkout Date: <% out.print(out_d); %> </h8><br>
-                  <h8>Total cost: <% out.print(b_cost); %> </h8><br>
+                <h8>Total cost: <% out.print(b_cost); %> </h8><br>
                 <h8>Notes: <% out.print(booking_notes); %> </h8><br><br>
                 <h8>The following rooms have been reserved for you: </h8>
                 <ul>

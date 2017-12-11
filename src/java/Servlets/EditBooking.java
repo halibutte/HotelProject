@@ -56,6 +56,7 @@ public class EditBooking extends HttpServlet {
             String bref = request.getParameter("b_ref");
             String custEmail = request.getParameter("email");
             String btnClicked = request.getParameter("btn_update");
+            String btnDelete = request.getParameter("btn_cancel");
             List<String> messages = new ArrayList<>();
 
             Booking booking = null;
@@ -162,6 +163,17 @@ public class EditBooking extends HttpServlet {
                             c.setCardtype(request.getParameter("cardtype"));
                             c.setEmail(request.getParameter("email"));
                             
+                        }
+                    } else if ((!Objects.isNull(bref))&&(!Objects.isNull(btnDelete))) {
+                        //request a complete cancel
+                        //try to comply
+                        try {
+                            model.BOOKINGS.cancelBooking(int_bref);
+                            responsePage = "/cancel_booking.jsp";
+                        } catch (ModelException e) {
+                            messages.add("error#" + e.getMessage());
+                        } catch (Exception e) {
+                            messages.add("error#Failed when trying to delete booking");
                         }
                     } else if (!Objects.isNull(bref)) {
                         //no update requested, but ref provided

@@ -269,6 +269,33 @@ public class BookingManager extends AbstractManager {
         }
     }
     
+    public boolean cancelBooking(int bref) throws ModelException {
+        //Delete a booking
+        //Will refuse to delete a booking which commences today or before
+        //Perform some checks first
+        //try to retrieve booking
+        Booking b = getBooking(bref);
+        if(Objects.isNull(b)) {
+            throw new ModelException("Could not find booking" + bref);
+        }
+        //Validate dates
+        LocalDate in = b.getRooms().get(0).getCheckin();
+        if(in.isBefore(LocalDate.now()) || in.isEqual(LocalDate.now())) {
+            throw new ModelException("Can only delete bookings before the day of checkin");
+        }
+        
+        //Delete booking
+        return deleteBooking(bref);
+    }
+    
+    private boolean deleteBooking(int bref) {
+        //private as do not want outside methods to cancel bookings which
+        //should be retained (ones which have started or happened)
+        String sql = "DELETE FROM booking WHERE b_ref = ?";
+        Object[] args = { bref };
+        return updateRecord(sql, args, "deleteBooking");
+    }
+    
     public Booking getCurrentOccupant(int rno) {
         //gets the booking which is currently checked into a room
         String sql = "SELECT booking.* " +
@@ -334,6 +361,7 @@ public class BookingManager extends AbstractManager {
     
     public static void main(String[] args) throws ModelException {
         Model model = new Model();
+        //model.BOOKINGS.cancelBooking(14101);
         /*Customer cust = new Customer("Testing Name", "A@B.C", "Neston", "V", "20/17", "2304930498");
         Room room = new Room();
         room.setRoomClass("sup_d");

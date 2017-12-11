@@ -302,7 +302,6 @@ ul.nav li a:hover {
     margin-top: 0;
     margin-bottom: 0.7ex;
 }
-
 .col-full {
     margin: auto;
     padding-left: 2em;
@@ -377,6 +376,7 @@ div.sub-table {
     margin-left: 2ex;
 }
 /* COLLAPSING TABLE STYLES */
+/* USED FOR HEADINGS IN BILLING */
 div.table-collapse {
     display: table;
     width: 100%;    
@@ -395,7 +395,7 @@ div.table-cell-align-right {
     text-align: right;
 }
 
-/* FORM STYLES */
+/* CARD STYLES */
 div.card {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     background-color: white;

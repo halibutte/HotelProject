@@ -5,6 +5,7 @@
 --%>
 
 
+<%@page import="java.time.LocalDate"%>
 <%@page import="DataModel.Booking"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.text.DecimalFormat"%>
@@ -24,6 +25,7 @@
     Map<String, Integer> roomsReq = (Map<String, Integer>)request.getAttribute("rooms_requested");
     List<String> messages = (List<String>)request.getAttribute("messages");
     Booking b = (Booking)request.getAttribute("booking");
+    boolean permitCancel = b.getRooms().get(0).getCheckin().isAfter(LocalDate.now());
     DecimalFormat df = new DecimalFormat("###,##0.00");
     boolean showQuant = !Objects.isNull(countAvail);
 %>
@@ -133,7 +135,7 @@
                 </div>
                 <div class="form-card">
                     <div class="form-spacing-small">Card Number</div>
-                    <input type="number" name="cardno" id="cardno" pattern="[0-9]{15,19}" placeholder="Card Number, without spaces" class="form-spacing" value="<% out.print(b.getCustomer().getCardno()); %>" required>
+                    <input type="text" name="cardno" id="cardno" pattern="[0-9]{15,19}" placeholder="Card Number, without spaces" class="form-spacing" value="<% out.print(b.getCustomer().getCardno()); %>" required>
                     <div class="form-spacing-small">Card Expiry</div>
                     <input type="text" name="cardexp" id="cardexp" placeholder="Card Expiry (MM/YY)" pattern="\d{2}\/\d{2}" class="form-spacing" value="<% out.print(b.getCustomer().getCardexp()); %>" required> 
                     <div class="form-spacing-small">Card Type</div>
@@ -153,6 +155,11 @@
                 <div class="form-card">
                     <button type="submit" name="btn_update" class="button">Update Booking</button>
                 </div>
+                <% if(permitCancel) { %>
+                <div class="form-card">
+                    <button type="submit" name="btn_cancel" value="cancel" class="button message-error">Cancel Booking</button>
+                </div>
+                <% } %>
             </div>
         </fieldset>
     </form>

@@ -57,6 +57,8 @@
                 <input type="text" name="name" id="email" placeholder="Email Address" class="form-spacing" required>
                 <label for="address" class="form-spacing-small">Address</label>
                 <textarea id="address" name="address" required></textarea>
+                <label for="notes" class="form-spacing-small">Notes</label>
+                <textarea id="notes" name="notes"></textarea>
             </div>
             <div class="form-card">
                 <input type="text" name="card_no" id="card_no" placeholder="Card Number" class="form-spacing" required>

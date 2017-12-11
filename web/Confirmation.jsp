@@ -64,13 +64,13 @@
            string_Std_T = "Standard Twin: "+nStdT;}
             
            if(nStdD>0){
-           string_Std_D = "Standard Twin: "+nStdD;}
+           string_Std_D = "Standard Double: "+nStdD;}
             
            if(nSupT>0){
-           string_Sup_T = "Standard Twin: "+nSupT;}
+           string_Sup_T = "Superior Twin: "+nSupT;}
             
            if(nSupD>0){
-           string_Sup_D = "Standard Twin: "+nSupD;}
+           string_Sup_D = "Superior Double: "+nSupD;}
 %>
 <!DOCTYPE html>
     <head>

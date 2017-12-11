@@ -113,14 +113,13 @@
                     <input class="form-spacing" type="date" name="checkin" value="<% out.print(b.getRooms().get(0).getCheckin()); %>" id="rooms_check_in" onchange="sanity_dates(this); hide_payment(); calc_price();" required>
                     <div class="form-spacing-small">Check-out Date</div>
                     <input class="form-spacing" type="date" name="checkout" value="<% out.print(b.getRooms().get(0).getCheckout()); %>" id="rooms_check_out" onchange="sanity_dates(this); hide_payment(); calc_price();" required>
-                    <button type="submit" name="btn_update" class="button">Update Booking</button>
                 </div>
             </div>
         </fieldset>
     <span id="pay_open"></span>
     <%-- This section will only print when okay to go ahead and make booking --%>
         <fieldset class="content-bg">
-            <legend>Payment Details and notes</legend>
+            <legend>Payment Details & Notes</legend>
             <div class="form-card-container">
                 <div class="form-card">
                     <input type="hidden" name="c_id"  value="<% out.print(b.getCustomer().getNo()); %>"  >
@@ -145,9 +144,15 @@
                         <option value="MC"<% if (b.getCustomer().getCardtype().equals("MC")){ out.print(" selected"); } %>>Mastercard</option>
                         <option value="A"<% if (b.getCustomer().getCardtype().equals("A")) { out.print(" selected"); } %>>American Express</option>
                     </select>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset class="content-bg">
+            <legend>Update Booking</legend>
+            <div class="form-card-container">
+                <div class="form-card">
                     <button type="submit" name="btn_update" class="button">Update Booking</button>
-                </div>  
-
+                </div>
             </div>
         </fieldset>
     </form>

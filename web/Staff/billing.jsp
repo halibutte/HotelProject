@@ -76,17 +76,35 @@
                 List<RoomBooking> rooms = b.getRooms();
                 %>
                 <div class="flexItemLarge">
-                    <h3 class="staff clearfix" data-highlightnum="<% out.print(b.getRef()); %>"><span data-searchon="<% out.print(c.getName()); %>" data-searchparent="flexItemLarge"><% out.print(c.getName()); %></span>
-                        <% for(int i = 0; i < rooms.size(); i++) {
-                            RoomBooking r = rooms.get(i);
-                            String end = ",&nbsp;";
-                            if(i == 0) {
-                                end = "";
-                            }
-                            out.print("<span class='payment-expand' data-searchon='" + r.getRoomNo() + "' data-searchparent='flexItemLarge'>" + r.getRoomNo() + end + "</span>");
-                        } %>
-                    </h3>
-                    <h4 class="staff checkin-subtitle"><span>Checkin <% out.print(b.getRooms().get(0).getCheckin()); %></span><span class="payment-expand">Checkout <% out.print(b.getRooms().get(0).getCheckout()); %></span></h4>
+                    <div class="table-collapse">
+                        <div class="table-row-collapse" data-highlightnum="<% out.print(b.getRef()); %>">
+                            <div class="table-cell-collapse table-50pc-collapse">
+                                <div class="billing-card-title">
+                                    <span data-searchon="<% out.print(c.getName()); %>" data-searchparent="flexItemLarge"><% out.print(c.getName()); %></span>
+                                </div>
+                            </div>
+                            <div class="table-cell-collapse table-50pc-collapse table-cell-align-right">
+                                <div class="billing-card-title">
+                            <% for(int i = 0; i < rooms.size(); i++) {
+                                    RoomBooking r = rooms.get(i);
+                                    String comma = "";
+                                    if(i != rooms.size()-1) {
+                                        comma = ", ";
+                                    }
+                                    out.print("<span data-searchon='" + r.getRoomNo() + "' data-searchparent='flexItemLarge'>" + r.getRoomNo() + comma + "</span>");
+                                } %>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-row-collapse billing-card-subtitle">
+                            <div class="table-cell-collapse table-50pc-collapse">
+                                Checkin <% out.print(b.getRooms().get(0).getCheckin()); %>
+                            </div>
+                            <div class="table-cell-collapse table-50pc-collapse table-cell-align-right">
+                                Checkout <% out.print(b.getRooms().get(0).getCheckout()); %>
+                            </div>
+                        </div>
+                    </div>
                     <div class="table table-total form-spacing">
                         <div class="table-head">
                                 <div class="table-row">

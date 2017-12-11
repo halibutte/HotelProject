@@ -72,12 +72,6 @@ h2.staff, h3.staff, h4.staff, h5.staff, h6.staff {
     letter-spacing: .4ex;
     border-bottom: thin solid lightslategray;
 }
-h4.checkin-subtitle {
-    border-bottom: none;
-    letter-spacing: 0.1ex;
-    margin-top: 0;
-    margin-bottom: 0.7ex;
-}
 h7 {
     font-size: 25px;
     margin-top: 0;
@@ -293,6 +287,21 @@ ul.nav li a:hover {
     font-size: xx-large;
     font-weight: bold;
 }
+.billing-card-title {
+    font-family: "Bookman Old Style", serif;
+    font-size: x-large;
+    font-weight: normal;
+    letter-spacing: .4ex;
+    margin-bottom: 0.7ex;
+}
+.billing-card-subtitle {
+    font-family: "Bookman Old Style", serif;
+    font-size: large;
+    font-weight: normal;
+    letter-spacing: 0.1ex;
+    margin-top: 0;
+    margin-bottom: 0.7ex;
+}
 
 .col-full {
     margin: auto;
@@ -377,9 +386,13 @@ div.table-row-collapse {
 }
 div.table-cell-collapse {
     display: table-cell;
+    vertical-align: bottom;
 }
 div.table-50pc-collapse {
     width: 50%;
+}
+div.table-cell-align-right {
+    text-align: right;
 }
 
 /* FORM STYLES */
@@ -580,6 +593,22 @@ span.payment-expand-text {
     div.empty div {
         display: block;
         top: 100px;
+    }
+    div.table-collapse {
+        display: block;
+        width: 100%;    
+    }
+    div.table-row-collapse {
+        display: block;
+    }
+    div.table-cell-collapse {
+        display: block
+    }
+    div.table-50pc-collapse {
+        width: 100%
+    }
+    div.table-cell-align-right {
+        text-align: left;
     }
 }
 @media screen and (max-width: 375px) {

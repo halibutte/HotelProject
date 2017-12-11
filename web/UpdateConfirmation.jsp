@@ -72,60 +72,50 @@
            if(nSupD>0){
            string_Sup_D = "Superior Double: "+nSupD;}
 %>
-<!DOCTYPE html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Update Confirmation Page</title>
-    </head>
-    <body>
-        <br><h1>Update Completed!</h1>
-        <div class="content">
-            <p>Thank you for booking your stay with us, the following information has been sent
-            to the email address provided. <br> If you need check to your booking details you can do so by clicking 
-            <a href="./EditBooking"><u>here</u> </a> and supplying your booking number and email. Didn't receive your email confirmation? Call or email us! <br><br>
-            Telephone: (+44) 01603 123456 <br>
-            Email: Bookings@HeartacheHotel.co.uk
-            </p>
-        </div>
-        <div class="content">
-            <fieldset><legend>Email Confirmation</legend>
-                
-                
-                Dear <%out.print(cus_name);%>
-                
-                This is an email confirmation for your order, please retain this information for future reference. <br><br>
-                Your booking update has been received and reserved. <br> <br>
-                <h7>Order details:</h7><br><br>
-                <h8>Customer ID: <% out.print(cus_id); %></h8><br>
-                <h8>Email Address: <% out.print(cus_email); %></h8><br>
-                <h8>Booking Reference number: <% out.print(b.getRef()); %> </h8><br>
-                <h8>Checkin Date: <% out.print(in_d); %> </h8><br>
-                <h8>Checkout Date: <% out.print(out_d); %> </h8><br>
-                 <h8>Total cost: <% out.print(b_cost); %> </h8><br>
-                <h8>Notes: <% out.print(booking_notes); %> </h8><br><br>
-                
-                <h8>The following rooms are now been reserved for you: </h8>
-                <ul>
-                    <% if(nStdT > 0) { %>
-                    <li><% out.print(string_Std_T); %></li>
-                    <% } %>   
-                    <% if(nStdD > 0) { %>
-                    <li><% out.print(string_Std_D); %></li>
-                    <% } %>   
-                    <% if(nSupT > 0) { %>
-                    <li><% out.print(string_Sup_T); %></li>
-                    <% } %>   
-                    <% if(nSupD > 0) { %>
-                    <li><% out.print(string_Sup_D); %></li>
-                    <% } %>   
-                </ul>
-        
-              
-                    <br><H9>Thank you from Heartache!</H9>
-                    <p> From all the staff of The Heartache Hotel, we look forward to seeing you soon!</p>
-    
-            </fieldset>
-            
-        </div>
-    </body>
+<div class="main-content">
+    <h1>Update Completed!</h1>
+    <div class="content">
+        <p>Thank you for booking your stay with us, the following information has been sent
+        to the email address provided. <br> If you need check to your booking details you can do so by clicking 
+        <a href="./EditBooking"><u>here</u> </a> and supplying your booking number and email. Didn't receive your email confirmation? Call or email us! <br><br>
+        Telephone: (+44) 01603 123456 <br>
+        Email: Bookings@HeartacheHotel.co.uk
+        </p>
+    </div>
+    <div class="content">
+        <fieldset>
+            <legend>Email Confirmation</legend>
+            Dear <%out.print(cus_name);%>
+
+            This is an email confirmation for your order, please retain this information for future reference. <br><br>
+            Your booking update has been received and reserved. <br> <br>
+            <h3>Order details:</h3>
+            Customer ID: <% out.print(cus_id); %><br>
+            Email Address: <% out.print(cus_email); %><br>
+            Booking Reference number: <% out.print(b.getRef()); %> <br>
+            Checkin Date: <% out.print(in_d); %><br>
+            Checkout Date: <% out.print(out_d); %><br>
+             Total cost: <% out.print(b_cost); %><br>
+            Notes: <% out.print(booking_notes); %><br><br>
+
+            The following rooms are now been reserved for you: 
+            <ul>
+                <% if(nStdT > 0) { %>
+                <li><% out.print(string_Std_T); %></li>
+                <% } %>   
+                <% if(nStdD > 0) { %>
+                <li><% out.print(string_Std_D); %></li>
+                <% } %>   
+                <% if(nSupT > 0) { %>
+                <li><% out.print(string_Sup_T); %></li>
+                <% } %>   
+                <% if(nSupD > 0) { %>
+                <li><% out.print(string_Sup_D); %></li>
+                <% } %>   
+            </ul>
+                <br>Thank you from Heartache!
+                <p> From all the staff of The Heartache Hotel, we look forward to seeing you soon!</p>
+        </fieldset>
+    </div>
+</div>
 <%@include file="/WEB-INF/footer.jspf" %>

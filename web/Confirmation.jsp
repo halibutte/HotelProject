@@ -3,6 +3,7 @@
     Created on : 06-Dec-2017, 10:21:57
     Author     : jdk17aku
 --%>
+<%@page import="java.text.DecimalFormat"%>
 <%@page import="java.time.LocalDate"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.Map"%>
@@ -29,6 +30,7 @@
     String string_Sup_D = "";
     
     Model model = null;
+    DecimalFormat df = new DecimalFormat("###,##0.00");
             try {
                 model = new Model();
                 //room_rates = model.ROOMS.getRates();
@@ -76,8 +78,8 @@
         <h1>Thank you!</h1>
         <div class="content">
             <p>Thank you for booking your stay with us, the following information has been sent
-            to the email address provided. <br> If you need check to your booking details you can do so by clicking 
-            <a href="./EditBooking"><u>here</u></a> and supplying your booking number and email. 
+            to the email address provided. <br> If you need check to your booking details you can do so by  
+            <a href="./EditBooking" target="_blank">clicking here</a> and supplying your booking number and email. 
             <br>You will only be able to change your booking up to the day before you check in. After that you will not be able to change or cancel your booking.
             <br>Didn't receive your email confirmation? Call or email us! <br><br>
             Telephone: (+44) 01603 123456 <br>
@@ -95,9 +97,9 @@
                 Customer ID: <% out.print(cus_id); %><br>
                 Booking Reference: <% out.print(b.getRef()); %><br>
                 Email Address: <% out.print(cus_email); %><br>
-                Check in Date: <% out.print(in_d); %><br>
-                Check out Date: <% out.print(out_d); %><br>
-                Total cost: <% out.print(b_cost); %><br>
+                Check in: <% out.print(in_d); %><br>
+                Check out: <% out.print(out_d); %><br>
+                Total Cost: £<% out.print(df.format(b_cost)); %><br>
                 Notes: <% out.print(booking_notes); %><br><br>
                 The following rooms have been reserved for you:
                 <ul>
@@ -114,6 +116,7 @@
                     <li><% out.print(string_Sup_D); %></li>
                     <% } %>   
                 </ul>
+                To change or cancel your booking, <a href="./EditBooking" target="_blank">click here</a>. You will be asked for your email address and booking reference.
                     <br>Thank you from Heartache!
                     <p> From all the staff of The Heartache Hotel, we look forward to seeing you soon!</p>
             </fieldset>

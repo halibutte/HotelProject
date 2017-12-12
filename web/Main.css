@@ -279,8 +279,8 @@ ul.nav li a {
     text-align: center;
     padding: 1ex;
     text-decoration: none;
-    padding-left: 1ex;
-    padding-right: 1ex;
+    padding-left: 3ex;
+    padding-right: 3ex;
 }
 ul.nav li.active {
     background-color: lightsteelblue;
@@ -338,6 +338,9 @@ ul.nav li a:hover {
 a.no-decoration {
     text-decoration: none;
     color: black;
+}
+.nav-bg {
+    background-color: #eaf1f9;
 }
 
 /* CLASSES TO MAKE REPORT TABLES */

@@ -13,6 +13,7 @@ $(document).ready(function() {
     }
     init_settings();
     calc_price();
+    sanity_dates($("[name='c_in_date']"));
 });
 
 var arrivalSettings = [];
@@ -21,13 +22,26 @@ var roomPrices = [];
 function move_room() {
     var div = $(".message-relocate");
     var flexCont = $("#message_container");
-    var pay = $('#pay_open').length > 0;
-    if(pay) {
-        $(div).toggleClass('message-error message-confirm');
-        flexCont = $("#message_confirm");
+    var showArr = window.location.href.match("\\?");
+    var show = false;
+    try {
+        show = showArr.length > 0;
+    } catch(err) {
+        show = false;
     }
-    $(flexCont).append(div);
-    $(div).show();
+    var pay = $('#pay_open').length > 0;
+    if(show) {
+        if(pay) {
+            $(div).toggleClass('message-error message-confirm');
+            flexCont = $("#message_confirm");
+        }
+        $(flexCont).append(div);
+        $(div).show();
+    } else {
+        $(div).toggleClass("message-error message-confirm");
+        $(flexCont).append(div);
+        $(div).show();
+    }
 }
 
 function removeMessage(el) {

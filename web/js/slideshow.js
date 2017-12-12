@@ -1,5 +1,8 @@
 $(document).ready(function () {
     showDivs(slideIndex);
+    window.setInterval(function() {
+        plusDivs(1);
+    }, 10000);
 });
 
 var slideIndex = 1;

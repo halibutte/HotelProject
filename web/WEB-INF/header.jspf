@@ -11,15 +11,21 @@
         <title>The Heartache Hotel</title>
 <body>
 <header>
-    <h1><a class="no-decoration" href="./">The Heartache Hotel</a></h1>
-        <ul class="nav dropshadow-bottom">
-            <li><a href="./">Home</a></li>
-            <li><a href="./BookingRoom">Book</a></li>
-            <li><a href="./info.jsp">Info</a></li>
-            <li><a href="./area.jsp">Area</a></li>
-            <li><a href="./about.jsp">About Us</a></li>
-            <li><a href="./EditBooking">Manage Booking</a></li>
-        </ul>
+    <div class="main-content">
+        <h1><a class="no-decoration" href="./">The Heartache Hotel</a></h1>
+    </div>
+    <div class="nav-bg dropshadow-bottom">
+        <div class="main-content">
+            <ul class="nav">
+                <li><a href="./">Home</a></li>
+                <li><a href="./BookingRoom">Book</a></li>
+                <li><a href="./info.jsp">Info</a></li>
+                <li><a href="./area.jsp">Area</a></li>
+                <li><a href="./about.jsp">About Us</a></li>
+                <li><a href="./EditBooking">Manage Booking</a></li>
+            </ul>
+        </div>
+    </div>
 </header>
 <div class="bg-container">
     <div class="container">

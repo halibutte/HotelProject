@@ -81,7 +81,7 @@ h7 {
 div.slideshow {
     display: block;
     width: 100%;
-    height: 250px;
+    height: 200px;
     text-align: center;
     overflow: hidden;
     margin-top: 0;
@@ -272,6 +272,9 @@ ul.nav li a:hover {
     -webkit-transition-duration: 0.2s; /* Safari */
     transition-duration: 0.2s;
     background-color: #b9d6f7;
+}
+.nav-bg {
+    background-color: #eaf1f9;
 }
 
 /*GENERAL STYLES*/

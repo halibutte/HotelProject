@@ -69,7 +69,7 @@
                 
             <div class="col-full">
                 <h3 class="staff">Guests</h3>
-                <div class="flexCont center-flex" data-highlightchild="<% out.print(request.getAttribute("highlight_bref")); %>" id="guest_container">
+                <div class="flexCont" data-highlightchild="<% out.print(request.getAttribute("highlight_bref")); %>" id="guest_container">
                 <% for(Booking b : bookings) { 
                 Customer c = b.getCustomer();
                 List<BilledItem> billItems = b.getBilledItems();

@@ -68,6 +68,11 @@ public class BookingRoom extends HttpServlet {
             Integer SupDno = 0;
             Integer CustID = null;
             Integer bCustID = null;
+            String roomNo_msg = "Enter number of rooms";
+            String dates_message = "Please enter/check dates";
+            String selection_message = "Please change your selection";
+            String proceed_message = "Preference available. You can proceed to enter your details and make a booking or search for other preferences";
+            String expiry_alert = "Enter valid card expiry";
             if (!Objects.isNull(c_id)) {
                 try {
                     CustID = Integer.parseInt(c_id);
@@ -176,7 +181,7 @@ public class BookingRoom extends HttpServlet {
                 }
             }
             if (StdTno == 0 && StdDno == 0 && SupTno == 0 && SupDno == 0) {
-                b_message = "Enter number of rooms";
+                b_message = roomNo_msg;
             }
             //get a map of String (class) to amnt avail to pass to page for display
             Map<String,Long> countAvail = null;
@@ -184,28 +189,28 @@ public class BookingRoom extends HttpServlet {
                 countAvail = model.ROOMS.getCountRoomsAvailByDate(Checkin, Checkout);
             }
             if (StdTno > nStdT) {
-                stdt_message = "Not enough Standard twin rooms available. There are " + nStdT + " rooms left for your chosen period.";
+                stdt_message = "Not enough Standard twin rooms available. Number of rooms left for your chosen period: \n" + nStdT;
             }
 
             if (StdDno > nStdD) {
-                stdd_message = "Not enough Standard double rooms available. There are " + nStdD + " rooms left for your chosen period.";
+                stdd_message = "Not enough Standard double rooms available. Number of rooms left for your chosen period: \n" + nStdD ;
             }
 
             if (SupTno > nSupT) {
-                supt_message = "Not enough Superior twin rooms available. There are " + nSupT + " rooms left for your chosen period.";
+                supt_message = "Not enough Superior twin rooms available. Number of rooms left for your chosen period: \n" + nSupT ;
             }
 
             if (SupDno > nSupD) {
-                supd_message = "Not enough Superior double rooms available. There are " + nSupD + " rooms left for your chosen period.";
+                supd_message = "Not enough Superior double rooms available. Number of rooms left for your chosen period: \n" + nSupD ;
             }
             if (Checkout.isBefore(LocalDate.now()) || Checkin.isBefore(LocalDate.now()) || Checkin.isAfter(Checkout) || Checkin.isEqual(Checkout)) {
-                d_message = "Please enter/check dates";
+                d_message = dates_message;
             }
 
             if (StdTno > nStdT || StdDno > nStdD || SupTno > nSupT || SupDno > nSupD) {
-                s_message = "Please change your selection";
+                s_message = selection_message;
             } else {
-                s_message = "Preference available. You can proceed to enter your details and make a booking or serach for other preferences";
+                s_message = proceed_message;
             }
 
             if (CustID != null) {
@@ -273,8 +278,7 @@ public class BookingRoom extends HttpServlet {
             String[] cardexpS1 = null;
 
             if (Cardexp.contains("/")) {
-                cardexpS1 = Cardexp.split("/");
-               
+                cardexpS1 = Cardexp.split("/");   
             }
             
 
@@ -283,18 +287,18 @@ public class BookingRoom extends HttpServlet {
             if(cardexpS1!=null){
             if (Integer.parseInt(cardexpS1[1]) > 99 || Integer.parseInt(cardexpS1[1]) < (LocalDate.now().getYear() % 100) || Integer.parseInt(cardexpS1[0]) < 1
             || Integer.parseInt(cardexpS1[0]) > 12 || !Cardexp.contains("/") || Cardexp.length() > 5) {
-                c_message = "Enter valid card expiry";
+                c_message = expiry_alert;
             }
             if(LocalDate.now().getYear() % 100 == Integer.parseInt(cardexpS1[1])
                     && Integer.parseInt(cardexpS1[0])<LocalDate.now().getMonthValue() ){
-                c_message = "Enter valid card expiry";
+                c_message = expiry_alert;
             }
             }
 
             Customer customer = new Customer(Name, Email, Address, Cardtype, Cardexp, Cardno);
             Customer customer1 = model.CUSTOMERS.getCustomer(Name, Email);
             
-            if(!c_message.equals("Enter valid card expiry")){
+            if(!c_message.equals(expiry_alert)){
             if (customer1 == null) {
 
                 try {
@@ -333,7 +337,7 @@ public class BookingRoom extends HttpServlet {
             }
          
        String requestJsp = "/bookingroom.jsp"  ;
-       if(request.getParameter("bButton")!=null && !c_message.equals("Enter valid card expiry")){
+       if(request.getParameter("bButton")!=null && !c_message.equals(expiry_alert)){
             try {
                 Booking b = model.BOOKINGS.makeBooking(customer, r_availableB, Checkin, Checkout,Notes);
                 request.setAttribute("b_ref", b.getRef());
@@ -342,7 +346,7 @@ public class BookingRoom extends HttpServlet {
             } catch (Exception e) {
             }
        }
-
+            
             request.setAttribute("CustID", CustID);
             request.setAttribute("r_available", r_available);
             request.setAttribute("b_message", b_message);
@@ -368,7 +372,11 @@ public class BookingRoom extends HttpServlet {
             request.setAttribute("Cardno", Cardno);
             request.setAttribute("count_avail", countAvail);
             request.setAttribute("room_rates", room_rates);
-
+            request.setAttribute("roomNo_msg", roomNo_msg);
+            request.setAttribute("dates_message", dates_message);
+            request.setAttribute("selection_message", selection_message);
+            request.setAttribute("proceed_message", proceed_message);
+            
             RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(requestJsp);
             dispatcher.forward(request, response);
         }

@@ -24,6 +24,11 @@
     List<String> messages = new ArrayList<>();
     DecimalFormat df = new DecimalFormat("###,##0.00");
     boolean showQuant = !Objects.isNull(countAvail);
+    
+   String roomNo_msg = (String)request.getAttribute("roomNo_msg");
+   String dates_message = (String)request.getAttribute("dates_message");
+   String selection_message = (String)request.getAttribute("selection_message");
+   String proceed_message = (String)request.getAttribute("proceed_message");
 %>
 <script src="js/bookingroom.js"></script>
 <div class="main-content">
@@ -107,13 +112,13 @@
         </fieldset>
     </form>
     <div class="flexCont" id="message_confirm"> </div>
-    <%if (request.getAttribute("b_message").equals("Enter number of rooms")) {
+    <%if (request.getAttribute("b_message").equals(roomNo_msg)) {
             messages.add(request.getAttribute("b_message").toString());
-        } else if (!request.getAttribute("b_message").equals("Enter number of rooms")) {
-            if (request.getAttribute("d_message").equals("Please enter/check dates")) {
+        } else if (!request.getAttribute("b_message").equals(roomNo_msg)) {
+            if (request.getAttribute("d_message").equals(dates_message)) {
                 messages.add(request.getAttribute("d_message").toString());
             }
-            if (!request.getAttribute("d_message").equals("Please enter/check dates")) {
+            if (!request.getAttribute("d_message").equals(dates_message)) {
                 if (!request.getAttribute("stdt_message").equals("")) {
                     messages.add(request.getAttribute("stdt_message").toString());
                 }
@@ -126,10 +131,10 @@
                 if (!request.getAttribute("supd_message").equals("")) {
                     messages.add(request.getAttribute("supd_message").toString());
                 }
-                if (request.getAttribute("s_message").equals("Please change your selection")) {
+                if (request.getAttribute("s_message").equals(selection_message)) {
                     messages.add(request.getAttribute("s_message").toString());
                 }
-                if (request.getAttribute("s_message").equals("Preference available. You can proceed to enter your details and make a booking or serach for other preferences")) {
+                if (request.getAttribute("s_message").equals(proceed_message)) {
                     messages.add(rooms_msg = request.getAttribute("s_message").toString());
     %>
     <span id="pay_open"></span>

@@ -36,7 +36,8 @@ public class BookingManager extends AbstractManager {
     
     //<editor-fold defaultstate="collapsed" desc="BOOKING">
     //booking mapping is a bit more detailed - want to get objects for some
-    //related items. This cannot be static, must be passed using lambda syntax
+    //related items. This cannot be static, as wants to use non-static methods,
+    //must be passed using lambda syntax
     //eg. (map) -> mapToBooking(map)
     private Booking mapToBooking(Map<String,Object> map) {
         Booking booking = new Booking();
@@ -52,6 +53,7 @@ public class BookingManager extends AbstractManager {
     }
     
     public Booking getBooking(int ref) {
+        //get a booking from b_ref
         String sql = "SELECT * FROM booking WHERE b_ref = ?";
         Object[] args = {ref};
         return (Booking)getSingle(sql, args, "getBookingRef", m -> mapToBooking(m));
@@ -134,12 +136,14 @@ public class BookingManager extends AbstractManager {
     }
     
     private boolean allAvail(List<Room> rooms, LocalDate checkin, LocalDate checkout) {
+        //check if the number of rooms of each type are available between the specified dates
         return allAvail(rooms, checkin, checkout, null);
     }
     
     private boolean allAvail(List<Room> rooms, LocalDate checkin, LocalDate checkout, Integer bref) {
         //check all the requires rooms in the list are available
         //rooms only need to specify the type
+        //if bref is not null, will consider booking bref to not exist (useful for updating a booking)
         List<Room> avail;
         if(Objects.isNull(bref)) {
             avail = model.ROOMS.getRoomsAvailByDate(checkin, checkout);
@@ -181,6 +185,8 @@ public class BookingManager extends AbstractManager {
                 throw new ModelException("List of requested rooms is empty");
             }
             
+            //do the update as a transaction, so it can be rolled back to original
+            //booking on failure
             model.getConnection().startTransaction();
             if(!allAvail(rooms, checkin, checkout, bref)) {
                 throw new ModelException("Rooms not available");
@@ -214,7 +220,9 @@ public class BookingManager extends AbstractManager {
             //commmit all of this
             model.getConnection().commitTransaction();
         } catch (ModelException e) {
+            //on exceptions, rollback to original state
             model.getConnection().rollbackTransaction();
+            //pass exception up so caller knows cause of problem
             throw new ModelException(e.getMessage());
         } catch (Exception e) {
             model.getConnection().rollbackTransaction();
@@ -226,6 +234,7 @@ public class BookingManager extends AbstractManager {
     }
     
     public Booking takePayment(Booking booking, double amount) throws ModelException {
+        //check this isn't an empty booking object
         if(Objects.isNull(booking.getRef())) {
             throw new ModelException("Booking must have reference");
         }
@@ -308,6 +317,7 @@ public class BookingManager extends AbstractManager {
     }
     
     public List<Booking> getAllOccupants(LocalDate date) {
+        //get all bookings which will be present in the hotel on a given date
         String sql = "SELECT booking.* FROM booking WHERE booking.b_ref IN " +
             "(SELECT roombooking.b_ref FROM roombooking " +
             "WHERE roombooking.checkin <= ? " +
@@ -321,6 +331,7 @@ public class BookingManager extends AbstractManager {
     }
     
     public Booking getCheckinBooking(int rno, LocalDate checkin) {
+        //get bookings who will check into a specific room on a specific day
         String sql = "SELECT booking.* "+
             "FROM roombooking NATURAL JOIN booking " +
             "WHERE roombooking.checkin = ? AND roombooking.r_no = ?";
@@ -329,6 +340,7 @@ public class BookingManager extends AbstractManager {
     }
     
     public Booking getCheckoutBooking(int rno, LocalDate checkout) {
+        //get bookings who will check into a specific room on a specific day
         String sql = "SELECT booking.* "+
             "FROM roombooking NATURAL JOIN booking " +
             "WHERE roombooking.checkout = ? AND roombooking.r_no = ?";
@@ -337,12 +349,16 @@ public class BookingManager extends AbstractManager {
     }
     
     public boolean updateBookingNotes(int bref, String notes) {
+        //update the notes for booking specified by bref
+        //should probably be replaced by an updateBooking which takes a booking argument
         String sql = "UPDATE booking SET b_notes = ? WHERE b_ref = ?";
         Object[] args = { notes, bref };
         return updateRecord(sql, args, "updateBookingNotes");
     }
     
     private Booking createBooking(int custNo, double cost, String notes) throws ModelException {
+        //create a booking record
+        //DOES NOT CREATE RELATED ROOMBOOKING ITEMS
         String sql = "INSERT INTO hotelbooking.booking(" +
             "c_no, b_cost, b_outstanding, b_notes)" +
             "VALUES (?, ?, ?, ?)";

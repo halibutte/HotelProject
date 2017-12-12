@@ -23,6 +23,7 @@ public class RoomBookingManager extends AbstractManager {
     }
     
     //<editor-fold defaultstate="collapsed" desc="ROOMBOOKING">
+    //convert a row into a RoomBooking object
     private static RoomBooking mapToRoomBooking(Map<String, Object> map) {
         RoomBooking rb = new RoomBooking();
         rb.setCheckin(LocalDate.parse(map.get("checkin").toString()));
@@ -33,6 +34,7 @@ public class RoomBookingManager extends AbstractManager {
     }
     
     public List<RoomBooking> getAllRoomBookings() {
+        //get all roombookings
         String sql = "SELECT * FROM roombooking";
         Object[] args = {};
         return (List<RoomBooking>)(List<?>)getList(
@@ -62,6 +64,7 @@ public class RoomBookingManager extends AbstractManager {
     }
     
     public List<RoomBooking> getRoomBookings(int bookingRef) {
+        //get all the roombookings related to a specific booking b_ref
         String sql = "SELECT * FROM roombooking WHERE b_ref = ?";
         Object[] args = {bookingRef};
         return (List<RoomBooking>)(List<?>)getList(
@@ -73,6 +76,8 @@ public class RoomBookingManager extends AbstractManager {
     }
     
     public RoomBooking getRoomBooking(int bookingRef, int roomNo) {
+        //get a roombooking which matches one specific booking and is for a 
+        //specific room number
         String sql = "SELECT * FROM roombooking WHERE b_ref = ? AND r_no = ?";
         Object[] args = {bookingRef, roomNo};
         return (RoomBooking)getSingle(sql, 
@@ -83,6 +88,7 @@ public class RoomBookingManager extends AbstractManager {
     }
     
     public RoomBooking createRoomBooking(RoomBooking rb) throws ModelException {
+        //create a roombooking record
         String sql = "INSERT INTO hotelbooking.roombooking(" +
             "r_no, b_ref, checkin, checkout)" + 
             "VALUES (?, ?, ?, ?)";
@@ -104,6 +110,7 @@ public class RoomBookingManager extends AbstractManager {
     }
     
     public boolean deleteRoomsForBooking(int bref) throws ModelException {
+        //delete all roombookings for a specific b_ref (used for update booking)
         String sql = "DELETE FROM roombooking WHERE b_ref = ?";
         Object[] args = {
             bref

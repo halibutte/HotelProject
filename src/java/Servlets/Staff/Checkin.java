@@ -56,7 +56,7 @@ public class Checkin extends HttpServlet {
             String cardExp = (String)request.getParameter("cardExp");
             String cardType = (String)request.getParameter("cardType");
             String cardNum = (String)request.getParameter("cardNum");
-            //if the date is not null use date otherwise today
+            //if the date is not null use date, otherwise use today
             LocalDate viewDate = LocalDate.now();
             if(!Objects.isNull(forDate)) {
                 try {
@@ -77,6 +77,8 @@ public class Checkin extends HttpServlet {
             if(!Objects.isNull(roomNo)) {
                 try {
                     Room r = model.ROOMS.getRoom(Integer.parseInt(roomNo));
+                    //only attempt update if the database status is differen to
+                    //status from form
                     if(!r.getStatus().equals(roomStatus)) {
                         r.setStatus(roomStatus);
                         model.ROOMS.updateRoom(r);
@@ -93,6 +95,7 @@ public class Checkin extends HttpServlet {
                     Booking b = model.BOOKINGS.getBooking(Integer.parseInt(bref));
                     //update the customers payment details
                     Customer c = b.getCustomer();
+                    //only attempt update if any details from form different to db
                     if(!(c.getCardno().equals(cardNum) && c.getCardtype().equals(cardType) && c.getCardexp().equals(cardExp))) {
                         c.setCardno(cardNum);
                         c.setCardtype(cardType);
@@ -117,8 +120,12 @@ public class Checkin extends HttpServlet {
                 }
             }
             
+            //get a map of the expected checkins and checkouts
+            //the key is the rooms they will be in, value is the booking
+            //this roombooking is related to
             Map<Room, Booking> checkins = model.ROOMS.getExpectedArrivals(viewDate);
             Map<Room, Booking> checkouts = model.ROOMS.getExpectedDepartures(viewDate);
+            //set some attributes for the jsp
             request.setAttribute("checkins", checkins);
             request.setAttribute("checkouts", checkouts);
             request.setAttribute("viewdate", viewDate);

@@ -39,6 +39,7 @@ public class Reports extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            //get parameters from form
             String startDate = (String)request.getParameter("start_date");
             String endDate = (String)request.getParameter("end_date");
             LocalDate start = LocalDate.now();
@@ -47,6 +48,8 @@ public class Reports extends HttpServlet {
             List<String> messages = new ArrayList<>();
             
             if(!Objects.isNull(startDate)) {
+                //have received a start and end date from form
+                //try to parse them into a Date type
                 try {
                     start = LocalDate.parse(startDate);
                     end = LocalDate.parse(endDate);

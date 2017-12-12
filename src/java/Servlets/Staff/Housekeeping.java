@@ -49,12 +49,14 @@ public class Housekeeping extends HttpServlet {
                 //set this rooms status to the new value
                 try {
                     Room r = model.ROOMS.getRoom(Integer.parseInt(roomNo));
+                    //only attempt update if form different to db value
                     if(!r.getStatus().equals(roomStatus)) {
                         r.setStatus(roomStatus);
                         model.ROOMS.updateRoom(r);
                         messages.add("confirm#Room " + r.getNo() + " updated to status " + r.getLongStatus());
                     }
                 } catch(NumberFormatException e) {
+                    //failed to parse the room number to a numeric type
                     messages.add("error#Unrecognised room number");
                 } catch(ModelException e) {
                     messages.add("error#Unable to update room status");
@@ -64,6 +66,7 @@ public class Housekeeping extends HttpServlet {
             //get a list of all rooms
             List<Room> allRooms = model.ROOMS.getAllRooms();
             //only care about rooms with status C or X
+            //sort so they apears in room order on checkin page
             List<Room> statusC = allRooms.stream()
                     .filter(r -> r.getStatus().equals("C"))
                     .sorted()

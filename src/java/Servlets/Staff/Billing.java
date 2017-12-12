@@ -42,6 +42,7 @@ public class Billing extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            //lists to store details in - messages stores error & confirmations
             List<String> messages = new ArrayList<>();
             List<Booking> bookings = new ArrayList<>();
             List<BillableItem> items = new ArrayList<>();
@@ -63,14 +64,13 @@ public class Billing extends HttpServlet {
             String remId = request.getParameter("remove_item");
             
             LocalDate date = LocalDate.now();
-            
-            
             try {
                 Model model = new Model();
                 try {
+                    //try to parse requested date into Date type
                     date = LocalDate.parse(viewDate);
                 } catch (Exception e) {
-                    //leave as now
+                    //leave as current dte
                 }
                 
                 //try processing any actions received
@@ -78,6 +78,8 @@ public class Billing extends HttpServlet {
                     //adding an item to the bill
                     if(actType.equals("add")) {
                         if(addItem(itemCode, itemDesc, itemPrice, itemBref, model)) {
+                            //highlight_bref defines which card to highlight as 
+                            //having just been updated
                             request.setAttribute("highlight_bref", itemBref);
                             messages.add("confirm#Added item to bill");
                         } else {
@@ -110,6 +112,7 @@ public class Billing extends HttpServlet {
                 //get info to pass to JSP
                 //get all the current bookings
                 bookings = model.BOOKINGS.getAllOccupants(date);
+                //get all items which can be added to bill
                 items = model.BILLABLES.getAllBillableItems();
             } catch (ModelException e) {
                 messages.add("error#Problem connecting to database");

@@ -22,6 +22,7 @@ public class ReportManager extends AbstractManager {
         super(model);
     }
         
+    //convert database row into Report class
     private static Report mapToReport(Map<String,Object> map) {
         Report report = new Report();
         report.setEndDate(LocalDate.parse(map.get("date_end").toString()));
@@ -36,6 +37,7 @@ public class ReportManager extends AbstractManager {
     }
     
     public List<Report> weeklyReport(LocalDate start, LocalDate end) {
+        //get reports from one date to another
         String sql = "SELECT * FROM weekly_reports(?, ?)";
         Object[] args = {
             Date.valueOf(start),

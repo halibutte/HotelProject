@@ -38,6 +38,7 @@ public class ConnectionManager {
     }
     
     private Connection makeConnection() throws SQLException {
+        //establish connection
         try {
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
@@ -64,6 +65,7 @@ public class ConnectionManager {
     }
     
     public boolean startTransaction() {
+        //intitate a transaction by turning autcommit off
         try{
             conn.setAutoCommit(false);
             return true;
@@ -73,6 +75,7 @@ public class ConnectionManager {
     }
     
     public boolean endTransaction() {
+        //end a transaction by turning autocommit on
         try{
             conn.setAutoCommit(true);
             return true;
@@ -82,6 +85,7 @@ public class ConnectionManager {
     }
     
     public boolean commitTransaction() {
+        //attempt to commit statements
         try{
             conn.commit();
             endTransaction();
@@ -92,6 +96,7 @@ public class ConnectionManager {
     }
     
     public boolean rollbackTransaction() {
+        //rollback any statements which have not been comitted
         try{
             conn.rollback();
             endTransaction();
@@ -103,6 +108,7 @@ public class ConnectionManager {
     
     @Override
     public void finalize() {
+        //close the connection when class destroyed
         try {
             conn.close();
         } catch (SQLException e) {

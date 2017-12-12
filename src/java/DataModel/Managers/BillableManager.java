@@ -32,6 +32,7 @@ public class BillableManager extends AbstractManager {
     }
     
     public BilledItem getBilledItem(int id) {
+        //get a specific billed item based on it
         String sql = "SELET * FROM bookingitem WHERE id = ?";
         Object[] args = {
             id
@@ -50,6 +51,7 @@ public class BillableManager extends AbstractManager {
             String desc, 
             double price) throws ModelException 
     {
+        //add an item to a customers bill
         String sql = "INSERT INTO bookingitem (item_code, b_ref, item_desc, price) " + 
                 "VALUES (?, ?, ?, ?)";
         Object[] args = {
@@ -70,6 +72,7 @@ public class BillableManager extends AbstractManager {
     }
     
     public boolean deleteBilledItem(int id) {
+        //delete and item from a bill (takes PK of the item)
         String sql = "DELETE FROM bookingitem WHERE id = ?";
         Object[] args = {
             id
@@ -78,6 +81,7 @@ public class BillableManager extends AbstractManager {
     }
     
     public List<BillableItem> getAllBillableItems() {
+        //get a list of all items which could be added to a customers bill
         String sql = "SELECT * FROM billableitem";
         Object[] args = {  
         };
@@ -85,6 +89,7 @@ public class BillableManager extends AbstractManager {
     }
     
     public BillableItem getBillableItemFromCode(String code) {
+        //get details of an items which could be added to a customers bill based on code
         String sql = "SELECT * FROM billableitem WHERE item_code = ?";
         Object[] args = {
             code
@@ -92,6 +97,7 @@ public class BillableManager extends AbstractManager {
         return (BillableItem)getSingle(sql, args, "getBillableItemCode", BillableManager::mapToBillableItem);
     }
     
+    //map query to a BilledItem entity
     private BilledItem mapToBilledItem(Map<String, Object> map) {
         BillableItem bi = getBillableItemFromCode((String)map.get("item_code"));
         BilledItem build = new BilledItem();
@@ -104,6 +110,7 @@ public class BillableManager extends AbstractManager {
         return build;
     }
     
+    //map a query to a BillableItem entity
     private static BillableItem mapToBillableItem(Map<String, Object> map) {
         BillableItem bi = new BillableItem();
         bi.setCode((String)map.get("item_code"));

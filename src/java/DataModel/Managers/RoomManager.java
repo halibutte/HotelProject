@@ -31,6 +31,7 @@ public class RoomManager extends AbstractManager {
     
     //<editor-fold defaultstate="collapsed" desc="ROOM">
     public Room getRoom(int roomNo) {
+        //get a specific room
         String sql = "SELECT * FROM roomrate WHERE r_no = ?";
         Object[] args = {roomNo};
         Room result = (Room)getSingle(
@@ -43,6 +44,7 @@ public class RoomManager extends AbstractManager {
     }
     
     public List<Room> getRoomsByClass(String roomClass) {
+        //get all rooms of a certain class (std_t, ...)
         String sql = "SELECT * FROM roomrate WHERE r_class = ?";
         Object[] args = {roomClass};
         List<Room> result = (List<Room>)(List<?>)getList(
@@ -55,6 +57,7 @@ public class RoomManager extends AbstractManager {
     }
     
     public List<Room> getRoomByStatus(String status) {
+        //get all rooms which have a certain status (C = checked in etc...)
         String sql = "SELECT * FROM roomrate WHERE r_status = ?";
         Object[] args = {status};
         List<Room> result = (List<Room>)(List<?>)getList(
@@ -67,6 +70,7 @@ public class RoomManager extends AbstractManager {
     }
      
     public List<Room> getAllRooms()  {
+        //get all rooms
         String sql = "SELECT * FROM roomrate";
         Object[] args = {};
         List<Room> result = (List<Room>)(List<?>)getList(
@@ -79,6 +83,7 @@ public class RoomManager extends AbstractManager {
     }
     
     public List<Room> getRoomsAvailByDate(LocalDate checkin, LocalDate checkout) {
+        //get a list of rooms which are available between specified dates
         String sql = "SELECT * FROM rooms_avail(?, ?)";
         Object[] args = {
             Date.valueOf(checkin),
@@ -104,6 +109,7 @@ public class RoomManager extends AbstractManager {
     }
     public Map<String,Long> getCountRoomsAvailByDate(LocalDate checkin, LocalDate checkout, Integer bref) {
         //returns a number of available rooms for a specific date range
+        //returns as a map, key class (std_t), value number of rooms of that class available
         List<Room> avail;
         if(Objects.isNull(bref)) {
             avail = getRoomsAvailByDate(checkin, checkout);
@@ -129,6 +135,8 @@ public class RoomManager extends AbstractManager {
     }
     
     public Map<Room, Booking> getExpectedArrivals(LocalDate date) {
+        //get all the arrivals (checkins) expected on a specific day
+        //map is key room, value the booking which is arriving for that room
         String sql = "SELECT roomrate.r_no AS r_no, roomrate.r_class AS r_class, " +
             "roomrate.r_status AS r_status, roomrate.r_notes AS r_note, " +
             "roomrate.price AS price  " +
@@ -151,6 +159,8 @@ public class RoomManager extends AbstractManager {
     }
     
     public Map<Room, Booking> getExpectedDepartures(LocalDate date) {
+        //get all the departures (checkouts) expected on a specific day
+        //map is key room, value the booking which is leaving that room
         String sql = "SELECT roomrate.r_no AS r_no, roomrate.r_class AS r_class, " +
             "roomrate.r_status AS r_status, roomrate.r_notes AS r_note, " +
             "roomrate.price AS price  " +
@@ -173,6 +183,7 @@ public class RoomManager extends AbstractManager {
     }
     
     public Room updateRoom(Room room) throws ModelException {
+        //update all properties in a room
         if(Objects.isNull(room.getNo())) {
             throw new ModelException("Room number is not set");
         }
@@ -197,6 +208,8 @@ public class RoomManager extends AbstractManager {
     }
     
     public Map<String,Double> getRates() {
+        //get the current rate for each room type
+        //map is key class (std_t), value nightly rate
         List<Room> rooms = getAllRooms();
         Map<String,Double> map = new HashMap<>();
         for(Room r : rooms) {

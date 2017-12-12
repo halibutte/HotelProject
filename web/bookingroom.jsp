@@ -42,9 +42,9 @@
                     <div class="form-spacing-small">Customer ID</div> 
                     <input class="form-spacing" type="number" name="c_id" id="c_id" size="10" value="<% out.print(((request.getAttribute("CustID") == null ? "" : request.getAttribute("CustID")))); %>" placeholder="Can be blank" onchange="hide_payment()">
                     <%--Hide customer ID--%>
-                    <div class="form-spacing-small">Check-in Date</div>
+                    <div class="form-spacing-small">Check in Date</div>
                     <input class="form-spacing" type="date" name="c_in_date" value="<% out.print(request.getAttribute("Checkin")); %>" id="rooms_check_in" onchange="sanity_dates(this); hide_payment(); calc_price();" required>
-                    <div class="form-spacing-small">Check-out Date</div>
+                    <div class="form-spacing-small">Check out Date</div>
                     <input class="form-spacing" type="date" name="c_out_date" value="<% out.print(request.getAttribute("Checkout")); %>" id="rooms_check_out" onchange="sanity_dates(this); hide_payment(); calc_price();" required>
                 </div>
                 <div class="form-card">

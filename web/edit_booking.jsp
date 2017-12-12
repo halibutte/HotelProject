@@ -55,9 +55,9 @@
                     <div class="text-large form-spacing-small">£<span id="cost_span">0.00</span></div>
                     <input type="hidden" name="b_ref" id="b_red" value="<% out.print(b.getRef()); %>">
                     <%--Hide customer ID--%>
-                    <div class="form-spacing-small">Check-in Date</div>
+                    <div class="form-spacing-small">Check in Date</div>
                     <input class="form-spacing" type="date" name="checkin" value="<% out.print(b.getRooms().get(0).getCheckin()); %>" id="rooms_check_in" onchange="sanity_dates(this); hide_payment(); calc_price();" required>
-                    <div class="form-spacing-small">Check-out Date</div>
+                    <div class="form-spacing-small">Check out Date</div>
                     <input class="form-spacing" type="date" name="checkout" value="<% out.print(b.getRooms().get(0).getCheckout()); %>" id="rooms_check_out" onchange="sanity_dates(this); hide_payment(); calc_price();" required>
                 </div>
                 <div class="form-card">

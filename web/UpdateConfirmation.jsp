@@ -77,7 +77,9 @@
     <div class="content">
         <p>Thank you for booking your stay with us, the following information has been sent
         to the email address provided. <br> If you need check to your booking details you can do so by clicking 
-        <a href="./EditBooking"><u>here</u> </a> and supplying your booking number and email. Didn't receive your email confirmation? Call or email us! <br><br>
+        <a href="./EditBooking"><u>here</u></a> and supplying your booking number and email.<br>
+        <br>You will only be able to change your booking up to the day before you check in. After that you will not be able to change or cancel your booking.
+        <br>Didn't receive your email confirmation? Call or email us! <br><br>
         Telephone: (+44) 01603 123456 <br>
         Email: Bookings@HeartacheHotel.co.uk
         </p>
@@ -87,18 +89,18 @@
             <legend>Email Confirmation</legend>
             Dear <%out.print(cus_name);%>
 
-            This is an email confirmation for your order, please retain this information for future reference. <br><br>
+            This is an email confirmation for your booking, please retain this information for future reference. <br><br>
             Your booking update has been received and reserved. <br> <br>
             <h3>Order details:</h3>
             Customer ID: <% out.print(cus_id); %><br>
+            Booking Reference: <% out.print(b.getRef()); %> <br>
             Email Address: <% out.print(cus_email); %><br>
-            Booking Reference number: <% out.print(b.getRef()); %> <br>
-            Checkin Date: <% out.print(in_d); %><br>
-            Checkout Date: <% out.print(out_d); %><br>
-             Total cost: <% out.print(b_cost); %><br>
+            Check in Date: <% out.print(in_d); %><br>
+            Check out Date: <% out.print(out_d); %><br>
+            Total cost: <% out.print(b_cost); %><br>
             Notes: <% out.print(booking_notes); %><br><br>
 
-            The following rooms are now been reserved for you: 
+            The following rooms are now reserved for you: 
             <ul>
                 <% if(nStdT > 0) { %>
                 <li><% out.print(string_Std_T); %></li>

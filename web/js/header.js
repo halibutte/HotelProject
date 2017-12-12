@@ -4,11 +4,11 @@ $(document).ready(function() {
    //get the end part
    var parts = href.split("/");
    var end = parts[parts.length-1];
+   end = end.split("?")[0];
    //loop over li items and see if href matches?
    $(".nav a").each(function(idx, el) {
        var elArr = $(el).attr("href").split("/");
        var thisEnd = elArr[elArr.length-1];
-       thisEnd = thisEnd.split("?")[0];
        if(end === thisEnd) {
            $(el).closest("li").addClass("active");
        }

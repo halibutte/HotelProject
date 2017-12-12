@@ -34,6 +34,15 @@
             <legend>Rooms</legend>
             <div class="form-card-container" id="room_messages">
                 <div class="form-card">
+                    <div class="form-spacing-small">Customer ID</div> 
+                    <input class="form-spacing" type="number" name="c_id" id="c_id" size="10" value="<% out.print(((request.getAttribute("CustID") == null ? "" : request.getAttribute("CustID")))); %>" placeholder="Can be blank" onchange="hide_payment()">
+                    <%--Hide customer ID--%>
+                    <div class="form-spacing-small">Check-in Date</div>
+                    <input class="form-spacing" type="date" name="c_in_date" value="<% out.print(request.getAttribute("Checkin")); %>" id="rooms_check_in" onchange="sanity_dates(this); hide_payment(); calc_price();" required>
+                    <div class="form-spacing-small">Check-out Date</div>
+                    <input class="form-spacing" type="date" name="c_out_date" value="<% out.print(request.getAttribute("Checkout")); %>" id="rooms_check_out" onchange="sanity_dates(this); hide_payment(); calc_price();" required>
+                </div>
+                <div class="form-card">
                     Standard Double Room
                     <img src="images/std_d.jpeg" class="room-thumb" alt="Standard Double Room">
                     <div class="form-spacing">£<span data-roomtype="std_d" data-roomprice="<% out.print(df.format(roomRate.get("std_d"))); %>"><% out.print(df.format(roomRate.get("std_d"))); %></span> per night</div>
@@ -91,14 +100,7 @@
                 </div>
                 <div class="form-card">
                     <div class="form-spacing-small">Price</div> 
-                    <div class="text-large">£<span id="cost_span">0.00</span></div>
-                    <div class="form-spacing-small">Customer ID</div> 
-                    <input class="form-spacing" type="number" name="c_id" id="c_id" size="10" value="<% out.print(((request.getAttribute("CustID") == null ? "" : request.getAttribute("CustID")))); %>" placeholder="Can be blank" onchange="hide_payment()">
-                    <%--Hide customer ID--%>
-                    <div class="form-spacing-small">Check-in Date</div>
-                    <input class="form-spacing" type="date" name="c_in_date" value="<% out.print(request.getAttribute("Checkin")); %>" id="rooms_check_in" onchange="sanity_dates(this); hide_payment(); calc_price();" required>
-                    <div class="form-spacing-small">Check-out Date</div>
-                    <input class="form-spacing" type="date" name="c_out_date" value="<% out.print(request.getAttribute("Checkout")); %>" id="rooms_check_out" onchange="sanity_dates(this); hide_payment(); calc_price();" required>
+                    <div class="text-large form-spacing">£<span id="cost_span">0.00</span></div>
                     <button type="submit" class="button">Search Rooms</button>
                 </div>
             </div>

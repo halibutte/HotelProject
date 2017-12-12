@@ -93,7 +93,7 @@
                 <br>
                 <br>
                 This is an email confirmation for your booking, please retain this information for future reference. <br><br>
-                Your booking has been received and reserved. <br> <br>
+                Your booking has been received and reserved. <br>
                 <h2>Order details:</h2>
                 Customer ID: <% out.print(cus_id); %><br>
                 Booking Reference: <% out.print(b.getRef()); %><br>

@@ -25,7 +25,7 @@
         <%@include file="staff_header.jsp" %>
         <div class="main-container">
         <div class="col-minwidth" id="message_div">
-            <h2 class="staff">Messages</h2>
+            <h3 class="staff">Messages</h3>
             <div class="flexCont">
                 <% List<String> msgs = (List<String>)request.getAttribute("messages");
                 for(String s : msgs) {

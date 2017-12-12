@@ -292,6 +292,15 @@ ul.nav li a:hover {
 }
 
 /*GENERAL STYLES*/
+.large-text {
+    font-size: larger;
+}
+.nav-bg {
+    background-color: #eaf1f9;
+}
+.padding-left{
+    padding-left: 2ex;
+}
 #googleMap{
     width:100%;
     height:400px;
@@ -339,8 +348,14 @@ a.no-decoration {
     text-decoration: none;
     color: black;
 }
-.nav-bg {
-    background-color: #eaf1f9;
+.center-flex {
+    justify-content: center;
+}
+ul.room-desc {
+    padding-left: 1.2ex;
+}
+ul.room-desc li {
+    margin: 1ex
 }
 
 /* CLASSES TO MAKE REPORT TABLES */

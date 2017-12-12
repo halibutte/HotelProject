@@ -10,9 +10,8 @@
 <% Booking b = (Booking)request.getAttribute("booking"); %>
 <div class="main-content">
     <h2>Booking Cancelled</h2>
-    <div class="content">
-        We have cancelled your booking (ref <%=b.getRef()%>) for <%=b.getRooms().get(0).getCheckin()%> 
-        to <%=b.getRooms().get(0).getCheckout()%>. We're sorry to hear you won't 
+    <div class="content large-text">
+        We have cancelled your booking (reference <%=b.getRef()%>). We're sorry to hear you won't 
         be staying with us at the Heartache Hotel this time, but hope you choose 
         us in the future.
     </div>

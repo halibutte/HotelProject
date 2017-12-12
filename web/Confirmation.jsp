@@ -89,9 +89,10 @@
         <div class="content">
             <h1>Booking Complete!</h1> <br>
             <fieldset><legend>Email Confirmation</legend>
-                Dear <%out.print(cus_name);%>
-                
-                This is an email confirmation for your order, please retain this information for future reference. <br><br>
+                Dear <%=cus_name%>,
+                <br>
+                <br>
+                This is an email confirmation for your booking, please retain this information for future reference. <br><br>
                 Your booking has been received and reserved. <br> <br>
                 <h3>Order details:</h3>
                 Customer ID: <% out.print(cus_id); %><br>

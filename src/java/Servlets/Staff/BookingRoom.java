@@ -45,7 +45,7 @@ public class BookingRoom extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-            //String n_rooms = (String) request.getParameter("n_rooms");
+            //getting parameters from the jsp pages
             String c_id = (String) request.getParameter("c_id");
             String std_t = (String) request.getParameter("std_t");
             String std_d = (String) request.getParameter("std_d");
@@ -60,6 +60,7 @@ public class BookingRoom extends HttpServlet {
             String cardtype = (String) request.getParameter("cardtype");
             String cardno = (String) request.getParameter("cardno");
             String cardexp = (String) request.getParameter("cardexp");
+            //declaring and initialising variables to use in this servelet
             LocalDate Checkin = LocalDate.now();
             LocalDate Checkout = LocalDate.now();
             Integer StdTno = 0;
@@ -67,12 +68,13 @@ public class BookingRoom extends HttpServlet {
             Integer SupTno = 0;
             Integer SupDno = 0;
             Integer CustID = null;
-            Integer bCustID = null;
+            //messages for the booking page
             String roomNo_msg = "Enter number of rooms";
             String dates_message = "Please enter/check dates";
             String selection_message = "Please change your selection";
             String proceed_message = "Preference available. You can proceed to enter your details and make a booking or search for other preferences";
             String expiry_alert = "Enter valid card expiry";
+            //Linking variables in servelet to parameters entered on booking page
             if (!Objects.isNull(c_id)) {
                 try {
                     CustID = Integer.parseInt(c_id);
@@ -123,6 +125,7 @@ public class BookingRoom extends HttpServlet {
 
                 }
             }
+            //Initialising and declaring customer details
             String Name = "";
             String Email = "";
             String Address = "";
@@ -131,14 +134,8 @@ public class BookingRoom extends HttpServlet {
             String Cardno = "";
             String Cardexp = "";
 
-            if (!Objects.isNull(name)) {
-                try {
-                    Name = name;
-                } catch (Exception e) {
-
-                }
-            }
-
+            
+            //initialising messages for jsp page and cheacks
             String b_message = "";
             String s_message;
             String d_message = "";
@@ -147,8 +144,9 @@ public class BookingRoom extends HttpServlet {
             String supt_message = "";
             String supd_message = "";
             String c_message = "";
-
+            //map to obtain room prices
             Map<String,Double> room_rates = new HashMap<>();
+            //connecting to the database through a created class
             Model model = null;
             try {
                 model = new Model();
@@ -156,12 +154,12 @@ public class BookingRoom extends HttpServlet {
             } catch (ModelException e) {
                 String errorMessage = "error#Cannot connect to databse";
             }
-
+            //list of the room available depending on dates given
             List<Room> r_available;
             r_available = model.ROOMS.getRoomsAvailByDate(Checkin, Checkout);
 
             Integer nStdT = 0, nStdD = 0, nSupT = 0, nSupD = 0;
-
+            //counting the rooms available for each type
             for (Room a : r_available) {
                 switch (a.getRoomClass()) {
                     case "std_t":
@@ -180,6 +178,7 @@ public class BookingRoom extends HttpServlet {
                         break;
                 }
             }
+            //messages to prompt customer to enter rooms needed
             if (StdTno == 0 && StdDno == 0 && SupTno == 0 && SupDno == 0) {
                 b_message = roomNo_msg;
             }
@@ -188,6 +187,7 @@ public class BookingRoom extends HttpServlet {
             if(!Objects.isNull(c_in_date)) {
                 countAvail = model.ROOMS.getCountRoomsAvailByDate(Checkin, Checkout);
             }
+            //messages to let customer know if the rooms they want are not available and let them know what is avaiable for that period
             if (StdTno > nStdT) {
                 stdt_message = "Not enough Standard twin rooms available. Number of rooms left for your chosen period: \n" + nStdT;
             }
@@ -203,18 +203,23 @@ public class BookingRoom extends HttpServlet {
             if (SupDno > nSupD) {
                 supd_message = "Not enough Superior double rooms available. Number of rooms left for your chosen period: \n" + nSupD ;
             }
+            //message to prompt customer to enter valid dates
             if (Checkout.isBefore(LocalDate.now()) || Checkin.isBefore(LocalDate.now()) || Checkin.isAfter(Checkout) || Checkin.isEqual(Checkout)) {
                 d_message = dates_message;
             }
-
+            //message to prompt customer to change selection given what they want is not available
             if (StdTno > nStdT || StdDno > nStdD || SupTno > nSupT || SupDno > nSupD) {
                 s_message = selection_message;
             } else {
+                //message letting customer know we have what they want and they can proceed to book
                 s_message = proceed_message;
             }
-
+            //retrieving customer details from the database given they provide a customer ID
+            //minimal log in system which would need to be made more secure in a real world situation by a password or something
+            //if customer changes their name or email after the information is retrieved a new customer will be created 
+            //if they change anything else their exisiting customer details will be updated
             if (CustID != null) {
-
+                //retrieving customer from database
                 Customer customer = model.CUSTOMERS.getCustomer(CustID);
 
                 if (customer != null) {
@@ -225,12 +230,20 @@ public class BookingRoom extends HttpServlet {
                     Cardtype = customer.getCardtype();
                     Cardexp = customer.getCardexp();
                     Cardno = customer.getCardno();
-                    bCustID = CustID;
+                    CustID = null;
                 } else {
                     CustID = null;
                     //customer number doesn't exist
                 }
 
+            }
+            //linking customer details to jsp
+            if (!Objects.isNull(name)) {
+                try {
+                    Name = name;
+                } catch (Exception e) {
+
+                }
             }
             if (!Objects.isNull(email)) {
                 try {
@@ -282,8 +295,7 @@ public class BookingRoom extends HttpServlet {
             }
             
 
-            //To finish of
-            //If statement for this years month and av
+            //Statements to check if the card details are valid
             if(cardexpS1!=null){
             if (Integer.parseInt(cardexpS1[1]) > 99 || Integer.parseInt(cardexpS1[1]) < (LocalDate.now().getYear() % 100) || Integer.parseInt(cardexpS1[0]) < 1
             || Integer.parseInt(cardexpS1[0]) > 12 || !Cardexp.contains("/") || Cardexp.length() > 5) {
@@ -297,24 +309,26 @@ public class BookingRoom extends HttpServlet {
 
             Customer customer = new Customer(Name, Email, Address, Cardtype, Cardexp, Cardno);
             Customer customer1 = model.CUSTOMERS.getCustomer(Name, Email);
-            
+            //creating cutomer given they have valid card details
             if(!c_message.equals(expiry_alert)){
             if (customer1 == null) {
 
                 try {
                    Customer customer2 =  model.CUSTOMERS.createCustomer(customer);
-                   bCustID = customer2.getNo();
+                   
                 } catch (Exception e) {
                 }
-            }else{bCustID = customer1.getNo();}
+            }
+            //updating customer given customer already exists and they changed something
             try {
                 model.CUSTOMERS.updateCustomer(customer);
             } catch (Exception e) {
             }
             }
-            if(bCustID!=null){customer.setNo(bCustID);}
+            //List of the rooms the customer wants
             List<Room> r_availableB = new ArrayList<>();
-          
+            
+            //statements adding the rooms needed to list
             for(int t = 1;t<StdTno+1;t++){
                 Room a = new Room();
                 a.setRoomClass("std_t");
@@ -337,6 +351,7 @@ public class BookingRoom extends HttpServlet {
             }
          
        String requestJsp = "/bookingroom.jsp"  ;
+       //make a booking given card details are valid and the make booking button is clicked
        if(request.getParameter("bButton")!=null && !c_message.equals(expiry_alert)){
             try {
                 Booking b = model.BOOKINGS.makeBooking(customer, r_availableB, Checkin, Checkout,Notes);
@@ -346,7 +361,7 @@ public class BookingRoom extends HttpServlet {
             } catch (Exception e) {
             }
        }
-            
+            //seeting attributes for the jsp page
             request.setAttribute("CustID", CustID);
             request.setAttribute("r_available", r_available);
             request.setAttribute("b_message", b_message);

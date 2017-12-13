@@ -58,7 +58,7 @@ public class EditBooking extends HttpServlet {
             String btnClicked = request.getParameter("btn_update");
             String btnDelete = request.getParameter("btn_cancel");
             List<String> messages = new ArrayList<>();
-
+            //declaring and initialising objects and retrieving information from the database using crated classes
             Booking booking = null;
             Model model = null;
             Map<String,Long> countAvail = null;
@@ -69,7 +69,7 @@ public class EditBooking extends HttpServlet {
                 if(!Objects.isNull(btnClicked) || !Objects.isNull(bref)) {
                     model = new Model();
                     Integer int_bref = null;
-                    //get the number of rooms available for these dates
+                    
                     try {
                         int_bref = Integer.parseInt(bref);
                     } catch (Exception e) {
@@ -101,7 +101,7 @@ public class EditBooking extends HttpServlet {
                     if(checkin.isBefore(LocalDate.now()) || checkin.isEqual(LocalDate.now())) {
                         throw new ModelException("Sorry, you can only change your booking up to one day before checkin");
                     }
-                    
+                    //counting the rooms available and getting the room rates
                     try {
                         Map<String,Long> checkAvail = model.ROOMS.getCountRoomsAvailByDate(checkin, checkout, int_bref);
                         request.setAttribute("count_avail", checkAvail);

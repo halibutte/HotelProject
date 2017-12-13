@@ -1,6 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@include file="/WEB-INF/header.jspf" %>
-    <script src="./js/slideshow.js"></script>
+<!--Pull Slideshow Java Script-->
+    <script src="./js/slideshow.js"></script> 
     <div class="slideshow">
       <img class="slide" src="images/bar.jpeg" alt="Hotel Bar">
       <img class="slide" src="images/breakfast.jpeg" alt="Breakfast">
@@ -14,6 +15,7 @@
     <div class="main-content">
         <br><h1>Information</h1>
         <fieldset class="content-bg">
+            <!--Forms cards used for mobile compatability-->
             <legend>Rooms</legend>
             <div class="form-card-container center-flex" id="room_messages">
                 <div class="form-card">
@@ -93,6 +95,20 @@
             <p>
             Each room has provides a TV and DVD player, extra ports are available incase you wish to connect a device to the TV, Cables can be requested at the reception. The hotel bar is open from 06:00-10:00 and again at 12:00-23:00 each day of the week and provides a variety of refreshments. <br><br>
             </p>
+            
+            <h2>Provided Services</h2>
+            <div>
+            Your stay will come with a variety of freely provided services.<br><br> Each room is fully serviced with:
+            <ul>
+                <li> Towels </li>
+                <li> Hair dryer</li>
+                <li> Alarm </li>
+                <li> Safe (Code can be requested from the Reception) </li>
+                <li> Body wash and shampoo's </li>
+                <li> Wardrobe with hangers</li>
+            </ul>
+            Resident are welcome to bring their own towels and toiletries.
+            </div>
             
             <h2>WiFi</h2>
             <p>

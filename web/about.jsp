@@ -1,8 +1,3 @@
-<%-- 
-    Document   : contact
-    Created on : 12-Dec-2017, 13:55:03
-    Author     : jdk17aku
---%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@include file="/WEB-INF/header.jspf" %>
@@ -19,7 +14,7 @@
     (+44)1603 123456<br><br>
     <u>Email:</u><br>
     Bookings@HeartacheHotel.co.uk<br><br>
-    <u>Social Media:</u> <a href="#Bot">Links below</a><br><br>
+    <u>Social Media:</u> <a href="#Bot">Links below</a><br><br> <!--Anchor point A-->
     <u>Address:</u><br>
     Reception Staff<br>
     The Heartache Hotel<br>
@@ -34,8 +29,9 @@
 
 <div id="googleMap_content" class="content">
 <div id="googleMap" class="float-left"></div>
-            
+<!--Lat and Lon of the UEA and how zoomed the map is-->            
 <script>
+//from https://developers.google.com/maps/documentation/javascript/adding-a-google-map
 function myMap() {
 var mapProp= {
     center:new google.maps.LatLng(52.621975, 1.238962),
@@ -44,12 +40,12 @@ var mapProp= {
 var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
 }
 </script>
-
+<!--Link to Google Maps with a linked API code received through jdk17aku@gmail.com-->
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDj4utM6YO9b-nnjifFeJwXm2J6A7P3HL0&callback=myMap"></script>
         </div>
 <div class= "main-content">
     <div class="content">
-        <nav class="navbar"><a name="Bot"></a>
+        <nav class="navbar"><a name="Bot"></a> <!--Anchor point B-->
         <a href="https://www.facebook.com" target="_blank"><img alt="Facebook" id="Facebook" src="images/facebook.png"></a>
         <a href="https://twitter.com/login?lang=en-gb" target="_blank"><img alt="Twitter" id="Twitter" src="images/twitter.png"></a>
         <a href="https://plus.google.com/discover" target="_blank"><img alt="Google" id="Google" src="images/google-plus.png"></a>

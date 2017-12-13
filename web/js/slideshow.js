@@ -1,17 +1,15 @@
-//sourced from https://www.w3schools.com/w3css/w3css_slideshow.asp
+//from https://www.w3schools.com/w3css/w3css_slideshow.asp
 $(document).ready(function () {
     showDivs(slideIndex);
-    window.setInterval(function() {
-        plusDivs(1);
-    }, 10000);
 });
 
-var slideIndex = 1;
+var slideIndex = 1; //First image
 function plusDivs(n) {
-    showDivs(slideIndex += n);
+    showDivs(slideIndex += n); //Add to slide Index
 }
 
-function showDivs(n) {
+function showDivs(n) //Display first image 
+{
     var i;
     var x = document.getElementsByClassName("slide");
     if (n > x.length) {slideIndex = 1}    
@@ -19,5 +17,5 @@ function showDivs(n) {
     for (i = 0; i < x.length; i++) {
         x[i].style.display = "none";  
     }
-    x[slideIndex-1].style.display = "block";  
+    x[slideIndex-1].style.display = "block";  //Display format as block
 }

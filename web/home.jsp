@@ -1,8 +1,3 @@
-<%-- 
-    Document   : home
-    Created on : 29-Nov-2017, 12:20:38
-    Author     : x3041557
---%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@include file="/WEB-INF/header.jspf" %>

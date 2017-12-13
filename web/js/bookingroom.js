@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 $(document).ready(function() {
-       move_room(); 
+    move_room(); 
     //if pay open exists, jump to it
     if($("#pay_anchor").length > 0) {
         $("html, body").animate({
@@ -20,8 +20,16 @@ var arrivalSettings = [];
 var roomPrices = [];
 
 function move_room() {
+    //servlet generates some error messages. Move these to a place consistent
+    //with layout in other parts of the site. Errors at top of page, confirmation
+    //between rooms & payment
+    //message to be moved
     var div = $(".message-relocate");
+    //default containing div to move it to - top of page above rooms
     var flexCont = $("#message_container");
+    //if this is the first time you arrive at the page, consider rooms error (select
+    //# rooms) as a non-error, so colour it green. Otherwise, consider as error.
+    //On first visit, url string will contain no parameters, so see if ? in url
     var showArr = window.location.href.match("\\?");
     var show = false;
     try {
@@ -29,7 +37,10 @@ function move_room() {
     } catch(err) {
         show = false;
     }
+    //if there is span id pay open it mans can proceed to payment details, so move
+    //message to between two divs
     var pay = $('#pay_open').length > 0;
+    //now position
     if(show) {
         if(pay) {
             $(div).toggleClass('message-error message-confirm');
@@ -134,6 +145,7 @@ function array_settings() {
 }
 
 function price_settings() {
+    //fetch data about room types from divs
     $("[data-roomtype]").each(function(idx,el) {
         var type = $(el).data("roomtype");
         var price = $(el).data("roomprice");
@@ -159,6 +171,7 @@ function calc_price() {
     var checkin = new Date($("#rooms_check_in").val());
     var checkout = new Date($("#rooms_check_out").val());
     var length = daydiff(checkin, checkout);
+    //if somehow negative nights, display blank, otherwise work out cost
     if(length > 0) {
         total = total * length;
     } else {
